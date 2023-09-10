@@ -4,7 +4,6 @@ import scrollbarPlugin from 'tailwind-scrollbar'
 import { getIconCollections, iconsPlugin } from '@egoist/tailwindcss-icons'
 import containerQueriesPlugin from '@tailwindcss/container-queries'
 
-
 export default <Partial<Config>> {
   content: [
     'src/**/*.*',
