@@ -1,0 +1,28 @@
+---
+import { cn } from '~/lib/utils';
+import GetStartedButton from './GetStartedButton.astro';
+---
+
+<main class="@container">
+    <div>
+        <h1 class="font-title font-bold text-[32px] text-center @xl:px-8 text-gray-900">
+            Empowering SAAS Owners to Forge Vital Customer Connections
+        </h1>
+        <p class="text-center mt-3">
+            Easily connect with your customers via chat, email, and more. Our assistant powered by ChatGPT and trained
+            based on your unique data, can reduce your workload by 50%.
+        </p>
+    </div>
+
+    <div class="flex items-center gap-4 justify-center mt-12 flex-wrap">
+        <GetStartedButton />
+
+        <a
+            href="https://github.com/divndev/resolvex"
+            class:list={cn(['pr-2.5 pl-[18px] py-2.5 rounded-full bg-gray-100 text-gray-900 flex items-center gap-1 border'])}
+        >
+            Star us on GitHub
+            <span class="i-mdi-github h-[22px] w-[22px]"></span>
+        </a>
+    </div>
+</main>
