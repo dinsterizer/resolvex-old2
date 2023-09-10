@@ -1,0 +1,13 @@
+{
+  "name": "@resolvex/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "@cloudflare/workers-types": "^4.20230904.0",
+    "@types/node": "^20.6.0",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "typescript": "^5.2.2"
+  }
+}

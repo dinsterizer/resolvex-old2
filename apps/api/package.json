@@ -1,0 +1,30 @@
+{
+  "name": "@resolvex/api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --env local --port 8000",
+    "preview": "wrangler dev --env local --port 8000",
+    "build": "tsc --build",
+    "type:check": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:studio": "drizzle-kit studio --port 8001 --verbose",
+    "db:apply:local": "wrangler d1 migrations apply main-db --local --env local",
+    "db:apply:preview": "wrangler d1 migrations apply main-db --env preview",
+    "db:apply:production": "wrangler d1 migrations apply main-db --env production",
+    "deploy:preview": "wrangler deploy --env preview",
+    "deploy:production": "wrangler deploy --env production"
+  },
+  "dependencies": {
+    "@trpc/server": "^10.38.0",
+    "@types/lodash-es": "^4.17.8",
+    "drizzle-orm": "^0.28.5",
+    "lodash-es": "^4.17.21",
+    "nanoid": "^4.0.2",
+    "valibot": "^0.12.0"
+  },
+  "devDependencies": {
+    "@resolvex/tsconfig": "workspace:^",
+    "drizzle-kit": "^0.19.13"
+  }
+}

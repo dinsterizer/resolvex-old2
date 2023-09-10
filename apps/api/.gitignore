@@ -1,0 +1,5 @@
+.dev.vars
+**.d.ts
+**.js
+.wrangler
+tsconfig.tsbuildinfo

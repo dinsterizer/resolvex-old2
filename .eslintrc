@@ -1,0 +1,18 @@
+{
+  "extends": "@antfu/eslint-config-react",
+  "rules": {
+    "max-len": ["warn", 120]
+  },
+  "ignorePatterns": [
+    ".*",
+    "*.js"
+  ],
+  "overrides": [
+    {
+      "files": ["*.json"],
+      "rules": {
+        "max-len": "off"
+      }
+    }
+  ]
+}

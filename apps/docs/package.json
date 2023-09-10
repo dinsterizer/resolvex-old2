@@ -1,0 +1,16 @@
+{
+  "name": "@resolvex/docs",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev --port 4000",
+    "build": "astro build",
+    "preview": "astro build && wrangler pages dev --port 4000 ./dist",
+    "type:check": "tsc --noEmit",
+    "deploy:preview": "astro build --mode=preview && wrangler pages deploy --project-name=resolvex-docs-preview ./dist",
+    "deploy:production": "astro build --mode=production && wrangler pages deploy --project-name=resolvex-docs-production ./dist"
+  },
+  "dependencies": {
+    "astro": "^3.0.12"
+  }
+}
