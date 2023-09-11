@@ -1,0 +1,104 @@
+---
+import multiChannelsIcon from '~/assets/img/multi-channels-icon.svg';
+import aiAssistantIcon from '~/assets/img/ai-assistant-icon.svg';
+import { Image } from 'astro:assets';
+---
+
+<section class="@container">
+    <div class="grid @4xl:grid-cols-2 gap-20">
+        <div class="border-t px-4 @md:px-16 py-10">
+            <div class="text-gray-900 flex items-center gap-4">
+                <div><Image src={multiChannelsIcon} alt="Multi channels icon" class="h-6 w-6" /></div>
+                <div class="flex items-center gap-2">
+                    <span class="font-medium text-xl font-title">Multi-Channels</span>
+                    <span class="text-sm font-medium inline-block py-1 px-2 text-green-500 rounded-md border">
+                        Ready
+                    </span>
+                </div>
+            </div>
+
+            <p class="mt-4">You can easily connect with your customers via chat, email, and your custom with our API</p>
+        </div>
+
+        <div class="border-t px-4 @md:px-16 py-10">
+            <div class="text-gray-900 flex items-center gap-4">
+                <div><Image src={aiAssistantIcon} alt="AI assistant icon" class="h-6 w-6" /></div>
+                <div class="flex items-center gap-2">
+                    <span class="font-medium text-xl font-title">AI-Assistant</span>
+                    <span class="text-sm font-medium inline-block py-1 px-2 text-amber-500 rounded-md border">soon</span
+                    >
+                </div>
+            </div>
+
+            <p class="mt-4">
+                Our assistant powered by ChatGPT and trained based on your unique data can help you resolve customer’s
+                straightforward problems.
+            </p>
+        </div>
+
+        <div class="border-t px-4 @md:px-16 py-10">
+            <div class="text-gray-900 flex items-center gap-4">
+                <span class="i-heroicons-code-bracket h-6 w-6"></span>
+                <div class="flex items-center gap-2">
+                    <span class="font-medium text-xl font-title">Extensibility</span>
+                    <span class="text-sm font-medium inline-block py-1 px-2 text-amber-500 rounded-md border">soon</span
+                    >
+                </div>
+            </div>
+
+            <p class="mt-4">
+                Our API and SDK consistently deliver an awesome experience for developers aiming to create atop
+                ResolveX.
+            </p>
+        </div>
+
+        <div class="border-t px-4 @md:px-16 py-10">
+            <div class="text-gray-900 flex items-center gap-4">
+                <span class="i-heroicons-rectangle-stack h-6 w-6"></span>
+                <div class="flex items-center gap-2">
+                    <span class="font-medium text-xl font-title">Multi-Platforms</span>
+                    <span class="text-sm font-medium inline-block py-1 px-2 text-amber-500 rounded-md border">soon</span
+                    >
+                </div>
+            </div>
+
+            <p class="mt-4">
+                Our app isn't just on the web – it's rocking out on Windows, macOS, Android, and iOS too!
+            </p>
+        </div>
+
+        <div class="border-t px-4 @md:px-16 py-10">
+            <div class="text-gray-900 flex items-center gap-4">
+                <span class="i-heroicons-bolt h-6 w-6"></span>
+                <div class="flex items-center gap-2">
+                    <span class="font-medium text-xl font-title">Edge-Speed</span>
+                    <span class="text-sm font-medium inline-block py-1 px-2 text-green-500 rounded-md border"
+                        >Ready</span
+                    >
+                </div>
+            </div>
+
+            <p class="mt-4">
+                Our lightning-fast app is globally accessible through Cloudflare's 300+ locations, ensuring a blazing
+                quick experience for users worldwide.
+            </p>
+        </div>
+
+        <div class="border-t px-4 @md:px-16 py-10">
+            <div class="text-gray-900 flex items-center gap-4">
+                <span class="i-heroicons-lock-open h-6 w-6"></span>
+                <div class="flex items-center gap-2">
+                    <span class="font-medium text-xl font-title">Open-Source</span>
+                    <span class="text-sm font-medium inline-block py-1 px-2 text-green-500 rounded-md border"
+                        >Ready</span
+                    >
+                </div>
+            </div>
+
+            <p class="mt-4">
+                Our app is totally open-source, primed for your contributions, and ripe for reuse under the cool MIT
+                license!
+            </p>
+        </div>
+    </div>
+</section>
