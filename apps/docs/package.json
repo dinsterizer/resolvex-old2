@@ -7,8 +7,8 @@
     "build": "astro build",
     "preview": "astro build && wrangler pages dev --port 4000 ./dist",
     "type:check": "tsc --noEmit",
-    "deploy:preview": "astro build --mode=preview && wrangler pages deploy --project-name=resolvex-docs-preview ./dist",
-    "deploy:production": "astro build --mode=production && wrangler pages deploy --project-name=resolvex-docs-production ./dist"
+    "deploy:preview": "astro build --mode=preview && wrangler pages deploy --project-name=resolvex-docs-preview --branch=main ./dist",
+    "deploy:production": "astro build --mode=production && wrangler pages deploy --project-name=resolvex-docs-production --branch=main ./dist"
   },
   "dependencies": {
     "@astrojs/tailwind": "^5.0.0",
