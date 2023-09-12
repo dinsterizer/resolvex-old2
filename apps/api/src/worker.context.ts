@@ -3,7 +3,7 @@ import type { Env } from './worker.env'
 import * as schema from './schema'
 
 export function createContext({ env, ec }: { env: Env; ec: ExecutionContext }) {
-  const db = drizzle(env.DB, { schema })
+  const db = drizzle(env.DB, { schema, logger: env.WORKER_ENV === 'development' })
 
   return {
     env,

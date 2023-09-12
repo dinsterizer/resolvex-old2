@@ -1,6 +1,7 @@
 import { initTRPC } from '@trpc/server'
 import { once } from 'lodash-es'
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch'
+import SuperJSON from 'superjson'
 import type { Context } from './worker.context'
 
 export function createTRPCContext({ context }: { context: Context }) {
@@ -12,7 +13,9 @@ export function createTRPCContext({ context }: { context: Context }) {
   }
 }
 
-const t = initTRPC.context<ReturnType<typeof createTRPCContext>>().create()
+const t = initTRPC.context<ReturnType<typeof createTRPCContext>>().create({
+  transformer: SuperJSON,
+})
 
 export const middleware = t.middleware
 export const router = t.router

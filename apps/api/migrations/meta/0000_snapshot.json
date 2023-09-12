@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "712d2e70-fc0d-469e-bbf7-0c88c1f973fc",
+  "id": "c80eb8d4-cbd0-4405-ae45-da805f35490f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "users": {
@@ -9,16 +9,37 @@
       "columns": {
         "id": {
           "name": "id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "otp": {
+          "name": "otp",
+          "type": "TEXT",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "full_name": {
-          "name": "full_name",
-          "type": "text",
+        "created_at": {
+          "name": "created_at",
+          "type": "INTEGER",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
