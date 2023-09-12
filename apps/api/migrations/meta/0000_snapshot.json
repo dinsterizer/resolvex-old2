@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "c80eb8d4-cbd0-4405-ae45-da805f35490f",
+  "id": "13689c82-ed91-45d2-a62e-6389b3abde21",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "users": {
@@ -30,14 +30,14 @@
         },
         "otp": {
           "name": "otp",
-          "type": "TEXT",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "INTEGER",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
