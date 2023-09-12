@@ -12,6 +12,8 @@
     "deploy:production": "vite build --mode=production && wrangler pages deploy --project-name=resolvex-web-production --branch=main ./dist"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-slot": "^1.0.2",
     "@resolvex/api": "workspace:^",
     "@tanstack/react-query": "^4.35.0",
     "@tanstack/react-router": "0.0.1-beta.185",

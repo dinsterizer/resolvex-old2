@@ -1,4 +1,5 @@
 import { Outlet, RootRoute } from '@tanstack/react-router'
+import { SignIn } from './sign-in'
 import { useAuthStore } from '~/stores/auth'
 
 export const rootRoute = new RootRoute({
@@ -6,14 +7,10 @@ export const rootRoute = new RootRoute({
     const { userId } = useAuthStore()
 
     if (!userId)
-      return <Login />
+      return <SignIn />
 
     return <>
       <Outlet />
     </>
   },
 })
-
-function Login() {
-  return <div className="bg-red-100 text-red-900">login</div>
-}
