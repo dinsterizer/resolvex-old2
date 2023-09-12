@@ -2,6 +2,7 @@ import { Buffer } from 'node:buffer'
 import { email, object, string, toLowerCase } from 'valibot'
 import { TRPCError } from '@trpc/server'
 import { SignJWT } from 'jose'
+import { eq } from 'drizzle-orm'
 import { publicProcedure, router } from '../trpc'
 import { Users } from '../schema'
 import { generateOtp } from '../utils'
@@ -29,19 +30,22 @@ export const authRouter = router({
 
         if (!user.otp || user.otp.expiresAt < new Date(Date.now() + 1000 * 30)) {
           const otp = generateOtp()
-          await db.update(Users).set({
-            otp: {
-              code: otp,
-              expiresAt: new Date(Date.now() + 1000 * 60 * 5),
-            },
-          })
+          await db.update(Users)
+            .set({
+              otp: {
+                code: otp,
+                expiresAt: new Date(Date.now() + 1000 * 60 * 5),
+              },
+            })
+            .where(eq(Users.email, email))
+            .get()
 
           // TODO - send email otp
         }
       }),
       verifyOtp: publicProcedure.input(object({ email: string([email()]), otp: string([toLowerCase()]) }))
         .mutation(async ({ ctx, input }) => {
-          const { db, env } = ctx
+          const { db, env, ec } = ctx
           const { email } = input
           const user = await db.query.Users.findFirst({
             where(t, { eq }) { return eq(t.email, email) },
@@ -66,6 +70,15 @@ export const authRouter = router({
               jwt: null,
             }
           }
+
+          ec.waitUntil(
+            db.update(Users)
+              .set({
+                otp: null,
+              })
+              .where(eq(Users.id, user.id))
+              .get(),
+          )
 
           const jwt = await new SignJWT({ userId: user.id })
             .setProtectedHeader({ alg: 'HS256' })
