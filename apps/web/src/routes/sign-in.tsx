@@ -10,8 +10,10 @@ import { Label } from '~/components/ui/label'
 import { env } from '~/env'
 import { trpc } from '~/utils/trpc'
 import { useToast } from '~/components/ui/use-toast'
+import { useAuthStore } from '~/stores/auth'
 
 export function SignIn() {
+  const auth = useAuthStore()
   const { toast } = useToast()
   const [step, setStep] = useState<'send-otp' | 'verify-otp'>('send-otp')
   const [email, setEmail] = useState<string>('')
@@ -56,9 +58,19 @@ export function SignIn() {
           setStep('verify-otp')
         }} />}
 
-        {step === 'verify-otp' && <VerifyOtpForm isLoading={emailVerifyOtpMutation.isLoading} onBack={() => setStep('send-otp')} onSubmit={({ otp }) => {
-          // TODO
-          emailVerifyOtpMutation.mutate({ email, otp })
+        {step === 'verify-otp' && <VerifyOtpForm isLoading={emailVerifyOtpMutation.isLoading} onBack={() => setStep('send-otp')} onSubmit={async ({ otp }) => {
+          const data = await emailVerifyOtpMutation.mutateAsync({ email, otp })
+
+          if (!data.user) {
+            toast({
+              variant: 'destructive',
+              title: 'Incorrect OTP',
+              description: 'The OTP you entered is incorrect. Please try again.',
+            })
+            return
+          }
+
+          auth.login(data)
         }} />}
 
       {step === 'send-otp'

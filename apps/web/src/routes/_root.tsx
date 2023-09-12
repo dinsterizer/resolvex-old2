@@ -4,9 +4,9 @@ import { useAuthStore } from '~/stores/auth'
 
 export const rootRoute = new RootRoute({
   component: function Root() {
-    const { userId } = useAuthStore()
+    const { user } = useAuthStore()
 
-    if (!userId)
+    if (!user)
       return <SignIn />
 
     return <>
