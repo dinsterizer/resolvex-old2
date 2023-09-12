@@ -1,9 +1,10 @@
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, text } from 'drizzle-orm/sqlite-core'
 import { date, object, string } from 'valibot'
 import { datetime, emailCol, json } from './schema.extend'
+import { generateUserId } from './utils'
 
 export const Users = sqliteTable('users', {
-  id: integer('id').notNull(),
+  id: text('id').notNull().$defaultFn(() => generateUserId()),
   name: text('name').notNull(),
   email: emailCol('email').notNull(),
   otp: json(object({

@@ -1,5 +1,5 @@
 CREATE TABLE `users` (
-	`id` integer NOT NULL,
+	`id` text NOT NULL,
 	`name` text NOT NULL,
 	`email` text NOT NULL,
 	`otp` text,
