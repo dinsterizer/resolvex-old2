@@ -9,12 +9,30 @@ import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { env } from '~/env'
 import { trpc } from '~/utils/trpc'
+import { useToast } from '~/components/ui/use-toast'
 
 export function SignIn() {
+  const { toast } = useToast()
   const [step, setStep] = useState<'send-otp' | 'verify-otp'>('send-otp')
   const [email, setEmail] = useState<string>('')
-  const emailSendOtpMutation = trpc.auth.signIn.email.sendOtp.useMutation()
-  const emailVerifyOtpMutation = trpc.auth.signIn.email.verifyOtp.useMutation()
+  const emailSendOtpMutation = trpc.auth.signIn.email.sendOtp.useMutation({
+    onError() {
+      toast({
+        variant: 'destructive',
+        title: 'Oops!',
+        description: 'Something went wrong. Please try again.',
+      })
+    },
+  })
+  const emailVerifyOtpMutation = trpc.auth.signIn.email.verifyOtp.useMutation({
+    onError() {
+      toast({
+        variant: 'destructive',
+        title: 'Oops!',
+        description: 'Something went wrong. Please try again.',
+      })
+    },
+  })
 
   return <Container>
     <Button variant={'ghost'} className="rounded-full" asChild>
@@ -39,6 +57,7 @@ export function SignIn() {
         }} />}
 
         {step === 'verify-otp' && <VerifyOtpForm isLoading={emailVerifyOtpMutation.isLoading} onBack={() => setStep('send-otp')} onSubmit={({ otp }) => {
+          // TODO
           emailVerifyOtpMutation.mutate({ email, otp })
         }} />}
 
@@ -49,7 +68,12 @@ export function SignIn() {
         </div>
       }
 
+      {step === 'verify-otp' && <Button variant="ghost" className="w-full text-muted-foreground" type="button" onClick={() => {
+        emailSendOtpMutation.mutate({ email })
+      }}>Resend OTP?</Button>}
+
         {step === 'send-otp' && <div>
+          {/* TODO */}
           <Button variant="secondary" type="button" className="w-full">
             Continue with Google <span className="i-mdi-google ml-3" />
           </Button>
@@ -65,8 +89,8 @@ function SendOtpForm({ onSubmit, isLoading }: { onSubmit: (data: Output<typeof s
     e.preventDefault()
     onSubmit(parse(sendOtpFormSchema, Object.fromEntries(new FormData(e.currentTarget))))
   }}>
-    <div className="space-y-1">
-        <Label htmlFor="sign-in-email">Email</Label>
+    <div>
+        <Label htmlFor="sign-in-email" className="mb-2">Email</Label>
         <Input id="sign-in-email" type="email" name="email" required placeholder="example@resolvex.ai" />
     </div>
 
@@ -94,18 +118,18 @@ function VerifyOtpForm(
     e.preventDefault()
     onSubmit(parse(verifyOtpFormSchema, { otp }))
   }}>
-    <div className="space-y-1">
-        <Label >OTP</Label>
-        <OtpInput
-          containerStyle={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-          value={otp}
-          onChange={setOtp}
-          numInputs={6}
-          renderInput={props => <Input {...props} className="p-0 !w-12 h-16" required />}
-        />
+    <div>
+      <Label className="mb-2">OTP</Label>
+      <OtpInput
+        containerStyle={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+        value={otp}
+        onChange={setOtp}
+        numInputs={6}
+        renderInput={props => <Input {...props} className="p-0 !w-12 h-16" required />}
+      />
     </div>
 
     <div className="flex gap-3">
