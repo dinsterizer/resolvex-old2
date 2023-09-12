@@ -25,6 +25,7 @@
     "million": "2.6.0-beta.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-otp-input": "^3.0.4",
     "tailwind-merge": "^1.14.0",
     "valibot": "^0.12.0"
   },
