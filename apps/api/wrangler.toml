@@ -1,6 +1,7 @@
 name = "resolvex-api"
 main = "src/worker.ts"
 compatibility_date = "2023-09-09"
+compatibility_flags = [ "nodejs_compat" ]
 
 [env.local]
 vars = { WORKER_ENV = "development", WEB_URL = "http://localhost:3000" }
