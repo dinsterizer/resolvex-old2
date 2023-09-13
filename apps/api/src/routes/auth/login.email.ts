@@ -51,7 +51,7 @@ export const loginEmailRouter = router({
         .get()
     }
 
-    const { htmlContent, textContent, subject } = generateLoginEmail({ otp: otp.code })
+    const { htmlContent, textContent, subject } = generateLoginEmail({ otp: otp.code.toUpperCase() })
 
     ec.waitUntil(fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
