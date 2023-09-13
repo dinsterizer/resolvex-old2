@@ -1,12 +1,15 @@
 {
   "extends": "@resolvex/tsconfig/tsconfig.react.json",
   "compilerOptions": {
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": false,
     "paths": {
       "~/*": ["./src/*"]
     }
   },
   "include": ["src"],
   "references": [
-    { "path": "./tsconfig.node.json" }
+    { "path": "./tsconfig.node.json" },
+    { "path": "../api/tsconfig.json" }
   ]
 }

@@ -1,6 +1,9 @@
 name = "resolvex-api"
 main = "src/worker.ts"
 compatibility_date = "2023-09-09"
+compatibility_flags = ["nodejs_compat"]
+
+# ------------------------------------------------------------------------------------------------------------
 
 [env.local]
 vars = { WORKER_ENV = "development", WEB_URL = "http://localhost:3000" }
@@ -8,17 +11,39 @@ d1_databases = [
     { binding = "DB", database_name = "main-db", database_id = "269c5104-d94e-46c7-af27-b8b1ae94ea61" },
 ]
 
+[[env.local.durable_objects.bindings]]
+name = "RATE_LIMITER_DON"
+class_name = "RateLimiterDO"
+
+# ------------------------------------------------------------------------------------------------------------
+
 [env.preview]
 route = { pattern = "preview.api.resolvex.ai", custom_domain = true }
-vars = { WORKER_ENV = "development", WEB_URL = "https://preview.resolvex.ai" }
+vars = { WORKER_ENV = "development", WEB_URL = "https://preview.app.resolvex.ai" }
 d1_databases = [
     { binding = "DB", database_name = "main-db", database_id = "959414b4-8486-426d-b78e-d2c6590cd434" },
 ]
 
+[[env.preview.durable_objects.bindings]]
+name = "RATE_LIMITER_DON"
+class_name = "RateLimiterDO"
+
+# ------------------------------------------------------------------------------------------------------------
+
 [env.production]
 logpush = true
 route = { pattern = "api.resolvex.ai", custom_domain = true }
-vars = { WORKER_ENV = "production", WEB_URL = "https://resolvex.ai" }
+vars = { WORKER_ENV = "production", WEB_URL = "https://app.resolvex.ai" }
 d1_databases = [
     { binding = "DB", database_name = "main-db", database_id = "2d1cd8fc-7483-4c2c-8674-c3d8a946e53b" },
 ]
+
+[[env.production.durable_objects.bindings]]
+name = "RATE_LIMITER_DON"
+class_name = "RateLimiterDO"
+
+# ------------------------------------------------------------------------------------------------------------
+
+[[migrations]]
+tag = "new-RateLimiterDO-class"
+new_classes = ["RateLimiterDO"]

@@ -37,3 +37,5 @@ export default {
     return response
   },
 }
+
+export { RateLimiterDO } from './worker.rate-limiter'

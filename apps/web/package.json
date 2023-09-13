@@ -12,21 +12,40 @@
     "deploy:production": "vite build --mode=production && wrangler pages deploy --project-name=resolvex-web-production --branch=main ./dist"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-toast": "^1.1.4",
     "@resolvex/api": "workspace:^",
     "@tanstack/react-query": "^4.35.0",
     "@tanstack/react-router": "0.0.1-beta.185",
     "@trpc/client": "^10.38.1",
     "@trpc/react-query": "^10.38.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "jose": "^4.14.6",
+    "lucide-react": "^0.276.0",
     "million": "2.6.0-beta.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-otp-input": "^3.0.4",
+    "superjson": "^1.13.1",
+    "tailwind-merge": "^1.14.0",
     "valibot": "^0.12.0"
   },
   "devDependencies": {
+    "@egoist/tailwindcss-icons": "^1.1.0",
+    "@iconify-json/heroicons": "^1.1.12",
+    "@iconify-json/mdi": "^1.1.54",
     "@resolvex/tsconfig": "workspace:^",
+    "@tailwindcss/container-queries": "^0.1.1",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react-swc": "^3.3.2",
+    "autoprefixer": "^10.4.15",
+    "postcss": "^8.4.29",
+    "tailwind-scrollbar": "^3.0.5",
+    "tailwindcss": "^3.3.3",
+    "tailwindcss-animate": "^1.0.7",
     "vite": "^4.4.9"
   }
 }
