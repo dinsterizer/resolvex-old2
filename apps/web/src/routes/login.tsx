@@ -12,12 +12,12 @@ import { trpc } from '~/utils/trpc'
 import { useToast } from '~/components/ui/use-toast'
 import { useAuthStore } from '~/stores/auth'
 
-export function SignIn() {
+export function Login() {
   const auth = useAuthStore()
   const { toast } = useToast()
   const [step, setStep] = useState<'send-otp' | 'verify-otp'>('send-otp')
   const [email, setEmail] = useState<string>('')
-  const emailSendOtpMutation = trpc.auth.signIn.email.sendOtp.useMutation({
+  const emailSendOtpMutation = trpc.auth.login.email.sendOtp.useMutation({
     onError() {
       toast({
         variant: 'destructive',
@@ -26,7 +26,7 @@ export function SignIn() {
       })
     },
   })
-  const emailVerifyOtpMutation = trpc.auth.signIn.email.verifyOtp.useMutation({
+  const emailVerifyOtpMutation = trpc.auth.login.email.verifyOtp.useMutation({
     onError() {
       toast({
         variant: 'destructive',
@@ -102,8 +102,8 @@ function SendOtpForm({ onSubmit, isLoading }: { onSubmit: (data: Output<typeof s
     onSubmit(parse(sendOtpFormSchema, Object.fromEntries(new FormData(e.currentTarget))))
   }}>
     <div>
-        <Label htmlFor="sign-in-email" className="mb-2">Email</Label>
-        <Input id="sign-in-email" type="email" name="email" required placeholder="example@resolvex.ai" />
+        <Label htmlFor="login-email" className="mb-2">Email</Label>
+        <Input id="login-email" type="email" name="email" required placeholder="example@resolvex.ai" />
     </div>
 
     <Button className="w-full">
