@@ -19,7 +19,7 @@ class_name = "RateLimiterDO"
 
 [env.preview]
 route = { pattern = "preview.api.resolvex.ai", custom_domain = true }
-vars = { WORKER_ENV = "development", WEB_URL = "https://preview.resolvex.ai" }
+vars = { WORKER_ENV = "development", WEB_URL = "https://preview.app.resolvex.ai" }
 d1_databases = [
     { binding = "DB", database_name = "main-db", database_id = "959414b4-8486-426d-b78e-d2c6590cd434" },
 ]
@@ -33,7 +33,7 @@ class_name = "RateLimiterDO"
 [env.production]
 logpush = true
 route = { pattern = "api.resolvex.ai", custom_domain = true }
-vars = { WORKER_ENV = "production", WEB_URL = "https://resolvex.ai" }
+vars = { WORKER_ENV = "production", WEB_URL = "https://app.resolvex.ai" }
 d1_databases = [
     { binding = "DB", database_name = "main-db", database_id = "2d1cd8fc-7483-4c2c-8674-c3d8a946e53b" },
 ]
