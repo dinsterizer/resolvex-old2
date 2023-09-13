@@ -17,24 +17,8 @@ export function Login() {
   const { toast } = useToast()
   const [step, setStep] = useState<'send-otp' | 'verify-otp'>('send-otp')
   const [email, setEmail] = useState<string>('')
-  const emailSendOtpMutation = trpc.auth.login.email.sendOtp.useMutation({
-    onError() {
-      toast({
-        variant: 'destructive',
-        title: 'Oops!',
-        description: 'Something went wrong. Please try again.',
-      })
-    },
-  })
-  const emailVerifyOtpMutation = trpc.auth.login.email.verifyOtp.useMutation({
-    onError() {
-      toast({
-        variant: 'destructive',
-        title: 'Oops!',
-        description: 'Something went wrong. Please try again.',
-      })
-    },
-  })
+  const emailSendOtpMutation = trpc.auth.login.email.sendOtp.useMutation()
+  const emailVerifyOtpMutation = trpc.auth.login.email.verifyOtp.useMutation()
 
   return <Container>
     <Button variant={'ghost'} className="rounded-full" asChild>
@@ -47,7 +31,7 @@ export function Login() {
     <main className="mt-52 max-w-md mx-auto">
       <Logo size={24} />
       {step === 'send-otp' && <h1 className="font-title font-bold text-xl mt-3">One Step Login</h1>}
-      {step === 'verify-otp' && <h1 className="font-title font-bold text-xl mt-3">Enter the 6-character OTP</h1>}
+      {step === 'verify-otp' && <h1 className="font-title font-bold text-xl mt-3">Enter the 6-char OTP</h1>}
 
       {step === 'verify-otp' && <p className="text-muted-foreground text-sm mt-2">We sent it to your email <span className="font-bold text-foreground">{email}</span></p>}
 
@@ -65,7 +49,7 @@ export function Login() {
             toast({
               variant: 'destructive',
               title: 'Incorrect OTP',
-              description: 'The OTP you entered is incorrect. Please try again.',
+              description: 'Please try again.',
             })
             return
           }
@@ -129,7 +113,7 @@ function VerifyOtpForm(
   }) {
   const [otp, setOtp] = useState<string>('')
 
-  return <form className="space-y-3" onSubmit={(e) => {
+  return <form className="space-y-5" onSubmit={(e) => {
     e.preventDefault()
     onSubmit(parse(verifyOtpFormSchema, { otp }))
   }}>

@@ -10,16 +10,13 @@ import { generateLoginEmail } from '../../emails/login'
 
 export const loginEmailRouter = router({
   sendOtp: publicProcedure.input(object({ email: string([email(), toLowerCase()]) })).mutation(async ({ ctx, input }) => {
-    const { db, ec, env, rateLimiter } = ctx
+    const { db, ec, env, rateLimit } = ctx
 
-    const { success } = await rateLimiter.limit({
-      key: `login.email.sendOtp:${input.email}`,
+    await rateLimit({
+      key: `email-send-otp:${input.email}`,
       duration: 60 * 2,
       limit: 2,
     })
-
-    if (!success)
-      return
 
     const { email } = input
     let user = await db.query.Users.findFirst({
@@ -73,8 +70,15 @@ export const loginEmailRouter = router({
   }),
   verifyOtp: publicProcedure.input(object({ email: string([email(), toLowerCase()]), otp: string([toLowerCase()]) }))
     .mutation(async ({ ctx, input }) => {
-      const { db, env, ec } = ctx
+      const { db, env, ec, rateLimit } = ctx
       const { email } = input
+
+      await rateLimit({
+        key: `email-verify-otp:${input.email}`,
+        duration: 60,
+        limit: 10,
+      })
+
       const user = await db.query.Users.findFirst({
         where(t, { eq }) { return eq(t.email, email) },
         columns: {

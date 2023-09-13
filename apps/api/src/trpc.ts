@@ -7,10 +7,21 @@ import { object, parse, string } from 'valibot'
 import type { Context } from './worker.context'
 
 export function createTRPCContext({ context }: { context: Context }) {
+  const rateLimit = async (...args: Parameters<typeof context.rateLimiter.limit>) => {
+    const { success } = await context.rateLimiter.limit(...args)
+
+    if (!success) {
+      throw new TRPCError({
+        code: 'TOO_MANY_REQUESTS',
+      })
+    }
+  }
+
   return async (opts: FetchCreateContextFnOptions) => {
     return {
       ...context,
       ...opts,
+      rateLimit,
     }
   }
 }
