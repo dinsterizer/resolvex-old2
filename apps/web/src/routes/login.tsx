@@ -80,9 +80,12 @@ export function Login() {
         </div>
       }
 
-      {step === 'verify-otp' && <Button variant="ghost" className="w-full text-muted-foreground" type="button" onClick={() => {
+      {step === 'verify-otp' && <Button disabled={emailSendOtpMutation.isLoading} variant="ghost" className="w-full text-muted-foreground" type="button" onClick={() => {
         emailSendOtpMutation.mutate({ email })
-      }}>Resend OTP?</Button>}
+      }}>
+        Resend OTP?
+        {emailSendOtpMutation.isLoading && <span className="i-heroicons-arrow-path animate-spin ml-3" />}
+      </Button>}
 
         {step === 'send-otp' && <div>
           {/* TODO */}
@@ -106,7 +109,7 @@ function SendOtpForm({ onSubmit, isLoading }: { onSubmit: (data: Output<typeof s
         <Input id="login-email" type="email" name="email" required placeholder="example@resolvex.ai" />
     </div>
 
-    <Button className="w-full">
+    <Button className="w-full" disabled={isLoading}>
       Continue
       {isLoading ? <span className="i-heroicons-arrow-path animate-spin ml-3" /> : <span className="i-heroicons-arrow-right ml-3" />}
     </Button>
@@ -146,7 +149,7 @@ function VerifyOtpForm(
 
     <div className="flex gap-3">
       <Button variant="secondary" type="button" onClick={() => onBack()} className="w-full"><span className="i-heroicons-arrow-left mr-3" /> Back</Button>
-      <Button className="w-full">
+      <Button className="w-full" disabled={isLoading}>
         Continue
         {isLoading ? <span className="i-heroicons-arrow-path animate-spin ml-3" /> : <span className="i-heroicons-arrow-right ml-3" />}
     </Button>

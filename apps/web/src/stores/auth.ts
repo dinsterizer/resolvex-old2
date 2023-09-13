@@ -16,8 +16,6 @@ interface Unauthed {
   jwt: null
 }
 
-// TODO - handle expire token
-
 export const useAuthStore = create(persist<(Authed | Unauthed) & {
   login: (auth: Authed) => void
   logout: () => void

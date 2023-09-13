@@ -6,10 +6,11 @@ import { eq } from 'drizzle-orm'
 import { publicProcedure, router } from '../../trpc'
 import { Users } from '../../schema'
 import { generateOtp } from '../../utils'
+import { generateLoginEmail } from '../../emails/login'
 
 export const loginEmailRouter = router({
   sendOtp: publicProcedure.input(object({ email: string([email(), toLowerCase()]) })).mutation(async ({ ctx, input }) => {
-    const { db } = ctx
+    const { db, ec, env } = ctx
     const { email } = input
     let user = await db.query.Users.findFirst({
       where(t, { eq }) { return eq(t.email, email) },
@@ -26,6 +27,7 @@ export const loginEmailRouter = router({
         .get()
     }
 
+    // TODO - prevent spamming
     if (!user.otp || user.otp.expiresAt < new Date(Date.now() + 1000 * 30)) {
       const otp = generateOtp()
       await db.update(Users)
@@ -38,7 +40,25 @@ export const loginEmailRouter = router({
         .where(eq(Users.email, email))
         .get()
 
-      // TODO - send email otp
+      const { htmlContent, textContent, subject } = generateLoginEmail({ otp })
+
+      ec.waitUntil(fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'api-key': env.BREVO_API_KEY,
+          'accept': 'application/json',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: {
+            id: env.BREVO_SENDER_ID,
+          },
+          to: [{ email }],
+          htmlContent,
+          textContent,
+          subject,
+        }),
+      }))
     }
   }),
   verifyOtp: publicProcedure.input(object({ email: string([email(), toLowerCase()]), otp: string([toLowerCase()]) }))

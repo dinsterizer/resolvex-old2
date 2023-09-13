@@ -1,0 +1,9 @@
+LOGIN
+
+Please copy and paste this OTP to login.
+
+{{OTP}}
+
+Safely ignore this email if you did not request a login.
+
+ResolveX.ai [https://resolvex.ai], forge vital customer connections
