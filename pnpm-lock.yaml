@@ -26,6 +26,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@resolvex/worker-rate-limiter':
+        specifier: workspace:^
+        version: link:../../packages/worker-rate-limiter
       '@trpc/server':
         specifier: ^10.38.0
         version: 10.38.1
@@ -214,6 +217,12 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+
+  packages/worker-rate-limiter:
+    devDependencies:
+      '@resolvex/tsconfig':
+        specifier: workspace:^
+        version: link:../tsconfig
 
 packages:
 

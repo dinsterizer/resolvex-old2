@@ -23,3 +23,11 @@ vars = { WORKER_ENV = "production", WEB_URL = "https://resolvex.ai" }
 d1_databases = [
     { binding = "DB", database_name = "main-db", database_id = "2d1cd8fc-7483-4c2c-8674-c3d8a946e53b" },
 ]
+
+[[durable_objects.bindings]]
+name = "RATE_LIMITER_DON"
+class_name = "RateLimiterDO"
+
+[[migrations]]
+tag = "new-RateLimiterDO-class"
+new_classes = ["RateLimiterDO"]
