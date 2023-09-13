@@ -25,5 +25,9 @@
     "class",
     "className",
     "class:list"
-  ]
+  ],
+  "files.exclude": {
+    "**/*.js": true,
+    "**/*.d.ts": true
+  }
 }
