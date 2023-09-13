@@ -4,9 +4,9 @@ import { datetime, emailCol, json } from './schema.extend'
 import { generateUserId } from './utils'
 
 export const Users = sqliteTable('users', {
-  id: text('id').notNull().$defaultFn(() => generateUserId()),
+  id: text('id').notNull().primaryKey().$defaultFn(() => generateUserId()),
   name: text('name').notNull(),
-  email: emailCol('email').notNull(),
+  email: emailCol('email').notNull().unique(),
   otp: json(object({
     code: string(),
     expiresAt: date(),
