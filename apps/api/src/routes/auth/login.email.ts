@@ -10,7 +10,17 @@ import { generateLoginEmail } from '../../emails/login'
 
 export const loginEmailRouter = router({
   sendOtp: publicProcedure.input(object({ email: string([email(), toLowerCase()]) })).mutation(async ({ ctx, input }) => {
-    const { db, ec, env } = ctx
+    const { db, ec, env, rateLimiter } = ctx
+
+    const { success } = await rateLimiter.limit({
+      key: `login.email.sendOtp:${input.email}`,
+      duration: 60 * 2,
+      limit: 2,
+    })
+
+    if (!success)
+      return
+
     const { email } = input
     let user = await db.query.Users.findFirst({
       where(t, { eq }) { return eq(t.email, email) },
@@ -27,39 +37,39 @@ export const loginEmailRouter = router({
         .get()
     }
 
-    // TODO - prevent spamming
-    if (!user.otp || user.otp.expiresAt < new Date(Date.now() + 1000 * 30)) {
-      const otp = generateOtp()
+    let otp = user.otp
+    if (!otp || otp.expiresAt < new Date(Date.now() + 1000 * 30)) {
+      otp = {
+        code: generateOtp(),
+        expiresAt: new Date(Date.now() + 1000 * 60 * 5),
+      }
       await db.update(Users)
         .set({
-          otp: {
-            code: otp,
-            expiresAt: new Date(Date.now() + 1000 * 60 * 5),
-          },
+          otp,
         })
         .where(eq(Users.email, email))
         .get()
-
-      const { htmlContent, textContent, subject } = generateLoginEmail({ otp })
-
-      ec.waitUntil(fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: {
-          'api-key': env.BREVO_API_KEY,
-          'accept': 'application/json',
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          sender: {
-            id: env.BREVO_SENDER_ID,
-          },
-          to: [{ email }],
-          htmlContent,
-          textContent,
-          subject,
-        }),
-      }))
     }
+
+    const { htmlContent, textContent, subject } = generateLoginEmail({ otp: otp.code })
+
+    ec.waitUntil(fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'api-key': env.BREVO_API_KEY,
+        'accept': 'application/json',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        sender: {
+          id: env.BREVO_SENDER_ID,
+        },
+        to: [{ email }],
+        htmlContent,
+        textContent,
+        subject,
+      }),
+    }))
   }),
   verifyOtp: publicProcedure.input(object({ email: string([email(), toLowerCase()]), otp: string([toLowerCase()]) }))
     .mutation(async ({ ctx, input }) => {
