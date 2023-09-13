@@ -1,8 +1,11 @@
 export class DO implements DurableObject {
-  constructor(private state: DurableObjectState, private env: Record<string, unknown>) {}
+  constructor(
+    private state: DurableObjectState,
+    private env: Record<string, unknown>,
+  ) {}
 
   public async fetch(request: Request): Promise<Response> {
-    const { limit, duration } = await request.json() as { limit: number; duration: number }
+    const { limit, duration } = (await request.json()) as { limit: number; duration: number }
     const key = `_DURATION:${duration}_LIMIT:${limit}`
 
     const value = await this.state.storage.get<string>(key)
