@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { decodeJwt } from 'jose'
 
 interface Authed {
   user: {
@@ -31,5 +32,20 @@ export const useAuthStore = create(persist<(Authed | Unauthed) & {
     },
   }), {
     name: 'auth-store',
+    onRehydrateStorage: () => {
+      return (state) => {
+        if (!state || !state.jwt)
+          return
+        try {
+          const claims = decodeJwt(state.jwt)
+
+          if (claims.exp! - 2 * 60 * 60 < Date.now() / 1000)
+            state.logout()
+        }
+        catch (e) {
+          state.logout()
+        }
+      }
+    },
   }),
 )

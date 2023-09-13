@@ -62,7 +62,7 @@ export const loginEmailRouter = router({
         })
       }
 
-      if (!user.otp || user.otp.expiresAt < new Date()) {
+      if (!user.otp || user.otp.expiresAt < new Date() || user.otp.code !== input.otp) {
         return {
           user: null,
           jwt: null,
@@ -81,7 +81,7 @@ export const loginEmailRouter = router({
       const jwt = await new SignJWT({ userId: user.id })
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
-        .setExpirationTime(new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).getTime())
+        .setExpirationTime((Date.now() + 1000 * 60 * 60 * 24 * 7) / 1000)
         .sign(Buffer.from(env.AUTH_SECRET))
 
       return {
