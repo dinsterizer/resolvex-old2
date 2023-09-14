@@ -9,6 +9,8 @@ export const envSchema = object({
   AUTH_SECRET: string(),
   BREVO_API_KEY: string(),
   BREVO_SENDER_ID: coerce(number([minValue(1)]), Number),
+  GOOGLE_OAUTH_CLIENT_ID: string(),
+  GOOGLE_OAUTH_CLIENT_SECRET: string(),
 })
 
 export type Env = Output<typeof envSchema>

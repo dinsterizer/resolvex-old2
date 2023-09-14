@@ -8,10 +8,12 @@ export const homeRoute = new Route({
   path: '/',
   component() {
     const { data, isLoading } = trpc.ping.useQuery()
+    const { mutate } = trpc.test.useMutation()
 
     return (
       <div>
         home page - {data} - {isLoading ? 'Loading' : ''} - {env.API_URL}
+        <button onClick={() => mutate()}>click me</button>
       </div>
     )
   },

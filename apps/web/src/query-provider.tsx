@@ -30,28 +30,55 @@ export function QueryProvider({ children }: { children: ReactNode }) {
         mutationCache: new MutationCache({
           onError(err) {
             if (err instanceof TRPCClientError) {
-              switch (err.data?.code) {
-                case 'TOO_MANY_REQUESTS':
+              const code = err.data?.code
+              const message = err.message
+
+              if (code === 'UNAUTHORIZED') {
+                auth.logout()
+              }
+
+              if (message !== code) {
+                toast({
+                  variant: 'destructive',
+                  title: message,
+                })
+              } else {
+                if (message === 'TOO_MANY_REQUESTS') {
                   toast({
                     variant: 'destructive',
                     title: 'Too many requests',
                     description: 'Please try again later.',
                   })
-                  break
-                case 'UNAUTHORIZED':
-                  auth.logout()
+                } else if (message === 'UNAUTHORIZED') {
                   toast({
                     variant: 'destructive',
                     title: 'Unauthorized',
                     description: 'Please login and try again.',
                   })
-                  break
-                default:
-                  toast({
-                    variant: 'destructive',
-                    title: 'Something went wrong',
-                    description: 'Please try again later.',
-                  })
+                } else {
+                  switch (code) {
+                    case 'TOO_MANY_REQUESTS':
+                      toast({
+                        variant: 'destructive',
+                        title: 'Too many requests',
+                        description: 'Please try again later.',
+                      })
+                      break
+                    case 'UNAUTHORIZED':
+                      toast({
+                        variant: 'destructive',
+                        title: 'Unauthorized',
+                        description: 'Please login and try again.',
+                      })
+                      break
+                    default:
+                      toast({
+                        variant: 'destructive',
+                        title: 'Something went wrong',
+                        description: 'Please try again later.',
+                      })
+                  }
+                }
               }
             }
           },

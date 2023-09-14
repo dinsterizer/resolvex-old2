@@ -1,6 +1,6 @@
 import { Outlet, RootRoute } from '@tanstack/react-router'
+import { Login } from '~/components/login'
 import { useAuthStore } from '~/stores/auth'
-import { Login } from './login'
 
 export const rootRoute = new RootRoute({
   component: function Root() {
