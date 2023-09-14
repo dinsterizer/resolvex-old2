@@ -19,8 +19,20 @@ export function Login() {
   const { toast } = useToast()
   const [step, setStep] = useState<'send-otp' | 'verify-otp'>('send-otp')
   const [email, setEmail] = useState<string>('')
-  const emailSendOtpMutation = trpc.auth.login.email.sendOtp.useMutation()
-  const emailVerifyOtpMutation = trpc.auth.login.email.verifyOtp.useMutation()
+  const emailSendOtpMutation = trpc.auth.login.email.sendOtp.useMutation({
+    onSuccess(_data, variables) {
+      toast({
+        title: 'Please check your email for the OTP',
+      })
+      setEmail(variables.email)
+      setStep('verify-otp')
+    },
+  })
+  const emailVerifyOtpMutation = trpc.auth.login.email.verifyOtp.useMutation({
+    onSuccess(data) {
+      auth.login(data)
+    },
+  })
 
   return (
     <Container>
@@ -46,11 +58,7 @@ export function Login() {
           {step === 'send-otp' && (
             <SendOtpForm
               isLoading={emailSendOtpMutation.isLoading}
-              onSubmit={async ({ email }) => {
-                await emailSendOtpMutation.mutateAsync({ email })
-                setEmail(email)
-                setStep('verify-otp')
-              }}
+              onSubmit={(data) => emailSendOtpMutation.mutate(data)}
             />
           )}
 
@@ -58,20 +66,7 @@ export function Login() {
             <VerifyOtpForm
               isLoading={emailVerifyOtpMutation.isLoading}
               onBack={() => setStep('send-otp')}
-              onSubmit={async ({ otp }) => {
-                const data = await emailVerifyOtpMutation.mutateAsync({ email, otp })
-
-                if (!data.user) {
-                  toast({
-                    variant: 'destructive',
-                    title: 'Incorrect OTP',
-                    description: 'Please try again.',
-                  })
-                  return
-                }
-
-                auth.login(data)
-              }}
+              onSubmit={async ({ otp }) => emailVerifyOtpMutation.mutate({ email, otp })}
             />
           )}
 

@@ -108,10 +108,7 @@ export const loginEmailRouter = router({
       }
 
       if (!user.otp || user.otp.expiresAt < new Date() || user.otp.code !== input.otp) {
-        return {
-          user: null,
-          jwt: null,
-        }
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Your OTP is invalid or expired' })
       }
 
       ec.waitUntil(
