@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import OtpInput from 'react-otp-input'
 import type { Output } from 'valibot'
@@ -9,6 +10,7 @@ import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { useToast } from '~/components/ui/use-toast'
 import { env } from '~/env'
+import { homeRoute } from '~/routes/home'
 import { useAuthStore } from '~/stores/auth'
 import { trpc } from '~/utils/trpc'
 
@@ -195,10 +197,12 @@ function VerifyOtpForm({
 }
 
 export function LoginWithGoogleButton() {
+  const navigate = useNavigate()
   const auth = useAuthStore()
   const { mutate, isLoading } = trpc.auth.login.google.verifyAuthCode.useMutation({
     onSuccess(data) {
       auth.login(data)
+      navigate({ to: homeRoute.to })
     },
   })
   const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth')
