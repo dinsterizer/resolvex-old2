@@ -5,16 +5,22 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint && eslint --max-warnings 0 --report-unused-disable-directives .",
-    "lint:fix": "turbo run lint:fix && eslint --fix --max-warnings 0 --report-unused-disable-directives .",
+    "lint": "eslint --max-warnings 0 --report-unused-disable-directives . && prettier --check .",
+    "lint:fix": "eslint --fix --max-warnings 0 --report-unused-disable-directives . && prettier --write .",
     "type:check": "turbo run type:check",
     "preview": "turbo run preview",
     "deploy:preview": "turbo run deploy:preview",
     "deploy:production": "turbo run deploy:production"
   },
   "devDependencies": {
-    "@antfu/eslint-config-react": "^0.41.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
     "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.0.3",
     "turbo": "latest",
     "typescript": "^5.2.2",
     "wrangler": "^3.7.0"

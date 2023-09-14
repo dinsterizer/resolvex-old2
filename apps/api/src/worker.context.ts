@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/d1'
-import type { Env } from './worker.env'
 import * as schema from './schema'
+import type { Env } from './worker.env'
 import { createRateLimiter } from './worker.rate-limiter'
 
 export function createContext({ env, ec }: { env: Env; ec: ExecutionContext }) {

@@ -8,15 +8,7 @@ export class RateLimiter {
     this.durableNamespace = options.durableNamespace
   }
 
-  public async limit({
-    key,
-    limit,
-    duration = 60,
-  }: {
-    key: string
-    limit: number
-    duration?: number
-  }) {
+  public async limit({ key, limit, duration = 60 }: { key: string; limit: number; duration?: number }) {
     const durableObjectId = this.durableNamespace.idFromName(key)
     const durableObject = this.durableNamespace.get(durableObjectId)
 
@@ -27,8 +19,7 @@ export class RateLimiter {
       }),
     )
 
-    if (status !== 200)
-      return { success: false }
+    if (status !== 200) return { success: false }
 
     return { success: true }
   }

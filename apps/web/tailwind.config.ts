@@ -1,16 +1,13 @@
-import type { Config } from 'tailwindcss'
-import defaultTheme from 'tailwindcss/defaultTheme'
-import scrollbarPlugin from 'tailwind-scrollbar'
-import containerQueriesPlugin from '@tailwindcss/container-queries'
-import animatePlugin from 'tailwindcss-animate'
 import { getIconCollections, iconsPlugin } from '@egoist/tailwindcss-icons'
+import containerQueriesPlugin from '@tailwindcss/container-queries'
+import scrollbarPlugin from 'tailwind-scrollbar'
+import type { Config } from 'tailwindcss'
+import animatePlugin from 'tailwindcss-animate'
+import defaultTheme from 'tailwindcss/defaultTheme'
 
 export default {
   darkMode: ['class'],
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     container: {
       center: true,

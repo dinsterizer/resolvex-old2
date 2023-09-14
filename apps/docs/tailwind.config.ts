@@ -1,15 +1,12 @@
-import type { Config } from 'tailwindcss'
-import defaultTheme from 'tailwindcss/defaultTheme'
-import scrollbarPlugin from 'tailwind-scrollbar'
-import containerQueriesPlugin from '@tailwindcss/container-queries'
-
 // @ts-expect-error - no types
 import { getIconCollections, iconsPlugin } from '@egoist/tailwindcss-icons'
+import containerQueriesPlugin from '@tailwindcss/container-queries'
+import scrollbarPlugin from 'tailwind-scrollbar'
+import type { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
 
-export default <Partial<Config>> {
-  content: [
-    'src/**/*.*',
-  ],
+export default {
+  content: ['src/**/*.*'],
   theme: {
     extend: {
       fontFamily: {
@@ -25,4 +22,4 @@ export default <Partial<Config>> {
     }),
     containerQueriesPlugin,
   ],
-}
+} satisfies Partial<Config>

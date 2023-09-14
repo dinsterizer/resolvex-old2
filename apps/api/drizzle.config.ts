@@ -1,5 +1,5 @@
-import path from 'node:path'
 import type { Config } from 'drizzle-kit'
+import path from 'node:path'
 
 export default {
   schema: './src/schema.ts',

@@ -2,9 +2,7 @@ import { Router } from '@tanstack/react-router'
 import { rootRoute } from './routes/_root'
 import { homeRoute } from './routes/home'
 
-const routeTree = rootRoute.addChildren([
-  homeRoute,
-])
+const routeTree = rootRoute.addChildren([homeRoute])
 
 export const router = new Router({ routeTree })
 

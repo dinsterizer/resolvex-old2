@@ -1,0 +1,8 @@
+.*/
+dist/
+!.vscode/
+!.github/
+
+
+**.js
+**.d.ts

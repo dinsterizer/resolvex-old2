@@ -1,74 +1,83 @@
+import { TRPCError } from '@trpc/server'
+import { eq } from 'drizzle-orm'
+import { SignJWT } from 'jose'
 import { Buffer } from 'node:buffer'
 import { email, object, string, toLowerCase } from 'valibot'
-import { TRPCError } from '@trpc/server'
-import { SignJWT } from 'jose'
-import { eq } from 'drizzle-orm'
-import { publicProcedure, router } from '../../trpc'
-import { Users } from '../../schema'
-import { generateOtp } from '../../utils'
 import { generateLoginEmail } from '../../emails/login'
+import { Users } from '../../schema'
+import { publicProcedure, router } from '../../trpc'
+import { generateOtp } from '../../utils'
 
 export const loginEmailRouter = router({
-  sendOtp: publicProcedure.input(object({ email: string([email(), toLowerCase()]) })).mutation(async ({ ctx, input }) => {
-    const { db, ec, env, rateLimit } = ctx
+  sendOtp: publicProcedure
+    .input(object({ email: string([email(), toLowerCase()]) }))
+    .mutation(async ({ ctx, input }) => {
+      const { db, ec, env, rateLimit } = ctx
 
-    await rateLimit({
-      key: `email-send-otp:${input.email}`,
-      duration: 60 * 2,
-      limit: 2,
-    })
+      await rateLimit({
+        key: `email-send-otp:${input.email}`,
+        duration: 60 * 2,
+        limit: 2,
+      })
 
-    const { email } = input
-    let user = await db.query.Users.findFirst({
-      where(t, { eq }) { return eq(t.email, email) },
-      columns: {
-        email: true,
-        otp: true,
-      },
-    })
-
-    if (!user) {
-      user = await db.insert(Users)
-        .values({ email, name: email.split('@')[0] })
-        .returning({ email: Users.email, otp: Users.otp })
-        .get()
-    }
-
-    let otp = user.otp
-    if (!otp || otp.expiresAt < new Date(Date.now() + 1000 * 30)) {
-      otp = {
-        code: generateOtp(),
-        expiresAt: new Date(Date.now() + 1000 * 60 * 5),
-      }
-      await db.update(Users)
-        .set({
-          otp,
-        })
-        .where(eq(Users.email, email))
-        .get()
-    }
-
-    const { htmlContent, textContent, subject } = generateLoginEmail({ otp: otp.code.toUpperCase() })
-
-    ec.waitUntil(fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {
-        'api-key': env.BREVO_API_KEY,
-        'accept': 'application/json',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        sender: {
-          id: env.BREVO_SENDER_ID,
+      const { email } = input
+      let user = await db.query.Users.findFirst({
+        where(t, { eq }) {
+          return eq(t.email, email)
         },
-        to: [{ email }],
-        htmlContent,
-        textContent,
-        subject,
-      }),
-    }))
-  }),
-  verifyOtp: publicProcedure.input(object({ email: string([email(), toLowerCase()]), otp: string([toLowerCase()]) }))
+        columns: {
+          email: true,
+          otp: true,
+        },
+      })
+
+      if (!user) {
+        user = await db
+          .insert(Users)
+          .values({ email, name: email.split('@')[0] })
+          .returning({ email: Users.email, otp: Users.otp })
+          .get()
+      }
+
+      let otp = user.otp
+      if (!otp || otp.expiresAt < new Date(Date.now() + 1000 * 30)) {
+        otp = {
+          code: generateOtp(),
+          expiresAt: new Date(Date.now() + 1000 * 60 * 5),
+        }
+        await db
+          .update(Users)
+          .set({
+            otp,
+          })
+          .where(eq(Users.email, email))
+          .get()
+      }
+
+      const { htmlContent, textContent, subject } = generateLoginEmail({ otp: otp.code.toUpperCase() })
+
+      ec.waitUntil(
+        fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'api-key': env.BREVO_API_KEY,
+            accept: 'application/json',
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            sender: {
+              id: env.BREVO_SENDER_ID,
+            },
+            to: [{ email }],
+            htmlContent,
+            textContent,
+            subject,
+          }),
+        }),
+      )
+    }),
+  verifyOtp: publicProcedure
+    .input(object({ email: string([email(), toLowerCase()]), otp: string([toLowerCase()]) }))
     .mutation(async ({ ctx, input }) => {
       const { db, env, ec, rateLimit } = ctx
       const { email } = input
@@ -80,7 +89,9 @@ export const loginEmailRouter = router({
       })
 
       const user = await db.query.Users.findFirst({
-        where(t, { eq }) { return eq(t.email, email) },
+        where(t, { eq }) {
+          return eq(t.email, email)
+        },
         columns: {
           id: true,
           name: true,
@@ -104,7 +115,8 @@ export const loginEmailRouter = router({
       }
 
       ec.waitUntil(
-        db.update(Users)
+        db
+          .update(Users)
           .set({
             otp: null,
           })
