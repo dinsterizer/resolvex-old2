@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import OtpInput from 'react-otp-input'
 import type { Output } from 'valibot'
 import { email, length, object, parse, string } from 'valibot'
@@ -99,10 +99,7 @@ export function Login() {
 
           {step === 'send-otp' && (
             <div>
-              {/* TODO */}
-              <Button variant="secondary" type="button" className="w-full">
-                Continue with Google <span className="i-mdi-google ml-3" />
-              </Button>
+              <LoginWithGoogleButton />
             </div>
           )}
         </div>
@@ -194,5 +191,44 @@ function VerifyOtpForm({
         </Button>
       </div>
     </form>
+  )
+}
+
+export function LoginWithGoogleButton() {
+  const auth = useAuthStore()
+  const { mutate, isLoading } = trpc.auth.login.google.verifyAuthCode.useMutation({
+    onSuccess(data) {
+      auth.login(data)
+    },
+  })
+  const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth')
+
+  authUrl.searchParams.set('client_id', env.GOOGLE_OAUTH_CLIENT_ID)
+  authUrl.searchParams.set('redirect_uri', window.location.origin)
+  authUrl.searchParams.set('response_type', 'code')
+  authUrl.searchParams.set(
+    'scope',
+    'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+  )
+
+  useEffect(() => {
+    console.log(12345)
+    const code = new URL(window.location.href).searchParams.get('code')
+    if (!code) return
+
+    mutate({ code })
+  }, [mutate])
+
+  return (
+    <Button variant="secondary" type="button" className="w-full" asChild>
+      <a href={authUrl.toString()}>
+        Continue with Google
+        {isLoading ? (
+          <span className="i-heroicons-arrow-path animate-spin ml-3" />
+        ) : (
+          <span className="i-mdi-google ml-3" />
+        )}
+      </a>
+    </Button>
   )
 }
