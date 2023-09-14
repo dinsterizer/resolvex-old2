@@ -5,11 +5,16 @@ compatibility_flags = ["nodejs_compat"]
 
 # ------------------------------------------------------------------------------------------------------------
 
-[env.local]
-vars = { WORKER_ENV = "development", WEB_URL = "http://localhost:3000" }
-d1_databases = [
-    { binding = "DB", database_name = "main-db", database_id = "269c5104-d94e-46c7-af27-b8b1ae94ea61" },
-]
+[[env.local.d1_databases]]
+binding = "DB"
+database_name = "main-db"
+database_id = "269c5104-d94e-46c7-af27-b8b1ae94ea61"
+
+[env.local.vars]
+WORKER_ENV = "development"
+WEB_URL = "http://localhost:3000"
+BREVO_SENDER_ID = 2
+GOOGLE_OAUTH_CLIENT_ID = "214623801374-b80npu9ro0tv5191cam6rmkpk1h1chos.apps.googleusercontent.com"
 
 [[env.local.durable_objects.bindings]]
 name = "RATE_LIMITER_DON"
@@ -17,12 +22,20 @@ class_name = "RateLimiterDO"
 
 # ------------------------------------------------------------------------------------------------------------
 
-[env.preview]
-route = { pattern = "preview.api.resolvex.ai", custom_domain = true }
-vars = { WORKER_ENV = "development", WEB_URL = "https://preview.app.resolvex.ai" }
-d1_databases = [
-    { binding = "DB", database_name = "main-db", database_id = "959414b4-8486-426d-b78e-d2c6590cd434" },
-]
+[env.preview.route]
+pattern = "preview.api.resolvex.ai"
+custom_domain = true
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "main-db"
+database_id = "959414b4-8486-426d-b78e-d2c6590cd434"
+
+[env.preview.vars]
+WORKER_ENV = "development"
+WEB_URL = "https://preview.app.resolvex.ai"
+BREVO_SENDER_ID = 2
+GOOGLE_OAUTH_CLIENT_ID = "214623801374-eeh1rav0hqu8lqjb6gftc953vendknlb.apps.googleusercontent.com"
 
 [[env.preview.durable_objects.bindings]]
 name = "RATE_LIMITER_DON"
@@ -32,11 +45,21 @@ class_name = "RateLimiterDO"
 
 [env.production]
 logpush = true
-route = { pattern = "api.resolvex.ai", custom_domain = true }
-vars = { WORKER_ENV = "production", WEB_URL = "https://app.resolvex.ai" }
-d1_databases = [
-    { binding = "DB", database_name = "main-db", database_id = "2d1cd8fc-7483-4c2c-8674-c3d8a946e53b" },
-]
+
+[env.production.route]
+pattern = "api.resolvex.ai"
+custom_domain = true
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "main-db"
+database_id = "2d1cd8fc-7483-4c2c-8674-c3d8a946e53b"
+
+[env.production.vars]
+WORKER_ENV = "production"
+WEB_URL = "https://app.resolvex.ai"
+BREVO_SENDER_ID = 2
+GOOGLE_OAUTH_CLIENT_ID = "214623801374-naec3agdn88jdvjt51e4dilgqdegt4ib.apps.googleusercontent.com"
 
 [[env.production.durable_objects.bindings]]
 name = "RATE_LIMITER_DON"

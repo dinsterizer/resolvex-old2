@@ -211,7 +211,6 @@ export function LoginWithGoogleButton() {
   )
 
   useEffect(() => {
-    console.log(12345)
     const code = new URL(window.location.href).searchParams.get('code')
     if (!code) return
 
