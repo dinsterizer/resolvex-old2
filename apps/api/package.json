@@ -17,9 +17,9 @@
   },
   "dependencies": {
     "@resolvex/worker-rate-limiter": "workspace:^",
-    "@trpc/server": "^10.38.0",
-    "@types/lodash-es": "^4.17.8",
-    "drizzle-orm": "^0.28.5",
+    "@trpc/server": "^10.38.3",
+    "@types/lodash-es": "^4.17.9",
+    "drizzle-orm": "^0.28.6",
     "jose": "^4.14.6",
     "lodash-es": "^4.17.21",
     "nanoid": "^4.0.2",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@resolvex/tsconfig": "workspace:^",
-    "drizzle-kit": "^0.19.13"
+    "drizzle-kit": "^0.19.13",
+    "toml": "^3.0.0"
   }
 }

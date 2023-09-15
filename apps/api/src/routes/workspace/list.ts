@@ -1,4 +1,6 @@
+import { desc, eq } from 'drizzle-orm'
 import { maxValue, minValue, number, object, withDefault, nullish } from 'valibot'
+import { WorkspaceMembers, Workspaces } from '../../schema'
 import { authedProcedure } from '../../trpc'
 
 export const workspaceListRouter = authedProcedure
@@ -8,75 +10,57 @@ export const workspaceListRouter = authedProcedure
       cursor: withDefault(number([minValue(0)]), 0),
     }),
   )
-  .query(({ input, ctx }) => {
+  .query(async ({ input, ctx }) => {
     const limit = input.limit!
 
-    let items = [
-      {
-        id: '1',
-        name: 'My Workspace',
-        members: [
-          {
-            name: 'John Doe 1',
-            email: '1johndo@gmail.com',
-          },
-          {
-            name: 'John Doe 2',
-            email: '2johndo@gmail.com',
-          },
-          {
-            name: 'Lucas',
-            email: 'me@divn.dev',
-          },
-          {
-            name: 'John Doe 3',
-            email: '3johndo@gmail.com',
-          },
-          {
-            name: 'John Doe 4',
-            email: '4johndo@gmail.com',
-          },
-          {
-            name: 'John Doe 6',
-            email: '6johndo@gmail.com',
-          },
-        ],
-      },
-      {
-        id: '2',
-        name: 'My Workspace',
-        members: [
-          {
-            name: 'John Doe 1',
-            email: '1johndo@gmail.com',
-          },
-          {
-            name: 'John Doe 2',
-            email: '2johndo@gmail.com',
-          },
-          {
-            name: 'Lucas',
-            email: 'me@divn.dev',
-          },
-          {
-            name: 'John Doe 3',
-            email: '3johndo@gmail.com',
-          },
-          {
-            name: 'John Doe 4',
-            email: '4johndo@gmail.com',
-          },
-          {
-            name: 'John Doe 6',
-            email: '6johndo@gmail.com',
-          },
-        ],
-      },
-    ]
+    const workspaces = await ctx.db
+      .select({
+        id: Workspaces.id,
+      })
+      .from(Workspaces)
+      .innerJoin(WorkspaceMembers, eq(Workspaces.id, WorkspaceMembers.workspaceId))
+      .where(eq(WorkspaceMembers.userId, ctx.auth.userId))
+      .groupBy(Workspaces.id)
+      .orderBy(desc(Workspaces.createdAt), desc(Workspaces.id))
+      .offset(input.cursor)
+      .limit(limit)
+      .all()
 
-    items = []
+    if (!workspaces.length) {
+      return {
+        items: [],
+        nextCursor: null,
+      }
+    }
+
+    const items = await ctx.db.query.Workspaces.findMany({
+      columns: {
+        id: true,
+        name: true,
+      },
+      with: {
+        members: {
+          columns: {},
+          with: {
+            user: {
+              columns: {
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+      where(t, { inArray }) {
+        return inArray(
+          t.id,
+          workspaces.map((w) => w.id),
+        )
+      },
+    })
+
     return {
       items,
-      nextCursor: null,
+      nextCursor: input.cursor + limit,
     }
   })

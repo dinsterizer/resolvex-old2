@@ -4,6 +4,10 @@ export function generateUserId() {
   return `u_${nanoid()}`
 }
 
+export function generateWorkspaceId() {
+  return `w_${nanoid()}`
+}
+
 export function generateOtp(length = 6) {
   let result = ''
   const characters = 'abcdefghijklmnopqrstuvwxyz0123456789'

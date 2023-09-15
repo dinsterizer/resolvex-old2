@@ -10,8 +10,10 @@ type Props = {
     id: string
     name: string
     members: {
-      name: string
-      email: string
+      user: {
+        name: string
+        email: string
+      }
     }[]
   }
 }
@@ -37,12 +39,12 @@ export function WorkspaceCard({ workspace }: Props) {
           </Link>
           <div className="flex mt-3 gap-0.5">
             {workspace.members.slice(0, 4).map((member) => (
-              <Avatar key={member.email} className="h-5 w-5">
+              <Avatar key={member.user.email} className="h-5 w-5">
                 <AvatarImage
-                  src={`https://www.gravatar.com/avatar/${Md5.hashStr(member.email)}?s=20&default=404`}
-                  alt={`Member ${member.name}`}
+                  src={`https://www.gravatar.com/avatar/${Md5.hashStr(member.user.email)}?s=20&default=404`}
+                  alt={`Member ${member.user.name}`}
                 />
-                <AvatarFallback className="text-[10px]">{member.name[0]}</AvatarFallback>
+                <AvatarFallback className="text-[10px]">{member.user.name[0]}</AvatarFallback>
               </Avatar>
             ))}
             {workspace.members.length > 4 && (
