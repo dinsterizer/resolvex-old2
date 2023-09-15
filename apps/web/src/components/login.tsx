@@ -38,7 +38,7 @@ export function Login() {
     <>
       <Container className="mt-4" asChild>
         <header>
-          <Button variant="ghost" asChild>
+          <Button variant="ghost" size="sm" asChild>
             <a href={env.DOCS_URL}>
               <span className="i-heroicons-chevron-left mr-1" />
               <span className="text-sm font-normal">Home</span>
@@ -77,7 +77,7 @@ export function Login() {
 
             {step === 'send-otp' && (
               <div className="relative">
-                <div className="h-[1px] bg-border absolute top-1/2 left-0 right-0 -z-10" />
+                <div className="h-[1px] bg-border absolute top-[calc(50%+0.5px)] left-0 right-0 -z-10" />
                 <div className="text-center">
                   <span className="p-1 bg-background">or</span>
                 </div>

@@ -50,3 +50,10 @@ export const useAuthStore = create(
     },
   ),
 )
+
+export function useAuthedStore() {
+  const auth = useAuthStore()
+  if (!auth.user) throw new Error('Requires the user to be logged in')
+
+  return auth
+}

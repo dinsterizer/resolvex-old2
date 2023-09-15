@@ -1,8 +1,9 @@
 import { Router } from '@tanstack/react-router'
 import { rootRoute } from './routes/_root'
-import { homeRoute } from './routes/home'
+import { workspaceDetailRoute } from './routes/workspace-detail'
+import { workspaceListRoute } from './routes/workspace-list'
 
-const routeTree = rootRoute.addChildren([homeRoute])
+const routeTree = rootRoute.addChildren([workspaceListRoute, workspaceDetailRoute])
 
 export const router = new Router({ routeTree })
 
