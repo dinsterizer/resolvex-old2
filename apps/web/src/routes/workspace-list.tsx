@@ -1,4 +1,5 @@
 import { Route } from '@tanstack/react-router'
+import { CreateWorkspaceSheet } from '~/components/create-workspace-sheet'
 import { End } from '~/components/end'
 import { Logo } from '~/components/logo'
 import { QueryError } from '~/components/query-error'
@@ -62,9 +63,11 @@ export const workspaceListRoute = new Route({
                 </p>
               </div>
               <div className="min-w-max">
-                <Button variant="secondary">
-                  <span className="i-heroicons-plus mr-2" /> Create workspace
-                </Button>
+                <CreateWorkspaceSheet>
+                  <Button variant="secondary">
+                    <span className="i-heroicons-plus mr-2" /> Create workspace
+                  </Button>
+                </CreateWorkspaceSheet>
               </div>
             </div>
 
