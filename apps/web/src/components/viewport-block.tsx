@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ComponentPropsWithoutRef } from 'react'
 import { type InjectedViewportProps, handleViewport } from 'react-in-viewport'
 

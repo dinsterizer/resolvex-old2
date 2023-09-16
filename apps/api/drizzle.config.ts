@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Config } from 'drizzle-kit'
 import { readFileSync } from 'fs'
 import path from 'node:path'
