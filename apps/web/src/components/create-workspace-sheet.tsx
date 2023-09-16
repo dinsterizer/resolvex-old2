@@ -3,13 +3,16 @@ import { useId } from 'react'
 import { workspaceDetailRoute } from '~/routes/workspace-detail'
 import { trpc } from '~/utils/trpc'
 import { Button } from './ui/button'
+import { Checkbox } from './ui/checkbox'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet'
 
 export function CreateWorkspaceSheet({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate()
   const nameId = useId()
+  const demoDataId = useId()
+
+  const navigate = useNavigate()
   const { mutate, isLoading } = trpc.workspace.create.useMutation({
     onSuccess(data) {
       navigate({
@@ -23,8 +26,9 @@ export function CreateWorkspaceSheet({ children }: { children: React.ReactNode }
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const data = Object.fromEntries(new FormData(e.currentTarget)) as { name: string }
-    mutate(data)
+    const name = (e.currentTarget.elements.namedItem('name') as HTMLInputElement).value
+    const withDemoData = (e.currentTarget.elements.namedItem('with-demo-data') as HTMLInputElement).checked
+    mutate({ name, withDemoData })
   }
 
   return (
@@ -43,13 +47,24 @@ export function CreateWorkspaceSheet({ children }: { children: React.ReactNode }
             <Input id={nameId} className="col-span-3" placeholder="Your workspace" name="name" required minLength={3} />
           </div>
 
+          <div className="items-top flex space-x-2 p-4 rounded-md border">
+            <Checkbox id={demoDataId} name="with-demo-data" />
+            <div className="grid gap-1.5 leading-none">
+              <Label htmlFor={demoDataId}>With demo data</Label>
+              <p className="text-sm text-muted-foreground">
+                Explore the features of the app with demo data.{' '}
+                <span className="text-destructive">Not recommended for production.</span>
+              </p>
+            </div>
+          </div>
+
           <div className="flex justify-end gap-4">
             <SheetClose asChild>
               <Button type="button" variant="secondary">
                 Close
               </Button>
             </SheetClose>
-            <Button>{isLoading && <span className="i-heroicons-arrow-path animate-spin mr-3" />} Create</Button>
+            <Button>{isLoading && <span className="i-heroicons-arrow-path animate-spin mr-3" />} Submit</Button>
           </div>
         </form>
       </SheetContent>
