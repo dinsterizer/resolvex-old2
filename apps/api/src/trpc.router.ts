@@ -4,6 +4,7 @@
  */
 import { TRPCError } from '@trpc/server'
 import { authRouter } from './routes/auth'
+import { workspaceRouter } from './routes/workspace'
 import { publicProcedure, router } from './trpc'
 
 export const appRouter = router({
@@ -12,6 +13,7 @@ export const appRouter = router({
     throw new TRPCError({ code: 'BAD_REQUEST' })
   }),
   auth: authRouter,
+  workspace: workspaceRouter,
 })
 
 // export only the type definition of the API

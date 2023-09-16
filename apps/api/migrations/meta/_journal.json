@@ -8,6 +8,13 @@
       "when": 1694572845834,
       "tag": "0000_good_aaron_stack",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1694783186039,
+      "tag": "0001_steep_penance",
+      "breakpoints": true
     }
   ]
 }

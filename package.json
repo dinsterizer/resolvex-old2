@@ -23,6 +23,6 @@
     "prettier": "^3.0.3",
     "turbo": "latest",
     "typescript": "^5.2.2",
-    "wrangler": "^3.7.0"
+    "wrangler": "^3.8.0"
   }
 }

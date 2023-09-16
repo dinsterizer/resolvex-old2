@@ -1,8 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import OtpInput from 'react-otp-input'
-import type { Output } from 'valibot'
-import { email, length, object, parse, string } from 'valibot'
 import { Logo } from '~/components/logo'
 import { Button } from '~/components/ui/button'
 import { Container } from '~/components/ui/container'
@@ -10,7 +8,7 @@ import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { useToast } from '~/components/ui/use-toast'
 import { env } from '~/env'
-import { homeRoute } from '~/routes/home'
+import { workspaceListRoute } from '~/routes/workspace-list'
 import { useAuthStore } from '~/stores/auth'
 import { trpc } from '~/utils/trpc'
 
@@ -35,90 +33,89 @@ export function Login() {
   })
 
   return (
-    <Container>
-      <Button variant={'ghost'} className="rounded-full" asChild>
-        <a href={env.DOCS_URL}>
-          <span className="i-heroicons-chevron-left h-3 w-3 mr-1" />
-          <span className="text-sm font-normal">Home</span>
-        </a>
-      </Button>
+    <>
+      <Container className="mt-4" asChild>
+        <header>
+          <Button variant="ghost" size="sm" asChild>
+            <a href={env.DOCS_URL}>
+              <span className="i-heroicons-chevron-left mr-1" />
+              <span className="text-sm font-normal">Home</span>
+            </a>
+          </Button>
+        </header>
+      </Container>
 
-      <main className="mt-52 max-w-md mx-auto">
-        <Logo size={24} />
-        {step === 'send-otp' && <h1 className="font-title font-bold text-xl mt-3">One Step Login</h1>}
-        {step === 'verify-otp' && <h1 className="font-title font-bold text-xl mt-3">Enter the 6-char OTP</h1>}
-
-        {step === 'verify-otp' && (
-          <p className="text-muted-foreground text-sm mt-2">
-            We sent it to your email <span className="font-bold text-foreground">{email}</span>
-          </p>
-        )}
-
-        <div className="mt-7 space-y-3">
-          {step === 'send-otp' && (
-            <SendOtpForm
-              isLoading={emailSendOtpMutation.isLoading}
-              onSubmit={(data) => emailSendOtpMutation.mutate(data)}
-            />
-          )}
+      <Container className="mt-40 max-w-md mx-auto" asChild>
+        <main>
+          <Logo size={24} />
+          {step === 'send-otp' && <h1 className="font-title font-bold text-xl mt-3">One Step Login</h1>}
+          {step === 'verify-otp' && <h1 className="font-title font-bold text-xl mt-3">Enter the 6-char OTP</h1>}
 
           {step === 'verify-otp' && (
-            <VerifyOtpForm
-              isLoading={emailVerifyOtpMutation.isLoading}
-              onBack={() => setStep('send-otp')}
-              onSubmit={async ({ otp }) => emailVerifyOtpMutation.mutate({ email, otp })}
-            />
+            <p className="text-muted-foreground text-sm mt-2">
+              We sent it to your email <span className="font-bold text-foreground">{email}</span>
+            </p>
           )}
 
-          {step === 'send-otp' && (
-            <div className="relative">
-              <div className="h-[1px] bg-border absolute top-1/2 left-0 right-0 -z-10" />
-              <div className="text-center">
-                <span className="p-1 bg-background">or</span>
+          <div className="mt-7 space-y-3">
+            {step === 'send-otp' && (
+              <SendOtpForm
+                isLoading={emailSendOtpMutation.isLoading}
+                onSubmit={(data) => emailSendOtpMutation.mutate(data)}
+              />
+            )}
+
+            {step === 'verify-otp' && (
+              <VerifyOtpForm
+                isLoading={emailVerifyOtpMutation.isLoading}
+                onBack={() => setStep('send-otp')}
+                onSubmit={async ({ otp }) => emailVerifyOtpMutation.mutate({ email, otp })}
+              />
+            )}
+
+            {step === 'send-otp' && (
+              <div className="relative">
+                <div className="h-[1px] bg-border absolute top-[calc(50%+0.5px)] left-0 right-0 -z-10" />
+                <div className="text-center">
+                  <span className="p-1 bg-background">or</span>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {step === 'verify-otp' && (
-            <Button
-              disabled={emailSendOtpMutation.isLoading}
-              variant="ghost"
-              className="w-full text-muted-foreground"
-              type="button"
-              onClick={() => {
-                emailSendOtpMutation.mutate({ email })
-              }}
-            >
-              Resend OTP?
-              {emailSendOtpMutation.isLoading && <span className="i-heroicons-arrow-path animate-spin ml-3" />}
-            </Button>
-          )}
+            {step === 'verify-otp' && (
+              <Button
+                disabled={emailSendOtpMutation.isLoading}
+                variant="ghost"
+                className="w-full text-muted-foreground"
+                type="button"
+                onClick={() => {
+                  emailSendOtpMutation.mutate({ email })
+                }}
+              >
+                Resend OTP?
+                {emailSendOtpMutation.isLoading && <span className="i-heroicons-arrow-path animate-spin ml-3" />}
+              </Button>
+            )}
 
-          {step === 'send-otp' && (
-            <div>
-              <LoginWithGoogleButton />
-            </div>
-          )}
-        </div>
-      </main>
-    </Container>
+            {step === 'send-otp' && (
+              <div>
+                <LoginWithGoogleButton />
+              </div>
+            )}
+          </div>
+        </main>
+      </Container>
+    </>
   )
 }
-
-const sendOtpFormSchema = object({ email: string([email()]) })
-function SendOtpForm({
-  onSubmit,
-  isLoading,
-}: {
-  onSubmit: (data: Output<typeof sendOtpFormSchema>) => void
-  isLoading: boolean
-}) {
+type SendOtpFormData = { email: string }
+function SendOtpForm({ onSubmit, isLoading }: { onSubmit: (data: SendOtpFormData) => void; isLoading: boolean }) {
   return (
     <form
       className="space-y-3"
       onSubmit={(e) => {
         e.preventDefault()
-        onSubmit(parse(sendOtpFormSchema, Object.fromEntries(new FormData(e.currentTarget))))
+        onSubmit(Object.fromEntries(new FormData(e.currentTarget)) as SendOtpFormData)
       }}
     >
       <div>
@@ -140,13 +137,13 @@ function SendOtpForm({
   )
 }
 
-const verifyOtpFormSchema = object({ otp: string([length(6)]) })
+type VerifyOtpFormData = { otp: string }
 function VerifyOtpForm({
   onSubmit,
   onBack,
   isLoading,
 }: {
-  onSubmit: (data: Output<typeof verifyOtpFormSchema>) => void
+  onSubmit: (data: VerifyOtpFormData) => void
   onBack: () => void
   isLoading: boolean
 }) {
@@ -157,7 +154,7 @@ function VerifyOtpForm({
       className="space-y-5"
       onSubmit={(e) => {
         e.preventDefault()
-        onSubmit(parse(verifyOtpFormSchema, { otp }))
+        onSubmit({ otp })
       }}
     >
       <div>
@@ -197,7 +194,7 @@ export function LoginWithGoogleButton() {
   const { mutate, isLoading } = trpc.auth.login.google.verifyAuthCode.useMutation({
     onSuccess(data) {
       auth.login(data)
-      navigate({ to: homeRoute.to })
+      navigate({ to: workspaceListRoute.to })
     },
   })
   const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth')

@@ -4,18 +4,6 @@
     "source.fixAll.eslint": true,
     "source.organizeImports": false
   },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "vue",
-    "html",
-    "markdown",
-    "json",
-    "jsonc",
-    "yaml"
-  ],
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.associations": {
     "*.css": "tailwindcss"

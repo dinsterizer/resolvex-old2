@@ -7,7 +7,6 @@
  *
  * Learn more at https://developers.cloudflare.com/workers/
  */
-import { parse } from 'valibot'
 import { createContext } from './worker.context'
 import { handleCorsRequest, handleCorsResponse } from './worker.cors'
 import { envSchema } from './worker.env'
@@ -15,7 +14,7 @@ import { handleTrpcRequest } from './worker.trpc'
 
 export default {
   async fetch(request: Request, unvalidatedEnv: unknown, ec: ExecutionContext) {
-    const env = parse(envSchema, unvalidatedEnv)
+    const env = envSchema.parse(unvalidatedEnv)
     const context = createContext({ env, ec })
 
     if (env.WORKER_ENV === 'development') await new Promise((resolve) => setTimeout(resolve, 300))
