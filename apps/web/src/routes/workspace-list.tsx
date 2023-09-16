@@ -51,7 +51,7 @@ export const workspaceListRoute = new Route({
           </header>
         </Container>
 
-        <Container className="mt-40 max-w-2xl mx-auto" asChild>
+        <Container className="mt-40 max-w-2xl mx-auto pb-8" asChild>
           <main>
             <div className="block md:flex justify-between gap-4">
               <div>
