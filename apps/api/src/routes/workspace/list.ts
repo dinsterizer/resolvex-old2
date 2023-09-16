@@ -1,4 +1,3 @@
-import { desc, eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { WorkspaceMembers, Workspaces } from '../../schema'
 import { authedProcedure } from '../../trpc'
@@ -11,19 +10,20 @@ export const workspaceListRouter = authedProcedure
     }),
   )
   .query(async ({ input, ctx }) => {
-    const workspaces = await ctx.db
-      .select({
-        id: Workspaces.id,
-      })
-      .from(Workspaces)
-      .innerJoin(WorkspaceMembers, eq(Workspaces.id, WorkspaceMembers.workspaceId))
-      .where(eq(WorkspaceMembers.userId, ctx.auth.userId))
-      .groupBy(Workspaces.id)
-      .orderBy(desc(Workspaces.createdAt), desc(Workspaces.id))
-      .offset(input.cursor)
-      .limit(input.limit)
-      .all()
-    const workspaceIds = workspaces.map((w) => w.id)
+    const workspaceMembers = await ctx.db.query.WorkspaceMembers.findMany({
+      columns: {
+        workspaceId: true,
+      },
+      where(t, { eq }) {
+        return eq(t.userId, ctx.auth.userId)
+      },
+      orderBy(t, { desc }) {
+        return desc(WorkspaceMembers.createdAt), desc(WorkspaceMembers.workspaceId)
+      },
+      limit: input.limit,
+      offset: input.cursor,
+    })
+    const workspaceIds = workspaceMembers.map((w) => w.workspaceId)
 
     if (!workspaceIds.length) {
       return {
@@ -52,9 +52,6 @@ export const workspaceListRouter = authedProcedure
       },
       where(t, { inArray }) {
         return inArray(t.id, workspaceIds)
-      },
-      orderBy(t, { desc }) {
-        return desc(Workspaces.createdAt), desc(Workspaces.id)
       },
     })
 
