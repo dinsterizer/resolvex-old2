@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { WorkspaceMembers, Workspaces } from '../../schema'
+import { WorkspaceMembers } from '../../schema'
 import { authedProcedure } from '../../trpc'
 
 export const workspaceListRouter = authedProcedure
