@@ -28,6 +28,7 @@
     "million": "2.6.0-beta.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-in-viewport": "1.0.0-alpha.30",
     "react-otp-input": "^3.0.4",
     "superjson": "^1.13.1",
     "tailwind-merge": "^1.14.0",

@@ -23,11 +23,12 @@ export const workspaceListRouter = authedProcedure
       .offset(input.cursor)
       .limit(input.limit)
       .all()
+    const workspaceIds = workspaces.map((w) => w.id)
 
-    if (!workspaces.length) {
+    if (!workspaceIds.length) {
       return {
         items: [],
-        nextCursor: null,
+        nextCursor: undefined,
       }
     }
 
@@ -50,10 +51,10 @@ export const workspaceListRouter = authedProcedure
         },
       },
       where(t, { inArray }) {
-        return inArray(
-          t.id,
-          workspaces.map((w) => w.id),
-        )
+        return inArray(t.id, workspaceIds)
+      },
+      orderBy(t, { desc }) {
+        return desc(Workspaces.createdAt), desc(Workspaces.id)
       },
     })
 

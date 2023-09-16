@@ -168,6 +168,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      react-in-viewport:
+        specifier: 1.0.0-alpha.30
+        version: 1.0.0-alpha.30(react-dom@18.2.0)(react@18.2.0)
       react-otp-input:
         specifier: ^3.0.4
         version: 3.0.4(react-dom@18.2.0)(react@18.2.0)
@@ -3944,6 +3947,12 @@ packages:
     resolution: {integrity: sha512-2bsegYkkHO+h/9MGbn6KWcE45cHZgPANo5LXF7EvWdT0yT2EguSVO1nDgU5c8+ZOPwp2vMNa7YFsJhVcDR9Sdg==}
     dev: true
 
+  /hoist-non-react-statics@3.3.2:
+    resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
+    dependencies:
+      react-is: 16.13.1
+    dev: false
+
   /html-escaper@3.0.3:
     resolution: {integrity: sha512-RuMffC89BOWQoY0WKGpIhn5gX3iI54O6nRA0yC124NYVtzjmFWBIiFd8M0x+ZdX0P9R4lADg1mgP8C7PxGOWuQ==}
     dev: false
@@ -5442,9 +5451,19 @@ packages:
       scheduler: 0.23.0
     dev: false
 
+  /react-in-viewport@1.0.0-alpha.30(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-fmjnsfWM+D739UKgQNY9E03Bjf+q9iTwMqwqXboThlfYZ7yLWXEGvTNsCPKwDYlrPinDX8/nZl4wAABsc5OH7w==}
+    peerDependencies:
+      react: ^16.8.3 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.3 || ^17.0.0 || ^18.0.0
+    dependencies:
+      hoist-non-react-statics: 3.3.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
-    dev: true
 
   /react-otp-input@3.0.4(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-24GWRCguMmCatD3u9+mtxOcvoHZBJEtzzKQ/2cIOpr1yRn/umjxXw5d6mwRV8JnGhQqtIigD+k3Vt1ieuDBypg==}

@@ -5,6 +5,7 @@ import { QueryError } from '~/components/query-error'
 import { Button } from '~/components/ui/button'
 import { Card } from '~/components/ui/card'
 import { Container } from '~/components/ui/container'
+import { ViewportBlock } from '~/components/viewport-block'
 import { WorkspaceCard, WorkspaceCardSkeleton } from '~/components/workspace-cart'
 import { env } from '~/env'
 import { useAuthedStore } from '~/stores/auth'
@@ -16,13 +17,16 @@ export const workspaceListRoute = new Route({
   path: '/',
   component: function WorkspaceListPage() {
     const authed = useAuthedStore()
-    const { data, isLoading, hasNextPage, isError, isSuccess } = trpc.workspace.list.useInfiniteQuery(
-      {},
+    const { data, hasNextPage, isError, isSuccess, fetchNextPage, isFetching } = trpc.workspace.list.useInfiniteQuery(
+      {
+        limit: 8,
+      },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
       },
     )
     const workspaceCount = data?.pages.reduce((acc, page) => acc + page.items.length, 0) ?? 0
+
     return (
       <>
         <Container className="mt-4" asChild>
@@ -68,18 +72,11 @@ export const workspaceListRoute = new Route({
               {data?.pages.map((page) =>
                 page.items.map((workspace) => <WorkspaceCard key={workspace.id} workspace={workspace} />),
               )}
-              {isLoading && (
-                <>
-                  <WorkspaceCardSkeleton />
-                  <WorkspaceCardSkeleton />
-                  <WorkspaceCardSkeleton />
-                  <WorkspaceCardSkeleton />
-                </>
-              )}
+              {isFetching && <WorkspaceCardSkeleton />}
+              {!isFetching && hasNextPage && <ViewportBlock onEnterViewport={() => fetchNextPage()} />}
               {isSuccess && workspaceCount === 0 && <Empty />}
               {isSuccess && !hasNextPage && workspaceCount > 0 && <End />}
               {isError && <QueryError />}
-              {/* TODO: auto fetch next page on scroll */}
             </div>
           </main>
         </Container>
