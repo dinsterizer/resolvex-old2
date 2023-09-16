@@ -1,8 +1,8 @@
 import { InferInsertModel, InferSelectModel, relations } from 'drizzle-orm'
-import { primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { index, primaryKey, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core'
 import { z } from 'zod'
 import { datetime, emailCol, json } from './schema.extend'
-import { generateUserId, generateWorkspaceId } from './utils'
+import { generateCustomerId, generateTimelineId, generateUserId, generateWorkspaceId } from './utils'
 
 export const Users = sqliteTable('users', {
   id: text('id')
@@ -25,6 +25,8 @@ export const Users = sqliteTable('users', {
 
 export const UserRelations = relations(Users, ({ many }) => ({
   workspaceMembers: many(WorkspaceMembers),
+  assignedCustomers: many(Customers),
+  createdTimelines: many(Timelines),
 }))
 
 export type SelectUser = InferSelectModel<typeof Users>
@@ -43,6 +45,7 @@ export const Workspaces = sqliteTable('workspaces', {
 
 export const WorkspaceRelations = relations(Workspaces, ({ many }) => ({
   members: many(WorkspaceMembers),
+  customers: many(Customers),
 }))
 
 export type SelectWorkspace = InferSelectModel<typeof Workspaces>
@@ -78,3 +81,82 @@ export const WorkspaceMemberRelations = relations(WorkspaceMembers, ({ one }) =>
 
 export type SelectWorkspaceMember = InferSelectModel<typeof WorkspaceMembers>
 export type InsertWorkspaceMember = InferInsertModel<typeof WorkspaceMembers>
+
+export const Customers = sqliteTable(
+  'customers',
+  {
+    id: text('id')
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => generateCustomerId()),
+    workspaceId: text('workspace_id').notNull(),
+    name: text('name').notNull(),
+    email: emailCol('email'),
+    status: text('status', {
+      enum: ['waiting', 'helping', 'helped', 'spam'],
+    }).notNull(),
+    assignedUserId: text('assigned_user_id'),
+    createdAt: datetime('created_at')
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (t) => ({
+    email_unique: unique('customers_email_unique').on(t.workspaceId, t.email),
+    primary_index: index('customers_primary_index').on(t.workspaceId, t.status, t.createdAt),
+    assigned_user_index: index('customers_assigned_user_index').on(t.assignedUserId),
+  }),
+)
+
+export const CustomerRelations = relations(Customers, ({ one }) => ({
+  workspace: one(Workspaces, {
+    fields: [Customers.workspaceId],
+    references: [Workspaces.id],
+  }),
+  assignedUser: one(Users, {
+    fields: [Customers.assignedUserId],
+    references: [Users.id],
+  }),
+}))
+
+export type SelectCustomer = InferSelectModel<typeof Customers>
+export type InsertCustomer = InferInsertModel<typeof Customers>
+export const Timelines = sqliteTable(
+  'timelines',
+  {
+    id: text('id')
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => generateTimelineId()),
+    customerId: text('customer_id').notNull(),
+    creatorId: text('creator_id'), // can be user_id or customer_id or null for system bot
+    data: json(
+      z.object({
+        type: z.literal('chat'),
+        message: z.string(),
+      }),
+      'data',
+    ).notNull(),
+    createdAt: datetime('created_at')
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (t) => ({
+    primary_index: index('timelines_primary_index').on(t.customerId, t.createdAt),
+    creator_index: index('timelines_creator_index').on(t.creatorId),
+  }),
+)
+
+export const timelinesRelations = relations(Timelines, ({ one }) => ({
+  customer: one(Customers, {
+    fields: [Timelines.customerId],
+    references: [Customers.id],
+  }),
+  customerCreator: one(Customers, {
+    fields: [Timelines.creatorId],
+    references: [Customers.id],
+  }),
+  userCreator: one(Users, {
+    fields: [Timelines.creatorId],
+    references: [Users.id],
+  }),
+}))
