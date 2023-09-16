@@ -41,7 +41,7 @@ export const workspaceListRoute = new Route({
               </Button>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Login as {authed.user.email}</span>
+                <span className="hidden md:inline text-sm text-muted-foreground">Login as {authed.user.email}</span>
                 <Button size="sm" type="button" variant="ghost" onClick={authed.logout}>
                   <span className="i-heroicons-arrow-left-on-rectangle h-4 w-4 mr-1" />
                   Logout
@@ -53,7 +53,7 @@ export const workspaceListRoute = new Route({
 
         <Container className="mt-40 max-w-2xl mx-auto" asChild>
           <main>
-            <div className="flex justify-between gap-4">
+            <div className="block md:flex justify-between gap-4">
               <div>
                 <Logo size={24} />
                 <h1 className="font-title text-xl font-bold mt-4">Chose your workspace</h1>
@@ -62,9 +62,9 @@ export const workspaceListRoute = new Route({
                   unlimited
                 </p>
               </div>
-              <div className="min-w-max">
+              <div className="min-w-max mt-6 md:mt-0">
                 <CreateWorkspaceSheet>
-                  <Button variant="secondary">
+                  <Button variant="secondary" className="md:w-auto w-full">
                     <span className="i-heroicons-plus mr-2" /> Create workspace
                   </Button>
                 </CreateWorkspaceSheet>
