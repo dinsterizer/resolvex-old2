@@ -5,6 +5,11 @@ import { authedProcedure } from '../../trpc'
 export const workspaceCreateRouter = authedProcedure
   .input(z.object({ name: z.string().min(1).max(100), withDemoData: z.boolean().default(false) }))
   .mutation(async ({ ctx, input }) => {
+    await ctx.rateLimit({
+      key: 'create-workspace:' + ctx.auth.userId,
+      limit: 2,
+    })
+
     const workspace = await ctx.db
       .insert(Workspaces)
       .values({
