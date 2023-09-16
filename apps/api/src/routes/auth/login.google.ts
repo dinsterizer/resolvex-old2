@@ -2,12 +2,12 @@ import { TRPCError } from '@trpc/server'
 import { eq } from 'drizzle-orm'
 import { SignJWT } from 'jose'
 import { Buffer } from 'node:buffer'
-import { object, string } from 'valibot'
+import { z } from 'zod'
 import { Users } from '../../schema'
 import { publicProcedure, router } from '../../trpc'
 
 export const loginGoogleRouter = router({
-  verifyAuthCode: publicProcedure.input(object({ code: string() })).mutation(async ({ ctx, input }) => {
+  verifyAuthCode: publicProcedure.input(z.object({ code: z.string() })).mutation(async ({ ctx, input }) => {
     const exchangedRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: {

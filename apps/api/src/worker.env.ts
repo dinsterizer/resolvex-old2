@@ -1,16 +1,15 @@
-import { coerce, enumType, minValue, number, object, special, string, url, withDefault } from 'valibot'
-import type { Output } from 'valibot'
+import { z } from 'zod'
 
-export const envSchema = object({
-  WORKER_ENV: withDefault(enumType(['development', 'production']), 'production'),
-  WEB_URL: string([url()]),
-  DB: special<D1Database>((i) => typeof i === 'object' && i !== null),
-  RATE_LIMITER_DON: special<DurableObjectNamespace>((i) => typeof i === 'object' && i !== null),
-  AUTH_SECRET: string(),
-  BREVO_API_KEY: string(),
-  BREVO_SENDER_ID: coerce(number([minValue(1)]), Number),
-  GOOGLE_OAUTH_CLIENT_ID: string(),
-  GOOGLE_OAUTH_CLIENT_SECRET: string(),
+export const envSchema = z.object({
+  WORKER_ENV: z.enum(['development', 'production']).default('production'),
+  WEB_URL: z.string().url(),
+  DB: z.custom<D1Database>((value) => typeof value === 'object' && value !== null),
+  RATE_LIMITER_DON: z.custom<DurableObjectNamespace>((value) => typeof value === 'object' && value !== null),
+  AUTH_SECRET: z.string(),
+  BREVO_API_KEY: z.string(),
+  BREVO_SENDER_ID: z.number().min(1),
+  GOOGLE_OAUTH_CLIENT_ID: z.string(),
+  GOOGLE_OAUTH_CLIENT_SECRET: z.string(),
 })
 
-export type Env = Output<typeof envSchema>
+export type Env = z.infer<typeof envSchema>

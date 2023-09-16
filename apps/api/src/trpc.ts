@@ -3,7 +3,7 @@ import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch'
 import { jwtVerify } from 'jose'
 import { Buffer } from 'node:buffer'
 import SuperJSON from 'superjson'
-import { object, parse, string } from 'valibot'
+import { z } from 'zod'
 import type { Context } from './worker.context'
 
 export function createTRPCContext({ context }: { context: Context }) {
@@ -44,12 +44,11 @@ export const authedProcedure = publicProcedure.use(
       return next({
         ctx: {
           ...ctx,
-          auth: parse(
-            object({
-              userId: string(),
-            }),
-            payload,
-          ),
+          auth: z
+            .object({
+              userId: z.string(),
+            })
+            .parse(payload),
         },
       })
     } catch (e) {

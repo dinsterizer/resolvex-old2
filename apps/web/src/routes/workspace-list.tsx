@@ -79,6 +79,7 @@ export const workspaceListRoute = new Route({
               {isSuccess && workspaceCount === 0 && <Empty />}
               {isSuccess && !hasNextPage && workspaceCount > 0 && <End />}
               {isError && <QueryError />}
+              {/* TODO: auto fetch next page on scroll */}
             </div>
           </main>
         </Container>

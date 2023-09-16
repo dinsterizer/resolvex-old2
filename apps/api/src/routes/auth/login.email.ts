@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server'
 import { eq } from 'drizzle-orm'
 import { SignJWT } from 'jose'
 import { Buffer } from 'node:buffer'
-import { email, object, string, toLowerCase } from 'valibot'
+import { z } from 'zod'
 import { generateLoginEmail } from '../../emails/login'
 import { Users } from '../../schema'
 import { publicProcedure, router } from '../../trpc'
@@ -10,7 +10,7 @@ import { generateOtp } from '../../utils'
 
 export const loginEmailRouter = router({
   sendOtp: publicProcedure
-    .input(object({ email: string([email(), toLowerCase()]) }))
+    .input(z.object({ email: z.string().email().toLowerCase() }))
     .mutation(async ({ ctx, input }) => {
       const { db, ec, env, rateLimit } = ctx
 
@@ -77,7 +77,7 @@ export const loginEmailRouter = router({
       )
     }),
   verifyOtp: publicProcedure
-    .input(object({ email: string([email(), toLowerCase()]), otp: string([toLowerCase()]) }))
+    .input(z.object({ email: z.string().email().toLowerCase(), otp: z.string().toLowerCase() }))
     .mutation(async ({ ctx, input }) => {
       const { db, env, ec, rateLimit } = ctx
       const { email } = input

@@ -1,8 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import OtpInput from 'react-otp-input'
-import type { Output } from 'valibot'
-import { email, length, object, parse, string } from 'valibot'
 import { Logo } from '~/components/logo'
 import { Button } from '~/components/ui/button'
 import { Container } from '~/components/ui/container'
@@ -110,21 +108,14 @@ export function Login() {
     </>
   )
 }
-
-const sendOtpFormSchema = object({ email: string([email()]) })
-function SendOtpForm({
-  onSubmit,
-  isLoading,
-}: {
-  onSubmit: (data: Output<typeof sendOtpFormSchema>) => void
-  isLoading: boolean
-}) {
+type SendOtpFormData = { email: string }
+function SendOtpForm({ onSubmit, isLoading }: { onSubmit: (data: SendOtpFormData) => void; isLoading: boolean }) {
   return (
     <form
       className="space-y-3"
       onSubmit={(e) => {
         e.preventDefault()
-        onSubmit(parse(sendOtpFormSchema, Object.fromEntries(new FormData(e.currentTarget))))
+        onSubmit(Object.fromEntries(new FormData(e.currentTarget)) as SendOtpFormData)
       }}
     >
       <div>
@@ -146,13 +137,13 @@ function SendOtpForm({
   )
 }
 
-const verifyOtpFormSchema = object({ otp: string([length(6)]) })
+type VerifyOtpFormData = { otp: string }
 function VerifyOtpForm({
   onSubmit,
   onBack,
   isLoading,
 }: {
-  onSubmit: (data: Output<typeof verifyOtpFormSchema>) => void
+  onSubmit: (data: VerifyOtpFormData) => void
   onBack: () => void
   isLoading: boolean
 }) {
@@ -163,7 +154,7 @@ function VerifyOtpForm({
       className="space-y-5"
       onSubmit={(e) => {
         e.preventDefault()
-        onSubmit(parse(verifyOtpFormSchema, { otp }))
+        onSubmit({ otp })
       }}
     >
       <div>

@@ -1,18 +1,16 @@
 import { desc, eq } from 'drizzle-orm'
-import { maxValue, minValue, number, object, withDefault, nullish } from 'valibot'
+import { z } from 'zod'
 import { WorkspaceMembers, Workspaces } from '../../schema'
 import { authedProcedure } from '../../trpc'
 
 export const workspaceListRouter = authedProcedure
   .input(
-    object({
-      limit: withDefault(nullish(number([minValue(0), maxValue(20)])), 10),
-      cursor: withDefault(number([minValue(0)]), 0),
+    z.object({
+      limit: z.number().min(1).max(20).optional().default(10),
+      cursor: z.number().min(0).optional().default(0),
     }),
   )
   .query(async ({ input, ctx }) => {
-    const limit = input.limit!
-
     const workspaces = await ctx.db
       .select({
         id: Workspaces.id,
@@ -23,7 +21,7 @@ export const workspaceListRouter = authedProcedure
       .groupBy(Workspaces.id)
       .orderBy(desc(Workspaces.createdAt), desc(Workspaces.id))
       .offset(input.cursor)
-      .limit(limit)
+      .limit(input.limit)
       .all()
 
     if (!workspaces.length) {
@@ -61,6 +59,6 @@ export const workspaceListRouter = authedProcedure
 
     return {
       items,
-      nextCursor: input.cursor + limit,
+      nextCursor: input.cursor + input.limit,
     }
   })

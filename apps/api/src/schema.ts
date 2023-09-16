@@ -1,6 +1,6 @@
 import { InferInsertModel, InferSelectModel, relations } from 'drizzle-orm'
 import { primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core'
-import { date, object, string } from 'valibot'
+import { z } from 'zod'
 import { datetime, emailCol, json } from './schema.extend'
 import { generateUserId, generateWorkspaceId } from './utils'
 
@@ -12,9 +12,9 @@ export const Users = sqliteTable('users', {
   name: text('name').notNull(),
   email: emailCol('email').notNull().unique(),
   otp: json(
-    object({
-      code: string(),
-      expiresAt: date(),
+    z.object({
+      code: z.string(),
+      expiresAt: z.date(),
     }),
     'otp',
   ),
