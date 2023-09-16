@@ -16,6 +16,7 @@
     "deploy:production": "wrangler deploy --env production"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@resolvex/worker-rate-limiter": "workspace:^",
     "@trpc/server": "^10.38.3",
     "@types/lodash-es": "^4.17.9",
