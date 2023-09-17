@@ -1,5 +1,6 @@
 import type { SelectCustomer, SelectTimeline, SelectUser } from '@resolvex/api/src/schema'
 import { Link } from '@tanstack/react-router'
+import { Calendar, MoreHorizontal } from 'lucide-react'
 import { Md5 } from 'ts-md5'
 import { customerDetailRoute } from '~/routes/customer-detail'
 import { CustomerStatusBadge } from './customer-status-badge'
@@ -54,7 +55,8 @@ export function CustomerCard({ customer }: Props) {
           )}
 
           <button type="button">
-            <span className="i-heroicons-ellipsis-horizontal h-5 w-5" />
+            {/* TODO */}
+            <MoreHorizontal size={16} />
           </button>
         </div>
       </div>
@@ -76,8 +78,11 @@ export function CustomerCard({ customer }: Props) {
 
       <div className="flex gap-2 mt-3">
         <div className="px-2 py-1 border rounded-md text-muted-foreground flex items-center gap-1">
-          <span className="i-heroicons-calendar h-4 w-4" />
-          <span className="text-xs">5m ago</span>
+          <Calendar size={16} />
+          <span className="text-xs">
+            {/* TODO */}
+            5m ago
+          </span>
         </div>
         <CustomerStatusBadge status={customer.status} />
       </div>

@@ -1,4 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
+import { ArrowLeft, ArrowRight, ChevronLeft, RotateCw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import OtpInput from 'react-otp-input'
 import { Logo } from '~/components/logo'
@@ -8,6 +9,7 @@ import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { useToast } from '~/components/ui/use-toast'
 import { env } from '~/env'
+import { Google } from '~/icons/google'
 import { workspaceListRoute } from '~/routes/workspace-list'
 import { useAuthStore } from '~/stores/auth'
 import { trpc } from '~/utils/trpc'
@@ -38,8 +40,8 @@ export function Login() {
         <header>
           <Button variant="ghost" size="sm" asChild>
             <a href={env.DOCS_URL}>
-              <span className="i-heroicons-chevron-left mr-1" />
-              <span className="text-sm font-normal">Home</span>
+              <ChevronLeft size={16} className="mr-1" />
+              Home
             </a>
           </Button>
         </header>
@@ -92,8 +94,8 @@ export function Login() {
                   emailSendOtpMutation.mutate({ email })
                 }}
               >
-                Resend OTP?
-                {emailSendOtpMutation.isLoading && <span className="i-heroicons-arrow-path animate-spin ml-3" />}
+                Resend OTP
+                {emailSendOtpMutation.isLoading && <RotateCw size={16} className="animate-spin ml-2" />}
               </Button>
             )}
 
@@ -127,11 +129,7 @@ function SendOtpForm({ onSubmit, isLoading }: { onSubmit: (data: SendOtpFormData
 
       <Button className="w-full" disabled={isLoading}>
         Continue
-        {isLoading ? (
-          <span className="i-heroicons-arrow-path animate-spin ml-3" />
-        ) : (
-          <span className="i-heroicons-arrow-right ml-3" />
-        )}
+        {isLoading ? <RotateCw size={16} className="animate-spin ml-2" /> : <ArrowRight size={16} className="ml-2" />}
       </Button>
     </form>
   )
@@ -173,15 +171,11 @@ function VerifyOtpForm({
 
       <div className="flex gap-3">
         <Button variant="secondary" type="button" onClick={() => onBack()} className="w-full">
-          <span className="i-heroicons-arrow-left mr-3" /> Back
+          <ArrowLeft size={16} className="mr-2" /> Back
         </Button>
         <Button className="w-full" disabled={isLoading}>
           Continue
-          {isLoading ? (
-            <span className="i-heroicons-arrow-path animate-spin ml-3" />
-          ) : (
-            <span className="i-heroicons-arrow-right ml-3" />
-          )}
+          {isLoading ? <RotateCw size={16} className="animate-spin ml-2" /> : <ArrowRight size={16} className="ml-2" />}
         </Button>
       </div>
     </form>
@@ -218,11 +212,7 @@ export function LoginWithGoogleButton() {
     <Button variant="secondary" type="button" className="w-full" asChild>
       <a href={authUrl.toString()}>
         Continue with Google
-        {isLoading ? (
-          <span className="i-heroicons-arrow-path animate-spin ml-3" />
-        ) : (
-          <span className="i-mdi-google ml-3" />
-        )}
+        {isLoading ? <RotateCw size={16} className="animate-spin ml-2" /> : <Google size={16} className="ml-2" />}
       </a>
     </Button>
   )

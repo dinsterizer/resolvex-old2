@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { Building2 } from 'lucide-react'
 import { Md5 } from 'ts-md5'
 import { workspaceDetailRoute } from '~/routes/workspace-detail'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
@@ -27,7 +28,7 @@ export function WorkspaceCard({ workspace }: Props) {
           params={{ workspaceId: workspace.id }}
           className="h-16 w-16 bg-accent rounded-md flex items-center justify-center group"
         >
-          <span className="i-heroicons-building-office h-6 w-6 text-accent-foreground group-hover:text-accent-foreground/80" />
+          <Building2 className="text-accent-foreground group-hover:text-accent-foreground/80" />
         </Link>
         <div>
           <Link

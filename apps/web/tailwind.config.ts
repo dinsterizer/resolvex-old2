@@ -1,4 +1,3 @@
-import { getIconCollections, iconsPlugin } from '@egoist/tailwindcss-icons'
 import containerQueriesPlugin from '@tailwindcss/container-queries'
 import scrollbarPlugin from 'tailwind-scrollbar'
 import type { Config } from 'tailwindcss'
@@ -77,12 +76,5 @@ export default {
       },
     },
   },
-  plugins: [
-    animatePlugin,
-    containerQueriesPlugin,
-    scrollbarPlugin({ nocompatible: true }),
-    iconsPlugin({
-      collections: getIconCollections(['heroicons', 'mdi']),
-    }),
-  ],
+  plugins: [animatePlugin, containerQueriesPlugin, scrollbarPlugin({ nocompatible: true })],
 } satisfies Config

@@ -1,4 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
+import { RotateCw } from 'lucide-react'
 import { useId } from 'react'
 import { workspaceDetailRoute } from '~/routes/workspace-detail'
 import { trpc } from '~/utils/trpc'
@@ -64,7 +65,9 @@ export function CreateWorkspaceSheet({ children }: { children: React.ReactNode }
                 Close
               </Button>
             </SheetClose>
-            <Button>{isLoading && <span className="i-heroicons-arrow-path animate-spin mr-3" />} Submit</Button>
+            <Button disabled={isLoading}>
+              Submit {isLoading && <RotateCw size={16} className="animate-spin ml-1" />}
+            </Button>
           </div>
         </form>
       </SheetContent>

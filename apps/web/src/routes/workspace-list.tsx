@@ -1,4 +1,5 @@
 import { Route } from '@tanstack/react-router'
+import { ChevronLeft, LogOut, Plus } from 'lucide-react'
 import { CreateWorkspaceSheet } from '~/components/create-workspace-sheet'
 import { End } from '~/components/end'
 import { Logo } from '~/components/logo'
@@ -35,15 +36,15 @@ export const workspaceListRoute = new Route({
             <div className="flex items-center justify-between">
               <Button variant="ghost" size="sm" asChild>
                 <a href={env.DOCS_URL}>
-                  <span className="i-heroicons-chevron-left mr-1" />
-                  <span className="text-sm font-normal">Home</span>
+                  <ChevronLeft size={16} className="mr-1" />
+                  Home
                 </a>
               </Button>
 
               <div className="flex items-center gap-2">
                 <span className="hidden md:inline text-sm text-muted-foreground">Login as {authed.user.email}</span>
                 <Button size="sm" type="button" variant="ghost" onClick={authed.logout}>
-                  <span className="i-heroicons-arrow-left-on-rectangle h-4 w-4 mr-1" />
+                  <LogOut size={16} className="mr-1" />
                   Logout
                 </Button>
               </div>
@@ -65,7 +66,7 @@ export const workspaceListRoute = new Route({
               <div className="min-w-max mt-6 md:mt-0">
                 <CreateWorkspaceSheet>
                   <Button variant="secondary" className="md:w-auto w-full">
-                    <span className="i-heroicons-plus mr-2" /> Create workspace
+                    <Plus size={16} className="mr-2" /> Create workspace
                   </Button>
                 </CreateWorkspaceSheet>
               </div>
