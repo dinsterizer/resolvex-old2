@@ -68,7 +68,7 @@
 
 @layer base {
   * {
-    @apply scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 scrollbar-thumb-rounded-full;
+    @apply scrollbar-thin scrollbar-thumb-gray-300 scrollbar-thumb-rounded-full;
     @apply border-border;
   }
   body {

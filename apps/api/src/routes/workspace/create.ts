@@ -72,7 +72,7 @@ export const workspaceCreateRouter = authedProcedure
         }),
       )
 
-      const customerStatuses: InsertCustomer['status'][] = ['helped', 'helped', 'spam', 'waiting']
+      const customerStatuses: InsertCustomer['status'][] = ['helped', 'helping', 'spam', 'waiting']
       const customerNames = [
         'Emily Johnson',
         'Ethan Davis',

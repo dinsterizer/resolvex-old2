@@ -129,6 +129,7 @@ export const CustomerRelations = relations(Customers, ({ one, many }) => ({
 
 export type SelectCustomer = InferSelectModel<typeof Customers>
 export type InsertCustomer = InferInsertModel<typeof Customers>
+
 export const Timelines = sqliteTable(
   'timelines',
   {
@@ -171,3 +172,6 @@ export const timelinesRelations = relations(Timelines, ({ one }) => ({
     references: [Users.id],
   }),
 }))
+
+export type SelectTimeline = InferSelectModel<typeof Timelines>
+export type InsertTimeline = InferInsertModel<typeof Timelines>

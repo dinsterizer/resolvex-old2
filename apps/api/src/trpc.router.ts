@@ -4,6 +4,7 @@
  */
 import { TRPCError } from '@trpc/server'
 import { authRouter } from './routes/auth'
+import { customerRouter } from './routes/customer'
 import { workspaceRouter } from './routes/workspace'
 import { publicProcedure, router } from './trpc'
 
@@ -14,6 +15,7 @@ export const appRouter = router({
   }),
   auth: authRouter,
   workspace: workspaceRouter,
+  customer: customerRouter,
 })
 
 // export only the type definition of the API
