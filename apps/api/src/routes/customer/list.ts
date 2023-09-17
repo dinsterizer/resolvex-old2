@@ -1,12 +1,13 @@
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
+import { customerStatusColumnBaseSchema } from '../../schema.customer'
 import { authedProcedure } from '../../trpc'
 
 export const customerListRouter = authedProcedure
   .input(
     z.object({
       workspaceId: z.string(),
-      status: z.enum(['waiting', 'helping', 'helped', 'spam']).optional(),
+      status: customerStatusColumnBaseSchema.optional(),
       limit: z.number().min(1).max(20).default(10),
       cursor: z.number().min(0).default(0),
     }),

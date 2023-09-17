@@ -11,6 +11,8 @@ type Props = {
 export function Sidebar(props: Props) {
   const matchWorkspaceOverview = useMatch(`/${props.workspaceId}`)
   const matchCustomerList = useMatch(`/${props.workspaceId}/customers`)
+  const matchWorkspaceSettings = useMatch(`/${props.workspaceId}/settings`)
+  const matchWorkspaceMembers = useMatch(`/${props.workspaceId}/members`)
   const [searchParams] = useSearchParams()
   const status = searchParams.get('status')
 
@@ -124,16 +126,28 @@ export function Sidebar(props: Props) {
       <div>
         <span className="text-xs text-muted-foreground">Workspace</span>
 
-        {/* TODO */}
-        <Button variant="ghost" size="sm" className="w-full justify-start mt-3">
-          <Settings size={16} className="mr-2" />
-          Settings
+        <Button
+          variant={matchWorkspaceSettings ? 'secondary' : 'ghost'}
+          size="sm"
+          className="w-full justify-start mt-3"
+          asChild
+        >
+          <Link to={`/${props.workspaceId}/settings`}>
+            <Settings size={16} className="mr-2" />
+            Settings
+          </Link>
         </Button>
 
-        {/* TODO */}
-        <Button variant="ghost" size="sm" className="w-full justify-start mt-3">
-          <Users size={16} className="mr-2" />
-          Members
+        <Button
+          variant={matchWorkspaceMembers ? 'secondary' : 'ghost'}
+          size="sm"
+          className="w-full justify-start mt-3"
+          asChild
+        >
+          <Link to={`/${props.workspaceId}/members`}>
+            <Users size={16} className="mr-2" />
+            Members
+          </Link>
         </Button>
 
         <Button variant="ghost" size="sm" className="w-full justify-start mt-3" asChild>

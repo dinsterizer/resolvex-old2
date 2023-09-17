@@ -1,7 +1,10 @@
 import { InferInsertModel, InferSelectModel, relations } from 'drizzle-orm'
 import { index, primaryKey, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core'
-import { z } from 'zod'
-import { datetime, emailCol, json } from './schema.extend'
+import { customerStatusColumnAllowValues } from './schema.customer'
+import { datetime, email, json } from './schema.extend'
+import { TimelineDataBaseColumn } from './schema.timeline'
+import { UserOtpBaseColumn } from './schema.user'
+import { workspaceMemberRoleColumnAllowValues } from './schema.workspace-member'
 import { generateCustomerId, generateTimelineId, generateUserId, generateWorkspaceId } from './utils'
 
 export const Users = sqliteTable('users', {
@@ -10,14 +13,8 @@ export const Users = sqliteTable('users', {
     .primaryKey()
     .$defaultFn(() => generateUserId()),
   name: text('name').notNull(),
-  email: emailCol('email').notNull().unique(),
-  otp: json(
-    z.object({
-      code: z.string(),
-      expiresAt: z.date(),
-    }),
-    'otp',
-  ),
+  email: email('email').notNull().unique(),
+  otp: json<UserOtpBaseColumn>('otp'),
   createdAt: datetime('created_at')
     .notNull()
     .$defaultFn(() => new Date()),
@@ -56,7 +53,7 @@ export const WorkspaceMembers = sqliteTable(
   {
     workspaceId: text('workspace_id').notNull(),
     userId: text('user_id').notNull(),
-    role: text('role', { enum: ['admin', 'basic_member'] })
+    role: text('role', { enum: workspaceMemberRoleColumnAllowValues })
       .notNull()
       .$defaultFn(() => 'basic_member'),
     createdAt: datetime('created_at')
@@ -91,9 +88,9 @@ export const Customers = sqliteTable(
       .$defaultFn(() => generateCustomerId()),
     workspaceId: text('workspace_id').notNull(),
     name: text('name').notNull(),
-    email: emailCol('email'),
+    email: email('email'),
     status: text('status', {
-      enum: ['waiting', 'helping', 'helped', 'spam'],
+      enum: customerStatusColumnAllowValues,
     }).notNull(),
     assignedUserId: text('assigned_user_id'),
     updatedAt: datetime('updated_at')
@@ -139,13 +136,7 @@ export const Timelines = sqliteTable(
       .$defaultFn(() => generateTimelineId()),
     customerId: text('customer_id').notNull(),
     creatorId: text('creator_id'), // can be user_id or customer_id or null for system bot
-    data: json(
-      z.object({
-        type: z.literal('chat'),
-        message: z.string(),
-      }),
-      'data',
-    ).notNull(),
+    data: json<TimelineDataBaseColumn>('data').notNull(),
     createdAt: datetime('created_at')
       .notNull()
       .$defaultFn(() => new Date()),

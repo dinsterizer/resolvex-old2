@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { z } from 'zod'
-import { Customers, InsertCustomer, Timelines, Users, WorkspaceMembers, Workspaces } from '../../schema'
+import { Customers, Timelines, Users, WorkspaceMembers, Workspaces } from '../../schema'
+import { customerStatusColumnAllowValues } from '../../schema.customer'
 import { authedProcedure } from '../../trpc'
 
 export const workspaceCreateRouter = authedProcedure
@@ -72,7 +73,6 @@ export const workspaceCreateRouter = authedProcedure
         }),
       )
 
-      const customerStatuses: InsertCustomer['status'][] = ['helped', 'helping', 'spam', 'waiting']
       const customerNames = [
         'Emily Johnson',
         'Ethan Davis',
@@ -103,7 +103,8 @@ export const workspaceCreateRouter = authedProcedure
             .insert(Customers)
             .values({
               workspaceId: workspace.id,
-              status: customerStatuses[Math.floor(Math.random() * customerStatuses.length)],
+              status:
+                customerStatusColumnAllowValues[Math.floor(Math.random() * customerStatusColumnAllowValues.length)],
               name,
               email,
               assignedUserId: fakeUsers[Math.floor(Math.random() * fakeUsers.length)].id,

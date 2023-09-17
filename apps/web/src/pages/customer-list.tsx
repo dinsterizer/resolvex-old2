@@ -1,4 +1,4 @@
-import { SelectCustomer } from '@resolvex/api/src/schema'
+import { customerStatusColumnBaseSchema } from '@resolvex/api/src/schema.customer'
 import { Outlet, useParams, useSearchParams } from 'react-router-dom'
 import { CustomerCard, CustomerCardSkeleton } from '~/components/customer-card'
 import { End } from '~/components/end'
@@ -6,11 +6,10 @@ import { QueryError } from '~/components/query-error'
 import { ViewportBlock } from '~/components/viewport-block'
 import { trpc } from '~/utils/trpc'
 
-// TODO: fix use Params and use Search Params
 export function CustomerListPage() {
   const { workspaceId } = useParams() as { workspaceId: string }
   const [searchParams] = useSearchParams()
-  const status = (searchParams.get('status') || 'waiting') as SelectCustomer['status']
+  const status = customerStatusColumnBaseSchema.catch('waiting').parse(searchParams.get('status'))
 
   const { data, hasNextPage, isError, isSuccess, fetchNextPage, isFetching, isLoading } =
     trpc.customer.list.useInfiniteQuery(

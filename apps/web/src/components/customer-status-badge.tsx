@@ -2,6 +2,7 @@ import { SelectCustomer } from '@resolvex/api/src/schema'
 import { cva } from 'class-variance-authority'
 import { CheckCircle2, Circle, MinusCircle, XCircle } from 'lucide-react'
 import React from 'react'
+import { expectNever } from 'ts-expect'
 
 type Props = {
   status: SelectCustomer['status']
@@ -30,8 +31,7 @@ export function CustomerStatusBadge({ status }: Props) {
   } else if (status === 'spam') {
     icon = <XCircle size={14} />
   } else {
-    // TODO: throw typescript error can catch on tsc not on runtime js error
-    icon as never
+    expectNever(status)
   }
   return (
     <div className={variants({ status })}>

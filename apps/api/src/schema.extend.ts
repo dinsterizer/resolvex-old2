@@ -1,11 +1,11 @@
 import { customType } from 'drizzle-orm/sqlite-core'
 import SuperJSON from 'superjson'
-import { Schema, z } from 'zod'
+import { z } from 'zod'
 
-export function json<T extends Schema>(schema: T, ...args: Parameters<ReturnType<typeof customType>>) {
-  return customType<{ data: z.infer<typeof schema> }>({
+export function json<T>(...args: Parameters<ReturnType<typeof customType>>) {
+  return customType<{ data: T }>({
     dataType: () => 'text',
-    toDriver: (value) => SuperJSON.stringify(schema.parse(value)),
+    toDriver: (value) => SuperJSON.stringify(value),
     fromDriver: (value) => SuperJSON.parse(value as string),
   })(...args)
 }
@@ -16,7 +16,7 @@ export const datetime = customType<{ data: Date }>({
   fromDriver: (value) => new Date(value as number),
 })
 
-export const emailCol = customType<{ data: string }>({
+export const email = customType<{ data: string }>({
   dataType: () => 'text',
   toDriver: (value) => z.string().parse(value),
 })
