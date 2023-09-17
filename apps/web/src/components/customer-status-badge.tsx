@@ -22,13 +22,13 @@ export function CustomerStatusBadge({ status }: Props) {
   let icon: React.ReactNode | null = null
 
   if (status === 'waiting') {
-    icon = <Circle className="h-4 w-4" />
+    icon = <Circle size={14} />
   } else if (status === 'helping') {
-    icon = <MinusCircle className="h-4 w-4" />
+    icon = <MinusCircle size={14} />
   } else if (status === 'helped') {
-    icon = <CheckCircle2 className="h-4 w-4" />
+    icon = <CheckCircle2 size={14} />
   } else if (status === 'spam') {
-    icon = <XCircle className="h-4 w-4" />
+    icon = <XCircle size={14} />
   } else {
     // TODO: throw typescript error can catch on tsc not on runtime js error
     icon as never

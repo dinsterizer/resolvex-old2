@@ -1,7 +1,6 @@
-import { useNavigate } from '@tanstack/react-router'
 import { RotateCw } from 'lucide-react'
 import { useId } from 'react'
-import { workspaceDetailRoute } from '~/routes/workspace-detail'
+import { useNavigate } from 'react-router-dom'
 import { trpc } from '~/utils/trpc'
 import { Button } from './ui/button'
 import { Checkbox } from './ui/checkbox'
@@ -16,12 +15,7 @@ export function CreateWorkspaceSheet({ children }: { children: React.ReactNode }
   const navigate = useNavigate()
   const { mutate, isLoading } = trpc.workspace.create.useMutation({
     onSuccess(data) {
-      navigate({
-        to: workspaceDetailRoute.to,
-        params: {
-          workspaceId: data.id,
-        },
-      })
+      navigate(`/${data.id}`)
     },
   })
 

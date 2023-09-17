@@ -1,8 +1,7 @@
 import type { SelectCustomer, SelectTimeline, SelectUser } from '@resolvex/api/src/schema'
-import { Link } from '@tanstack/react-router'
 import { Calendar, MoreHorizontal } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Md5 } from 'ts-md5'
-import { customerDetailRoute } from '~/routes/customer-detail'
 import { CustomerStatusBadge } from './customer-status-badge'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Card } from './ui/card'
@@ -23,14 +22,7 @@ export function CustomerCard({ customer }: Props) {
       <div className="flex justify-between gap-2">
         <div>
           <Link
-            to={customerDetailRoute.to}
-            params={{
-              workspaceId: customer.workspaceId,
-              customerId: customer.id,
-            }}
-            search={{
-              status: customer.status,
-            }}
+            to={`/${customer.workspaceId}/${customer.id}?status=${customer.status}`}
             className="font-medium text-sm"
           >
             {customer.name}
@@ -62,14 +54,7 @@ export function CustomerCard({ customer }: Props) {
       </div>
       {timeline?.data.type === 'chat' && (
         <Link
-          to={customerDetailRoute.to}
-          params={{
-            workspaceId: customer.workspaceId,
-            customerId: customer.id,
-          }}
-          search={{
-            status: customer.status,
-          }}
+          to={`/${customer.workspaceId}/${customer.id}?status=${customer.status}`}
           className="line-clamp-2 text-foreground/80 text-xs"
         >
           {timeline.data.message}
@@ -78,7 +63,7 @@ export function CustomerCard({ customer }: Props) {
 
       <div className="flex gap-2 mt-3">
         <div className="px-2 py-1 border rounded-md text-muted-foreground flex items-center gap-1">
-          <Calendar size={16} />
+          <Calendar size={14} />
           <span className="text-xs">
             {/* TODO */}
             5m ago

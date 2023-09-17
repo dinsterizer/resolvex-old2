@@ -1,7 +1,7 @@
-import { useNavigate } from '@tanstack/react-router'
 import { ArrowLeft, ArrowRight, ChevronLeft, RotateCw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import OtpInput from 'react-otp-input'
+import { useNavigate } from 'react-router-dom'
 import { Logo } from '~/components/logo'
 import { Button } from '~/components/ui/button'
 import { Container } from '~/components/ui/container'
@@ -10,7 +10,6 @@ import { Label } from '~/components/ui/label'
 import { useToast } from '~/components/ui/use-toast'
 import { env } from '~/env'
 import { Google } from '~/icons/google'
-import { workspaceListRoute } from '~/routes/workspace-list'
 import { useAuthStore } from '~/stores/auth'
 import { trpc } from '~/utils/trpc'
 
@@ -188,7 +187,7 @@ export function LoginWithGoogleButton() {
   const { mutate, isLoading } = trpc.auth.login.google.verifyAuthCode.useMutation({
     onSuccess(data) {
       auth.login(data)
-      navigate({ to: workspaceListRoute.to })
+      navigate('/')
     },
   })
   const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth')
