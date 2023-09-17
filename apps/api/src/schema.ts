@@ -96,6 +96,9 @@ export const Customers = sqliteTable(
       enum: ['waiting', 'helping', 'helped', 'spam'],
     }).notNull(),
     assignedUserId: text('assigned_user_id'),
+    updatedAt: datetime('updated_at')
+      .notNull()
+      .$defaultFn(() => new Date()),
     createdAt: datetime('created_at')
       .notNull()
       .$defaultFn(() => new Date()),
@@ -107,7 +110,7 @@ export const Customers = sqliteTable(
   }),
 )
 
-export const CustomerRelations = relations(Customers, ({ one }) => ({
+export const CustomerRelations = relations(Customers, ({ one, many }) => ({
   workspace: one(Workspaces, {
     fields: [Customers.workspaceId],
     references: [Workspaces.id],
@@ -115,6 +118,12 @@ export const CustomerRelations = relations(Customers, ({ one }) => ({
   assignedUser: one(Users, {
     fields: [Customers.assignedUserId],
     references: [Users.id],
+  }),
+  createdTimelines: many(Timelines, {
+    relationName: 'customerCreator',
+  }),
+  timelines: many(Timelines, {
+    relationName: 'customer',
   }),
 }))
 
@@ -142,16 +151,18 @@ export const Timelines = sqliteTable(
   },
   (t) => ({
     primary_index: index('timelines_primary_index').on(t.customerId, t.createdAt),
-    creator_index: index('timelines_creator_index').on(t.creatorId),
+    secondary_index: index('timelines_secondary_index').on(t.creatorId, t.createdAt),
   }),
 )
 
 export const timelinesRelations = relations(Timelines, ({ one }) => ({
   customer: one(Customers, {
+    relationName: 'customer',
     fields: [Timelines.customerId],
     references: [Customers.id],
   }),
   customerCreator: one(Customers, {
+    relationName: 'customerCreator',
     fields: [Timelines.creatorId],
     references: [Customers.id],
   }),
