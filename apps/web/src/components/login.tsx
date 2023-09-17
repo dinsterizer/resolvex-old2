@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ChevronLeft, RotateCw } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ChevronLeft, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import OtpInput from 'react-otp-input'
 import { useNavigate } from 'react-router-dom'
@@ -94,7 +94,7 @@ export function Login() {
                 }}
               >
                 Resend OTP
-                {emailSendOtpMutation.isLoading && <RotateCw size={16} className="animate-spin ml-2" />}
+                {emailSendOtpMutation.isLoading && <Loader2 size={16} className="animate-spin ml-2" />}
               </Button>
             )}
 
@@ -128,7 +128,7 @@ function SendOtpForm({ onSubmit, isLoading }: { onSubmit: (data: SendOtpFormData
 
       <Button className="w-full" disabled={isLoading}>
         Continue
-        {isLoading ? <RotateCw size={16} className="animate-spin ml-2" /> : <ArrowRight size={16} className="ml-2" />}
+        {isLoading ? <Loader2 size={16} className="animate-spin ml-2" /> : <ArrowRight size={16} className="ml-2" />}
       </Button>
     </form>
   )
@@ -174,7 +174,7 @@ function VerifyOtpForm({
         </Button>
         <Button className="w-full" disabled={isLoading}>
           Continue
-          {isLoading ? <RotateCw size={16} className="animate-spin ml-2" /> : <ArrowRight size={16} className="ml-2" />}
+          {isLoading ? <Loader2 size={16} className="animate-spin ml-2" /> : <ArrowRight size={16} className="ml-2" />}
         </Button>
       </div>
     </form>
@@ -211,7 +211,7 @@ export function LoginWithGoogleButton() {
     <Button variant="secondary" type="button" className="w-full" asChild>
       <a href={authUrl.toString()}>
         Continue with Google
-        {isLoading ? <RotateCw size={16} className="animate-spin ml-2" /> : <Google size={16} className="ml-2" />}
+        {isLoading ? <Loader2 size={16} className="animate-spin ml-2" /> : <Google size={16} className="ml-2" />}
       </a>
     </Button>
   )

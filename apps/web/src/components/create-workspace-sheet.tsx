@@ -1,4 +1,4 @@
-import { RotateCw } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useId } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { trpc } from '~/utils/trpc'
@@ -60,7 +60,7 @@ export function CreateWorkspaceSheet({ children }: { children: React.ReactNode }
               </Button>
             </SheetClose>
             <Button disabled={isLoading}>
-              Submit {isLoading && <RotateCw size={16} className="animate-spin ml-1" />}
+              Submit {isLoading && <Loader2 size={16} className="animate-spin ml-1" />}
             </Button>
           </div>
         </form>

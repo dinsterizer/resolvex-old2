@@ -1,5 +1,3 @@
-// @ts-expect-error - no types
-import { getIconCollections, iconsPlugin } from '@egoist/tailwindcss-icons'
 import containerQueriesPlugin from '@tailwindcss/container-queries'
 import scrollbarPlugin from 'tailwind-scrollbar'
 import type { Config } from 'tailwindcss'
@@ -15,11 +13,5 @@ export default {
       },
     },
   },
-  plugins: [
-    scrollbarPlugin({ nocompatible: true }),
-    iconsPlugin({
-      collections: getIconCollections(['heroicons', 'mdi']),
-    }),
-    containerQueriesPlugin,
-  ],
+  plugins: [scrollbarPlugin({ nocompatible: true }), containerQueriesPlugin],
 } satisfies Partial<Config>
