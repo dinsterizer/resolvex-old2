@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
-import { RootPage } from './routes/_root'
-import { CustomerDetailPage } from './routes/customer-detail'
-import { CustomerListPage } from './routes/customer-list'
-import { WorkspaceDetailPage } from './routes/workspace-detail'
-import { WorkspaceListPage } from './routes/workspace-list'
-import { WorkspaceOverviewPage } from './routes/workspace-overview'
+import { RootPage } from './pages/_root'
+import { CustomerDetailPage } from './pages/customer-detail'
+import { CustomerListPage } from './pages/customer-list'
+import { WorkspaceDetailPage } from './pages/workspace-detail'
+import { WorkspaceListPage } from './pages/workspace-list'
+import { WorkspaceOverviewPage } from './pages/workspace-overview'
 
 // const routeTree = rootRoute.addChildren([
 //   workspaceListRoute,

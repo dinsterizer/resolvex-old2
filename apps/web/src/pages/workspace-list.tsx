@@ -14,14 +14,15 @@ import { trpc } from '~/utils/trpc'
 
 export function WorkspaceListPage() {
   const authed = useAuthedStore()
-  const { data, hasNextPage, isError, isSuccess, fetchNextPage, isFetching } = trpc.workspace.list.useInfiniteQuery(
-    {
-      limit: 8,
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    },
-  )
+  const { data, hasNextPage, isError, isSuccess, fetchNextPage, isFetching, isLoading } =
+    trpc.workspace.list.useInfiniteQuery(
+      {
+        limit: 8,
+      },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+      },
+    )
   const workspaceCount = data?.pages.reduce((acc, page) => acc + page.items.length, 0) ?? 0
 
   return (
@@ -70,7 +71,14 @@ export function WorkspaceListPage() {
             {data?.pages.map((page) =>
               page.items.map((workspace) => <WorkspaceCard key={workspace.id} workspace={workspace} />),
             )}
-            {/* TODO: move logic to component */}
+            {isLoading && (
+              <>
+                <WorkspaceCardSkeleton />
+                <WorkspaceCardSkeleton />
+                <WorkspaceCardSkeleton />
+                <WorkspaceCardSkeleton />
+              </>
+            )}
             {isFetching && hasNextPage && <WorkspaceCardSkeleton />}
             {!isFetching && hasNextPage && <ViewportBlock onEnterViewport={() => fetchNextPage()} />}
             {isSuccess && workspaceCount === 0 && <Empty />}
