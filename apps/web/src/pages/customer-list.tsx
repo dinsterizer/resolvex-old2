@@ -1,6 +1,7 @@
 import { customerStatusColumnBaseSchema } from '@resolvex/api/src/schema.customer'
 import { Outlet, useParams, useSearchParams } from 'react-router-dom'
 import { CustomerCard, CustomerCardSkeleton } from '~/components/customer-card'
+import { Empty } from '~/components/empty'
 import { End } from '~/components/end'
 import { QueryError } from '~/components/query-error'
 import { ViewportBlock } from '~/components/viewport-block'
@@ -50,9 +51,4 @@ export function CustomerListPage() {
       <Outlet />
     </div>
   )
-}
-
-export function Empty() {
-  // TODO
-  return 'empty'
 }
