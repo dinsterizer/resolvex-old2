@@ -1,7 +1,7 @@
 import { InferInsertModel, InferSelectModel, relations } from 'drizzle-orm'
 import { index, integer, primaryKey, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core'
 import { customerStatusColumnAllowValues } from './schema.customer'
-import { email, json } from './schema.extend'
+import { email } from './schema.extend'
 import { TimelineDataBaseColumn } from './schema.timeline'
 import { UserOtpBaseColumn } from './schema.user'
 import { workspaceMemberRoleColumnAllowValues } from './schema.workspace-member'
@@ -14,7 +14,7 @@ export const Users = sqliteTable('users', {
     .$defaultFn(() => generateUserId()),
   name: text('name').notNull(),
   email: email('email').notNull().unique(),
-  otp: json<UserOtpBaseColumn>('otp'),
+  otp: text('otp', { mode: 'json' }).$type<UserOtpBaseColumn>(),
   createdAt: integer('created_at')
     .notNull()
     .$defaultFn(() => Date.now()),
@@ -136,7 +136,7 @@ export const Timelines = sqliteTable(
       .$defaultFn(() => generateTimelineId()),
     customerId: text('customer_id').notNull(),
     creatorId: text('creator_id'), // can be user_id or customer_id or null for system bot
-    data: json<TimelineDataBaseColumn>('data').notNull(),
+    data: text('data', { mode: 'json' }).$type<TimelineDataBaseColumn>().notNull(),
     createdAt: integer('created_at')
       .notNull()
       .$defaultFn(() => Date.now()),
