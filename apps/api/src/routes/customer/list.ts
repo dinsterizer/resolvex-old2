@@ -1,4 +1,3 @@
-import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import { customerStatusColumnBaseSchema } from '../../schema.customer'
 import { authedProcedure } from '../../trpc'
@@ -13,15 +12,10 @@ export const customerListRouter = authedProcedure
     }),
   )
   .query(async ({ ctx, input }) => {
-    const workspaceMember = await ctx.db.query.WorkspaceMembers.findFirst({
-      where(t, { eq, and }) {
-        return and(eq(t.workspaceId, input.workspaceId), eq(t.userId, ctx.auth.userId))
-      },
+    await ctx.assertMemberOfWorkspace({
+      workspaceId: input.workspaceId,
+      userId: ctx.auth.userId,
     })
-
-    if (!workspaceMember) {
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'Workspace not found' })
-    }
 
     const items = await ctx.db.query.Customers.findMany({
       columns: {

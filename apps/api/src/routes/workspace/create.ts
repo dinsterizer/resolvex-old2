@@ -99,6 +99,10 @@ export const workspaceCreateRouter = authedProcedure
       const fakeCustomers = await Promise.all(
         customerNames.map(async (name) => {
           const email = name.toLowerCase().replace(' ', '.') + '+demo_customer@example.com'
+          const date = faker.date.between({
+            from: new Date().setDate(new Date().getDate() - 6),
+            to: new Date(),
+          })
           return await ctx.db
             .insert(Customers)
             .values({
@@ -108,6 +112,8 @@ export const workspaceCreateRouter = authedProcedure
               name,
               email,
               assignedUserId: fakeUsers[Math.floor(Math.random() * fakeUsers.length)].id,
+              createdAt: date.getTime() / 1000,
+              updatedAt: date.getTime() / 1000,
             })
             .returning({
               id: Customers.id,
