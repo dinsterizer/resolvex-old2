@@ -10,12 +10,6 @@ export function json<T>(...args: Parameters<ReturnType<typeof customType>>) {
   })(...args)
 }
 
-export const datetime = customType<{ data: Date }>({
-  dataType: () => 'integer',
-  toDriver: (value) => value.getTime(),
-  fromDriver: (value) => new Date(value as number),
-})
-
 export const email = customType<{ data: string }>({
   dataType: () => 'text',
   toDriver: (value) => z.string().parse(value),
