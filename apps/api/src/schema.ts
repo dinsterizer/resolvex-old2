@@ -1,7 +1,6 @@
 import { InferInsertModel, InferSelectModel, relations } from 'drizzle-orm'
 import { index, integer, primaryKey, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core'
 import { customerStatusColumnAllowValues } from './schema.customer'
-import { email } from './schema.extend'
 import { TimelineDataBaseColumn } from './schema.timeline'
 import { UserOtpBaseColumn } from './schema.user'
 import { workspaceMemberRoleColumnAllowValues } from './schema.workspace-member'
@@ -13,7 +12,7 @@ export const Users = sqliteTable('users', {
     .primaryKey()
     .$defaultFn(() => generateUserId()),
   name: text('name').notNull(),
-  email: email('email').notNull().unique(),
+  email: text('email').notNull().unique(),
   otp: text('otp', { mode: 'json' }).$type<UserOtpBaseColumn>(),
   createdAt: integer('created_at')
     .notNull()
@@ -88,7 +87,7 @@ export const Customers = sqliteTable(
       .$defaultFn(() => generateCustomerId()),
     workspaceId: text('workspace_id').notNull(),
     name: text('name').notNull(),
-    email: email('email'),
+    email: text('email'),
     status: text('status', {
       enum: customerStatusColumnAllowValues,
     }).notNull(),
