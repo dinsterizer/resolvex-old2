@@ -6,6 +6,7 @@ import './globals.css'
 import { QueryProvider } from './query-provider.tsx'
 import { router } from './router.tsx'
 
+// TODO: ERROR BOUNDARY
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <div className={import.meta.env.DEV ? 'debug-screens' : ''}>

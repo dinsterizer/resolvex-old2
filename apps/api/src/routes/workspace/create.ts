@@ -101,7 +101,7 @@ export const workspaceCreateRouter = authedProcedure
           const email = name.toLowerCase().replace(' ', '.') + '+demo_customer@example.com'
           const date = faker.date.between({
             from: new Date().setDate(new Date().getDate() - 6),
-            to: new Date(),
+            to: new Date(Date.now() - 1000 * 60 * 60),
           })
           return await ctx.db
             .insert(Customers)
@@ -121,6 +121,7 @@ export const workspaceCreateRouter = authedProcedure
               email: Customers.email,
               status: Customers.status,
               assignedUserId: Customers.assignedUserId,
+              createdAt: Customers.createdAt,
             })
             .get()
         }),
@@ -128,6 +129,10 @@ export const workspaceCreateRouter = authedProcedure
 
       await Promise.all(
         fakeCustomers.map(async (customer) => {
+          const date = faker.date.between({
+            from: customer.createdAt * 1000,
+            to: new Date(),
+          })
           await Promise.all([
             ctx.db
               .insert(Timelines)
@@ -138,6 +143,7 @@ export const workspaceCreateRouter = authedProcedure
                   message: faker.lorem.sentences({ min: 1, max: 3 }) + '?',
                 },
                 creatorId: customer.id,
+                createdAt: date.getTime() / 1000 - 60 * 60,
               })
               .get(),
             ctx.db
@@ -149,6 +155,7 @@ export const workspaceCreateRouter = authedProcedure
                   message: faker.lorem.sentences({ min: 1, max: 4 }),
                 },
                 creatorId: customer.assignedUserId,
+                createdAt: date.getTime() / 1000 - 60 * 30,
               })
               .get(),
             Math.random() > 0.5 &&
@@ -161,6 +168,7 @@ export const workspaceCreateRouter = authedProcedure
                     message: faker.lorem.sentences({ min: 1, max: 3 }) + '?',
                   },
                   creatorId: customer.id,
+                  createdAt: date.getTime() / 1000 - 60 * 5,
                 })
                 .get(),
             Math.random() > 0.5 &&
@@ -173,6 +181,7 @@ export const workspaceCreateRouter = authedProcedure
                     message: faker.lorem.sentences({ min: 1, max: 4 }),
                   },
                   creatorId: customer.assignedUserId,
+                  createdAt: date.getTime(),
                 })
                 .get(),
           ])
