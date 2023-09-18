@@ -22,7 +22,7 @@ export function CustomerCard({ customer }: Props) {
       <div className="flex justify-between gap-2">
         <div>
           <Link
-            to={`/${customer.workspaceId}/${customer.id}?status=${customer.status}`}
+            to={`/${customer.workspaceId}/customers/${customer.id}?status=${customer.status}`}
             className="font-medium text-sm"
           >
             {customer.name}
@@ -54,7 +54,7 @@ export function CustomerCard({ customer }: Props) {
       </div>
       {timeline?.data.type === 'chat' && (
         <Link
-          to={`/${customer.workspaceId}/${customer.id}?status=${customer.status}`}
+          to={`/${customer.workspaceId}/customers/${customer.id}?status=${customer.status}`}
           className="line-clamp-2 text-foreground/80 text-xs"
         >
           {timeline.data.message}
