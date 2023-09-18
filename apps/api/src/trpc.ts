@@ -2,7 +2,6 @@ import { TRPCError, initTRPC } from '@trpc/server'
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch'
 import { jwtVerify } from 'jose'
 import { Buffer } from 'node:buffer'
-import SuperJSON from 'superjson'
 import { z } from 'zod'
 import type { Context } from './worker.context'
 
@@ -26,9 +25,7 @@ export function createTRPCContext({ context }: { context: Context }) {
   }
 }
 
-const t = initTRPC.context<ReturnType<typeof createTRPCContext>>().create({
-  transformer: SuperJSON,
-})
+const t = initTRPC.context<ReturnType<typeof createTRPCContext>>().create({})
 
 export const middleware = t.middleware
 export const router = t.router

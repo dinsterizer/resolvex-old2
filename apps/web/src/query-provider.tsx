@@ -2,7 +2,6 @@ import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@ta
 import { TRPCClientError, httpBatchLink } from '@trpc/client'
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import SuperJSON from 'superjson'
 import { useToast } from './components/ui/use-toast'
 import { env } from './env'
 import { useAuthStore } from './stores/auth'
@@ -90,7 +89,6 @@ export function QueryProvider({ children }: { children: ReactNode }) {
   const trpcClient = useMemo(
     () =>
       trpc.createClient({
-        transformer: SuperJSON,
         links: [
           httpBatchLink({
             url: new URL('/trpc', env.API_URL).toString(),
