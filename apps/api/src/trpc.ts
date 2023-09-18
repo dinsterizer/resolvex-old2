@@ -3,6 +3,7 @@ import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch'
 import { jwtVerify } from 'jose'
 import { Buffer } from 'node:buffer'
 import { z } from 'zod'
+import { WorkspaceMemberRoleBaseColumn } from './schema.workspace-member'
 import type { Context } from './worker.context'
 
 export function createTRPCContext({ context }: { context: Context }) {
@@ -16,11 +17,32 @@ export function createTRPCContext({ context }: { context: Context }) {
     }
   }
 
+  const assertMemberOfWorkspace = async ({
+    workspaceId,
+    userId,
+    role,
+  }: {
+    workspaceId: string
+    userId: string
+    role?: WorkspaceMemberRoleBaseColumn
+  }) => {
+    const workspaceMember = await context.db.query.WorkspaceMembers.findFirst({
+      where(t, { eq, and }) {
+        return and(eq(t.workspaceId, workspaceId), eq(t.userId, userId), role ? eq(t.role, role) : undefined)
+      },
+    })
+
+    if (!workspaceMember) {
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'You are not a member of this workspace' })
+    }
+  }
+
   return async (opts: FetchCreateContextFnOptions) => {
     return {
       ...context,
       ...opts,
       rateLimit,
+      assertMemberOfWorkspace,
     }
   }
 }

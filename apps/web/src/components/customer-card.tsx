@@ -65,7 +65,9 @@ export function CustomerCard({ customer }: Props) {
       <div className="flex gap-2 mt-3">
         <div className="px-2 py-1 border rounded-md text-muted-foreground flex items-center gap-1">
           <Calendar size={14} />
-          <span className="text-xs">{formatDistanceToNow(new Date(customer.updatedAt), { addSuffix: true })}</span>
+          <span className="text-xs">
+            {formatDistanceToNow(new Date(customer.updatedAt * 1000), { addSuffix: true })}
+          </span>
         </div>
         <CustomerStatusBadge status={customer.status} />
       </div>

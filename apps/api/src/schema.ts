@@ -16,7 +16,7 @@ export const Users = sqliteTable('users', {
   otp: text('otp', { mode: 'json' }).$type<UserOtpBaseColumn>(),
   createdAt: integer('created_at')
     .notNull()
-    .$defaultFn(() => Date.now()),
+    .$defaultFn(() => Date.now() / 1000),
 })
 
 export const UserRelations = relations(Users, ({ many }) => ({
@@ -36,7 +36,7 @@ export const Workspaces = sqliteTable('workspaces', {
   name: text('name').notNull(),
   createdAt: integer('created_at')
     .notNull()
-    .$defaultFn(() => Date.now()),
+    .$defaultFn(() => Date.now() / 1000),
 })
 
 export const WorkspaceRelations = relations(Workspaces, ({ many }) => ({
@@ -57,7 +57,7 @@ export const WorkspaceMembers = sqliteTable(
       .$defaultFn(() => 'basic_member'),
     createdAt: integer('created_at')
       .notNull()
-      .$defaultFn(() => Date.now()),
+      .$defaultFn(() => Date.now() / 1000),
   },
   (t) => ({
     pk: primaryKey(t.workspaceId, t.userId),
@@ -94,10 +94,10 @@ export const Customers = sqliteTable(
     assignedUserId: text('assigned_user_id'),
     updatedAt: integer('updated_at')
       .notNull()
-      .$defaultFn(() => Date.now()),
+      .$defaultFn(() => Date.now() / 1000),
     createdAt: integer('created_at')
       .notNull()
-      .$defaultFn(() => Date.now()),
+      .$defaultFn(() => Date.now() / 1000),
   },
   (t) => ({
     email_unique: unique('customers_email_unique').on(t.workspaceId, t.email),
@@ -138,7 +138,7 @@ export const Timelines = sqliteTable(
     data: text('data', { mode: 'json' }).$type<TimelineDataBaseColumn>().notNull(),
     createdAt: integer('created_at')
       .notNull()
-      .$defaultFn(() => Date.now()),
+      .$defaultFn(() => Date.now() / 1000),
   },
   (t) => ({
     primary_index: index('timelines_primary_index').on(t.customerId, t.createdAt),
