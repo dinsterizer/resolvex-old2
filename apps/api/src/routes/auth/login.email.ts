@@ -40,10 +40,10 @@ export const loginEmailRouter = router({
       }
 
       let otp = user.otp
-      if (!otp || otp.expiresAt < Date.now() + 1000 * 30) {
+      if (!otp || otp.expiresAt < Date.now() / 1000 + 30) {
         otp = {
           code: generateOtp(),
-          expiresAt: Date.now() + 1000 * 60 * 5,
+          expiresAt: Date.now() / 1000 + 60 * 5,
         }
         await db
           .update(Users)
@@ -107,7 +107,7 @@ export const loginEmailRouter = router({
         })
       }
 
-      if (!user.otp || user.otp.expiresAt < Date.now() || user.otp.code !== input.otp) {
+      if (!user.otp || user.otp.expiresAt < Date.now() / 1000 || user.otp.code !== input.otp) {
         throw new TRPCError({ code: 'BAD_REQUEST', message: 'Your OTP is invalid or expired' })
       }
 
@@ -124,7 +124,7 @@ export const loginEmailRouter = router({
       const jwt = await new SignJWT({ userId: user.id })
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
-        .setExpirationTime((Date.now() + 1000 * 60 * 60 * 24 * 7) / 1000)
+        .setExpirationTime(Date.now() / 1000 + 60 * 60 * 24 * 7)
         .sign(Buffer.from(env.AUTH_SECRET))
 
       return {
