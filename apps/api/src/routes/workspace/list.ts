@@ -28,7 +28,7 @@ export const workspaceListRouter = authedProcedure
     if (!workspaceIds.length) {
       return {
         items: [],
-        nextCursor: undefined,
+        nextCursor: null,
       }
     }
 
@@ -57,6 +57,6 @@ export const workspaceListRouter = authedProcedure
 
     return {
       items,
-      nextCursor: input.cursor + input.limit,
+      nextCursor: items.length < input.limit ? null : input.cursor + input.limit,
     }
   })

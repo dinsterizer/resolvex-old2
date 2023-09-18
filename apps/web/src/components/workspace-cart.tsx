@@ -1,6 +1,6 @@
-import { Link } from '@tanstack/react-router'
+import { Building2 } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Md5 } from 'ts-md5'
-import { workspaceDetailRoute } from '~/routes/workspace-detail'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Card } from './ui/card'
 import { Skeleton } from './ui/skeleton'
@@ -22,19 +22,11 @@ export function WorkspaceCard({ workspace }: Props) {
   return (
     <Card className="p-2.5 relative">
       <div className="flex gap-4">
-        <Link
-          to={workspaceDetailRoute.to}
-          params={{ workspaceId: workspace.id }}
-          className="h-16 w-16 bg-accent rounded-md flex items-center justify-center group"
-        >
-          <span className="i-heroicons-building-office h-6 w-6 text-accent-foreground group-hover:text-accent-foreground/80" />
+        <Link to={`/${workspace.id}`} className="h-16 w-16 bg-accent rounded-md flex items-center justify-center group">
+          <Building2 className="text-accent-foreground group-hover:text-accent-foreground/80" />
         </Link>
         <div>
-          <Link
-            to={workspaceDetailRoute.to}
-            params={{ workspaceId: workspace.id }}
-            className="font-medium hover:text-foreground/80"
-          >
+          <Link to={`/${workspace.id}`} className="font-medium hover:text-foreground/80">
             {workspace.name}
           </Link>
           <div className="flex mt-3 gap-0.5">

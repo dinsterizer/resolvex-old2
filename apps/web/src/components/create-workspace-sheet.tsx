@@ -1,6 +1,6 @@
-import { useNavigate } from '@tanstack/react-router'
+import { Loader2 } from 'lucide-react'
 import { useId } from 'react'
-import { workspaceDetailRoute } from '~/routes/workspace-detail'
+import { useNavigate } from 'react-router-dom'
 import { trpc } from '~/utils/trpc'
 import { Button } from './ui/button'
 import { Checkbox } from './ui/checkbox'
@@ -15,12 +15,7 @@ export function CreateWorkspaceSheet({ children }: { children: React.ReactNode }
   const navigate = useNavigate()
   const { mutate, isLoading } = trpc.workspace.create.useMutation({
     onSuccess(data) {
-      navigate({
-        to: workspaceDetailRoute.to,
-        params: {
-          workspaceId: data.id,
-        },
-      })
+      navigate(`/${data.id}`)
     },
   })
 
@@ -64,7 +59,9 @@ export function CreateWorkspaceSheet({ children }: { children: React.ReactNode }
                 Close
               </Button>
             </SheetClose>
-            <Button>{isLoading && <span className="i-heroicons-arrow-path animate-spin mr-3" />} Submit</Button>
+            <Button disabled={isLoading}>
+              Submit {isLoading && <Loader2 size={16} className="animate-spin ml-1" />}
+            </Button>
           </div>
         </form>
       </SheetContent>

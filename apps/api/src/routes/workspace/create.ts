@@ -1,5 +1,7 @@
+import { faker } from '@faker-js/faker'
 import { z } from 'zod'
-import { Users, WorkspaceMembers, Workspaces } from '../../schema'
+import { Customers, Timelines, Users, WorkspaceMembers, Workspaces } from '../../schema'
+import { customerStatusColumnAllowValues } from '../../schema.customer'
 import { authedProcedure } from '../../trpc'
 
 export const workspaceCreateRouter = authedProcedure
@@ -27,46 +29,149 @@ export const workspaceCreateRouter = authedProcedure
     })
 
     if (input.withDemoData) {
-      const getDemoUser = async (name: string) => {
-        const email = name.toLowerCase().replace(' ', '.') + '+demo@example.com'
-        const user = await ctx.db.query.Users.findFirst({
-          columns: {
-            id: true,
-            name: true,
-            email: true,
-          },
-          where(t, { eq }) {
-            return eq(t.email, email)
-          },
-        })
-
-        if (user) {
-          return user
-        }
-
-        return ctx.db
-          .insert(Users)
-          .values({
-            name,
-            email,
+      const userNames = ['Acme Corp', 'Globex', 'Initech', 'Umbrella Corp', 'Stark Industries']
+      const fakeUsers = await Promise.all(
+        userNames.map(async (name) => {
+          const email = name.toLowerCase().replace(' ', '.') + '+user_demo@example.com'
+          const user = await ctx.db.query.Users.findFirst({
+            columns: {
+              id: true,
+              name: true,
+              email: true,
+            },
+            where(t, { eq }) {
+              return eq(t.email, email)
+            },
           })
-          .returning({
-            id: Users.id,
-            name: Users.name,
-            email: Users.email,
+
+          if (user) {
+            return user
+          }
+
+          return ctx.db
+            .insert(Users)
+            .values({
+              name,
+              email,
+            })
+            .returning({
+              id: Users.id,
+              name: Users.name,
+              email: Users.email,
+            })
+            .get()
+        }),
+      )
+
+      await Promise.all(
+        fakeUsers.map(async (user) => {
+          return await ctx.db.insert(WorkspaceMembers).values({
+            userId: user.id,
+            workspaceId: workspace.id,
+            role: 'basic_member',
           })
-          .get()
-      }
+        }),
+      )
 
-      const fakeUsers = [await getDemoUser('John Doe'), await getDemoUser('Mary Jane'), await getDemoUser('Bob Smith')]
+      const customerNames = [
+        'Emily Johnson',
+        'Ethan Davis',
+        'Olivia Martinez',
+        'William Wilson',
+        'Sophia Anderson',
+        'Benjamin Lee',
+        'Isabella Taylor',
+        'Michael Brown',
+        'Mia Rodriguez',
+        'Alexander Garcia',
+        'Charlotte Hernandez',
+        'Amelia Davis',
+        'Matthew Wilson',
+        'Harper Anderson',
+        'Samuel Lee',
+        'Abigail Taylor',
+        'Joseph Brown',
+        'Elizabeth Rodriguez',
+        'David Garcia',
+        'Madison Hernandez',
+        'Daniel Martinez',
+      ]
+      const fakeCustomers = await Promise.all(
+        customerNames.map(async (name) => {
+          const email = name.toLowerCase().replace(' ', '.') + '+demo_customer@example.com'
+          return await ctx.db
+            .insert(Customers)
+            .values({
+              workspaceId: workspace.id,
+              status:
+                customerStatusColumnAllowValues[Math.floor(Math.random() * customerStatusColumnAllowValues.length)],
+              name,
+              email,
+              assignedUserId: fakeUsers[Math.floor(Math.random() * fakeUsers.length)].id,
+            })
+            .returning({
+              id: Customers.id,
+              name: Customers.name,
+              email: Customers.email,
+              status: Customers.status,
+              assignedUserId: Customers.assignedUserId,
+            })
+            .get()
+        }),
+      )
 
-      for (const user of fakeUsers) {
-        await ctx.db.insert(WorkspaceMembers).values({
-          userId: user.id,
-          workspaceId: workspace.id,
-          role: 'basic_member',
-        })
-      }
+      await Promise.all(
+        fakeCustomers.map(async (customer) => {
+          await Promise.all([
+            ctx.db
+              .insert(Timelines)
+              .values({
+                customerId: customer.id,
+                data: {
+                  type: 'chat',
+                  message: faker.lorem.sentences({ min: 1, max: 3 }) + '?',
+                },
+                creatorId: customer.id,
+              })
+              .get(),
+            ctx.db
+              .insert(Timelines)
+              .values({
+                customerId: customer.id,
+                data: {
+                  type: 'chat',
+                  message: faker.lorem.sentences({ min: 1, max: 4 }),
+                },
+                creatorId: customer.assignedUserId,
+              })
+              .get(),
+            Math.random() > 0.5 &&
+              ctx.db
+                .insert(Timelines)
+                .values({
+                  customerId: customer.id,
+                  data: {
+                    type: 'chat',
+                    message: faker.lorem.sentences({ min: 1, max: 3 }) + '?',
+                  },
+                  creatorId: customer.id,
+                })
+                .get(),
+            Math.random() > 0.5 &&
+              ctx.db
+                .insert(Timelines)
+                .values({
+                  customerId: customer.id,
+                  data: {
+                    type: 'chat',
+                    message: faker.lorem.sentences({ min: 1, max: 4 }),
+                  },
+                  creatorId: customer.assignedUserId,
+                })
+                .get(),
+          ])
+        }),
+      )
     }
 
     return {

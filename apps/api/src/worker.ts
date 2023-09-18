@@ -17,7 +17,7 @@ export default {
     const env = envSchema.parse(unvalidatedEnv)
     const context = createContext({ env, ec })
 
-    if (env.WORKER_ENV === 'development') await new Promise((resolve) => setTimeout(resolve, 300))
+    if (env.WORKER_ENV === 'development') await new Promise((resolve) => setTimeout(resolve, 600))
 
     let response: Response | undefined
 

@@ -3,6 +3,7 @@ interface LogoProps {
   size?: number
 }
 
+// TODO: drop menu on click logo
 export function Logo({ variant = 'full', size = 20 }: LogoProps) {
   const style = {
     width: 'auto',

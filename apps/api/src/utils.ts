@@ -8,6 +8,14 @@ export function generateWorkspaceId() {
   return `w_${nanoid()}`
 }
 
+export function generateCustomerId() {
+  return `c_${nanoid()}`
+}
+
+export function generateTimelineId() {
+  return `t_${nanoid()}`
+}
+
 export function generateOtp(length = 6) {
   let result = ''
   const characters = 'abcdefghijklmnopqrstuvwxyz0123456789'
