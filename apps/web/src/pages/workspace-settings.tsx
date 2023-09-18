@@ -1,5 +1,9 @@
 import { TODOAlert } from '~/components/todo-alert'
 
 export function WorkspaceSettingsPage() {
-  return <TODOAlert />
+  return (
+    <div className="p-4">
+      <TODOAlert />
+    </div>
+  )
 }

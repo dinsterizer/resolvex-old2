@@ -27,9 +27,9 @@ export function CustomerListPage() {
   const customerCount = data?.pages.reduce((acc, page) => acc + page.items.length, 0) ?? 0
   return (
     <div className="flex flex-col h-full">
-      <h1 className="font-title text-xl font-medium">Customers</h1>
+      <h1 className="font-title text-xl font-medium p-4">Customers</h1>
 
-      <div className="flex-1 lg:overflow-auto space-y-4 mt-8 lg:mt-10 pr-1">
+      <div className="flex-1 lg:overflow-auto space-y-4 lg:mt-2 p-4 lg:pr-2">
         {data?.pages.map((page) =>
           page.items.map((customer) => <CustomerCard key={customer.id} customer={customer} />),
         )}
