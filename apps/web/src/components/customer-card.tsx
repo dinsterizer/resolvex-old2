@@ -1,5 +1,6 @@
 import type { SelectCustomer, SelectTimeline, SelectUser } from '@resolvex/api/src/schema'
-import { Calendar, MoreHorizontal } from 'lucide-react'
+import { formatDistanceToNow } from 'date-fns'
+import { Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Md5 } from 'ts-md5'
 import { CustomerStatusBadge } from './customer-status-badge'
@@ -18,7 +19,7 @@ export function CustomerCard({ customer }: Props) {
   const timeline = customer.createdTimelines[0]
 
   return (
-    <Card className="py-2 px-3">
+    <Card className="py-2 px-3 @container">
       <div className="flex justify-between gap-2">
         <div>
           <Link
@@ -29,13 +30,13 @@ export function CustomerCard({ customer }: Props) {
           </Link>
 
           {customer.email && (
-            <span className="ml-1 text-xs text-muted-foreground">
+            <span className="ml-1 text-xs text-muted-foreground hidden @xs:inline">
               · <span className="pl-1">{customer.email}</span>
             </span>
           )}
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           {customer.assignedUser && (
             <Avatar className="h-5 w-5">
               <AvatarImage
@@ -46,10 +47,10 @@ export function CustomerCard({ customer }: Props) {
             </Avatar>
           )}
 
-          <button type="button">
-            {/* TODO */}
+          {/* TODO */}
+          {/* <button type="button">
             <MoreHorizontal size={16} />
-          </button>
+          </button> */}
         </div>
       </div>
       {timeline?.data.type === 'chat' && (
@@ -64,10 +65,7 @@ export function CustomerCard({ customer }: Props) {
       <div className="flex gap-2 mt-3">
         <div className="px-2 py-1 border rounded-md text-muted-foreground flex items-center gap-1">
           <Calendar size={14} />
-          <span className="text-xs">
-            {/* TODO */}
-            5m ago
-          </span>
+          <span className="text-xs">{formatDistanceToNow(new Date(customer.updatedAt), { addSuffix: true })}</span>
         </div>
         <CustomerStatusBadge status={customer.status} />
       </div>

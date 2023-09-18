@@ -7,7 +7,6 @@ import { QueryError } from '~/components/query-error'
 import { ViewportBlock } from '~/components/viewport-block'
 import { trpc } from '~/utils/trpc'
 
-// TODO: mobile responsive
 export function CustomerListPage() {
   const { workspaceId } = useParams() as { workspaceId: string }
   const [searchParams] = useSearchParams()
@@ -30,7 +29,7 @@ export function CustomerListPage() {
     <div className="flex flex-col h-full">
       <h1 className="font-title text-xl font-medium">Customers</h1>
 
-      <div className="flex-1 overflow-auto space-y-4 mt-10 pr-1">
+      <div className="flex-1 lg:overflow-auto space-y-4 mt-8 lg:mt-10 pr-1">
         {data?.pages.map((page) =>
           page.items.map((customer) => <CustomerCard key={customer.id} customer={customer} />),
         )}

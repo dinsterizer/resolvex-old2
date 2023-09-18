@@ -2,6 +2,7 @@ import containerQueriesPlugin from '@tailwindcss/container-queries'
 import scrollbarPlugin from 'tailwind-scrollbar'
 import type { Config } from 'tailwindcss'
 import animatePlugin from 'tailwindcss-animate'
+import debugScreensPlugin from 'tailwindcss-debug-screens'
 import defaultTheme from 'tailwindcss/defaultTheme'
 
 export default {
@@ -76,5 +77,5 @@ export default {
       },
     },
   },
-  plugins: [animatePlugin, containerQueriesPlugin, scrollbarPlugin({ nocompatible: true })],
+  plugins: [animatePlugin, containerQueriesPlugin, scrollbarPlugin({ nocompatible: true }), debugScreensPlugin],
 } satisfies Config

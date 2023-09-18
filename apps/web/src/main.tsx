@@ -8,10 +8,12 @@ import { router } from './router.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryProvider>
-      <RouterProvider router={router} />
-    </QueryProvider>
+    <div className={import.meta.env.DEV ? 'debug-screens' : ''}>
+      <QueryProvider>
+        <RouterProvider router={router} />
+      </QueryProvider>
 
-    <Toaster />
+      <Toaster />
+    </div>
   </StrictMode>,
 )

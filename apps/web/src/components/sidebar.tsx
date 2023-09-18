@@ -1,126 +1,128 @@
-import { CheckCircle2, Circle, FileSearch, LayoutDashboard, MinusCircle, Settings, Users, XCircle } from 'lucide-react'
+import {
+  CheckCircle2,
+  Circle,
+  FileSearch,
+  LayoutDashboard,
+  Menu,
+  MinusCircle,
+  Settings,
+  Users,
+  XCircle,
+} from 'lucide-react'
+import { useState } from 'react'
 import { Link, useMatch, useSearchParams } from 'react-router-dom'
 import { env } from '~/env'
 import { Logo } from './logo'
 import { Button } from './ui/button'
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from './ui/sheet'
 
 type Props = {
   workspaceId: string
 }
 
-export function Sidebar(props: Props) {
+function Nav(props: Props & { onNavigate?: () => void }) {
   const matchWorkspaceOverview = useMatch(`/${props.workspaceId}`)
   const matchCustomerList = useMatch(`/${props.workspaceId}/customers`)
   const matchWorkspaceSettings = useMatch(`/${props.workspaceId}/settings`)
   const matchWorkspaceMembers = useMatch(`/${props.workspaceId}/members`)
   const [searchParams] = useSearchParams()
   const status = searchParams.get('status')
-
   return (
-    <div className="w-44 space-y-8">
-      <Link to="/">
-        <Logo size={24} />
-      </Link>
-
+    <>
       <div>
-        <Link to={`/${props.workspaceId}`}>
-          <Button
-            variant={matchWorkspaceOverview ? 'secondary' : 'ghost'}
-            size="sm"
-            className="w-full justify-between mt-3"
-            asChild
-          >
-            <div>
-              <div className="flex items-center">
-                <LayoutDashboard className="h-4 w-4 mr-2" />
-                Overview
-              </div>
+        <Button
+          variant={matchWorkspaceOverview ? 'secondary' : 'ghost'}
+          size="sm"
+          className="w-full justify-between mt-3"
+          onClick={props.onNavigate}
+          asChild
+        >
+          <Link to={`/${props.workspaceId}`}>
+            <div className="flex items-center">
+              <LayoutDashboard className="h-4 w-4 mr-2" />
+              Overview
             </div>
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
 
       <div>
         <span className="text-xs text-muted-foreground">Customer</span>
 
-        <Link to={`/${props.workspaceId}/customers?status=waiting`}>
-          <Button
-            variant={matchCustomerList && status === 'waiting' ? 'secondary' : 'ghost'}
-            size="sm"
-            className="w-full justify-between mt-3"
-            asChild
-          >
-            <div>
-              <div className="flex items-center">
-                <Circle className="h-4 w-4 mr-2" />
-                Waiting
-              </div>
+        <Button
+          variant={matchCustomerList && status === 'waiting' ? 'secondary' : 'ghost'}
+          size="sm"
+          className="w-full justify-between mt-3"
+          onClick={props.onNavigate}
+          asChild
+        >
+          <Link to={`/${props.workspaceId}/customers?status=waiting`}>
+            <div className="flex items-center">
+              <Circle className="h-4 w-4 mr-2" />
+              Waiting
+            </div>
 
-              {/* TODO */}
-              {/* <div className="h-6 w-6 rounded-sm bg-muted-foreground/25 text-muted-foreground text-sm flex items-center justify-center">
+            {/* TODO */}
+            {/* <div className="h-6 w-6 rounded-sm bg-muted-foreground/25 text-muted-foreground text-sm flex items-center justify-center">
                 <span className="pt-[1px]">5</span>
               </div> */}
+          </Link>
+        </Button>
+
+        <Button
+          variant={matchCustomerList && status === 'helping' ? 'secondary' : 'ghost'}
+          size="sm"
+          className="w-full justify-between mt-3"
+          onClick={props.onNavigate}
+          asChild
+        >
+          <Link to={`/${props.workspaceId}/customers?status=helping`}>
+            <div className="flex items-center">
+              <MinusCircle className="h-4 w-4 mr-2" />
+              Helping
             </div>
-          </Button>
-        </Link>
 
-        <Link to={`/${props.workspaceId}/customers?status=helping`}>
-          <Button
-            variant={matchCustomerList && status === 'helping' ? 'secondary' : 'ghost'}
-            size="sm"
-            className="w-full justify-between mt-3"
-            asChild
-          >
-            <div>
-              <div className="flex items-center">
-                <MinusCircle className="h-4 w-4 mr-2" />
-                Helping
-              </div>
-
-              {/* TODO */}
-              {/* <div className="h-6 w-6 rounded-sm bg-muted-foreground/25 text-muted-foreground text-sm flex items-center justify-center">
+            {/* TODO */}
+            {/* <div className="h-6 w-6 rounded-sm bg-muted-foreground/25 text-muted-foreground text-sm flex items-center justify-center">
                 <span className="pt-[1px]">5</span>
               </div> */}
+          </Link>
+        </Button>
+
+        <Button
+          variant={matchCustomerList && status === 'helped' ? 'secondary' : 'ghost'}
+          size="sm"
+          className="w-full justify-between mt-3"
+          onClick={props.onNavigate}
+          asChild
+        >
+          <Link to={`/${props.workspaceId}/customers?status=helped`}>
+            <div className="flex items-center">
+              <CheckCircle2 className="h-4 w-4 mr-2" />
+              Helped
             </div>
-          </Button>
-        </Link>
 
-        <Link to={`/${props.workspaceId}/customers?status=helped`}>
-          <Button
-            variant={matchCustomerList && status === 'helped' ? 'secondary' : 'ghost'}
-            size="sm"
-            className="w-full justify-between mt-3"
-            asChild
-          >
-            <div>
-              <div className="flex items-center">
-                <CheckCircle2 className="h-4 w-4 mr-2" />
-                Helped
-              </div>
-
-              {/* TODO */}
-              {/* <div className="h-6 w-6 rounded-sm bg-muted-foreground/25 text-muted-foreground text-sm flex items-center justify-center">
+            {/* TODO */}
+            {/* <div className="h-6 w-6 rounded-sm bg-muted-foreground/25 text-muted-foreground text-sm flex items-center justify-center">
                 <span className="pt-[1px]">5</span>
               </div> */}
-            </div>
-          </Button>
-        </Link>
+          </Link>
+        </Button>
 
-        <Link to={`/${props.workspaceId}/customers?status=spam`}>
-          <Button
-            variant={matchCustomerList && status === 'spam' ? 'secondary' : 'ghost'}
-            size="sm"
-            className="w-full justify-between mt-3"
-            asChild
-          >
-            <div>
-              <div className="flex items-center">
-                <XCircle className="h-4 w-4 mr-2" />
-                Spam
-              </div>
+        <Button
+          variant={matchCustomerList && status === 'spam' ? 'secondary' : 'ghost'}
+          size="sm"
+          className="w-full justify-between mt-3"
+          onClick={props.onNavigate}
+          asChild
+        >
+          <Link to={`/${props.workspaceId}/customers?status=spam`}>
+            <div className="flex items-center">
+              <XCircle className="h-4 w-4 mr-2" />
+              Spam
             </div>
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
 
       <div>
@@ -130,6 +132,7 @@ export function Sidebar(props: Props) {
           variant={matchWorkspaceSettings ? 'secondary' : 'ghost'}
           size="sm"
           className="w-full justify-start mt-3"
+          onClick={props.onNavigate}
           asChild
         >
           <Link to={`/${props.workspaceId}/settings`}>
@@ -142,6 +145,7 @@ export function Sidebar(props: Props) {
           variant={matchWorkspaceMembers ? 'secondary' : 'ghost'}
           size="sm"
           className="w-full justify-start mt-3"
+          onClick={props.onNavigate}
           asChild
         >
           <Link to={`/${props.workspaceId}/members`}>
@@ -157,6 +161,53 @@ export function Sidebar(props: Props) {
           </a>
         </Button>
       </div>
+    </>
+  )
+}
+
+export function VerticalSidebar(props: Props) {
+  return (
+    <div className="space-y-8">
+      <Link to="/">
+        <Logo size={24} />
+      </Link>
+
+      <Nav {...props} />
+    </div>
+  )
+}
+
+export function HorizontalSidebar(props: Props) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="flex items-center justify-between gap-2">
+      <Link to="/">
+        <Logo size={24} />
+      </Link>
+
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button type="button" size="icon" variant="ghost">
+            <Menu size={20} />
+          </Button>
+        </SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <div>
+              <Logo size={24} />
+            </div>
+          </SheetHeader>
+
+          <div className="space-y-8 mt-8">
+            <Nav
+              onNavigate={() => {
+                setOpen(false)
+              }}
+              {...props}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
