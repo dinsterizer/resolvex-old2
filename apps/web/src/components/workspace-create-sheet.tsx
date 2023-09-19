@@ -1,14 +1,16 @@
 import { Loader2 } from 'lucide-react'
-import { useId } from 'react'
+import React, { useId } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { trpc } from '~/utils/trpc'
 import { Button } from './ui/button'
 import { Checkbox } from './ui/checkbox'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet'
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from './ui/sheet'
 
-export function CreateWorkspaceSheet({ children }: { children: React.ReactNode }) {
+type Props = React.ComponentPropsWithoutRef<typeof Sheet>
+
+export function CreateWorkspaceSheet({ children, ...props }: Props) {
   const nameId = useId()
   const demoDataId = useId()
 
@@ -27,8 +29,8 @@ export function CreateWorkspaceSheet({ children }: { children: React.ReactNode }
   }
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>{children}</SheetTrigger>
+    <Sheet {...props}>
+      {children}
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Create workspace</SheetTitle>

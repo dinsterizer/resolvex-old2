@@ -13,7 +13,7 @@ type Props = ComponentPropsWithoutRef<typeof Sheet> & {
   workspaceId: string
 }
 
-export function UpdateWorkspaceSheet({ workspaceId, ...props }: Props) {
+export function UpdateWorkspaceSheet({ workspaceId, children, ...props }: Props) {
   const idId = useId()
   const nameId = useId()
   const query = trpc.workspace.detail.useQuery({ workspaceId })
@@ -32,6 +32,7 @@ export function UpdateWorkspaceSheet({ workspaceId, ...props }: Props) {
 
   return (
     <Sheet {...props}>
+      {children}
       <SheetContent>
         {match(query)
           .with({ status: 'loading' }, () => <GeneralSkeleton count={5} />)
