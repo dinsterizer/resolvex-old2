@@ -190,6 +190,6 @@ export const workspaceCreateRouter = authedProcedure
     }
 
     return {
-      id: workspace.id,
+      workspaceId: workspace.id,
     }
   })

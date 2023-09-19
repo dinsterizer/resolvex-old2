@@ -1,6 +1,5 @@
 import { Loader2 } from 'lucide-react'
 import React, { useId } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { trpc } from '~/utils/trpc'
 import { Button } from './ui/button'
 import { Checkbox } from './ui/checkbox'
@@ -8,16 +7,17 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from './ui/sheet'
 
-type Props = React.ComponentPropsWithoutRef<typeof Sheet>
+type Props = React.ComponentPropsWithoutRef<typeof Sheet> & {
+  onSuccess?: ({ workspaceId }: { workspaceId: string }) => void
+}
 
-export function CreateWorkspaceSheet({ children, ...props }: Props) {
+export function CreateWorkspaceSheet({ children, onSuccess, ...props }: Props) {
   const nameId = useId()
   const demoDataId = useId()
 
-  const navigate = useNavigate()
   const { mutate, isLoading } = trpc.workspace.create.useMutation({
     onSuccess(data) {
-      navigate(`/${data.id}`)
+      onSuccess?.({ workspaceId: data.workspaceId })
     },
   })
 
