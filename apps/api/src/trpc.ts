@@ -33,7 +33,9 @@ export function createTRPCContext({ context }: { context: Context }) {
     })
 
     if (!workspaceMember) {
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'You are not a member of this workspace' })
+      const message =
+        role === 'admin' ? 'You are not an admin of this workspace' : 'You are not a member of this workspace'
+      throw new TRPCError({ code: 'NOT_FOUND', message })
     }
   }
 

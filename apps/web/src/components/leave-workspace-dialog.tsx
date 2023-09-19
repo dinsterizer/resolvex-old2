@@ -23,7 +23,7 @@ export function LeaveWorkspaceDialog({ children, workspaceId, onSuccess }: Props
   const [open, setOpen] = useState(false)
   const mutation = trpc.workspace.leave.useMutation({
     onSuccess() {
-      onSuccess && onSuccess()
+      onSuccess?.()
       setOpen(false)
     },
   })

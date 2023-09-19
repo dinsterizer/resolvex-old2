@@ -19,6 +19,9 @@ export const workspaceDetailRouter = authedProcedure
         id: true,
         name: true,
       },
+      with: {
+        members: true,
+      },
       where(t, { eq }) {
         return eq(t.id, input.workspaceId)
       },

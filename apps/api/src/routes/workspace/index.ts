@@ -4,6 +4,7 @@ import { workspaceDetailRouter } from './detail'
 import { workspaceLeaveRouter } from './leave'
 import { workspaceListRouter } from './list'
 import { workspaceOverviewRouter } from './overview'
+import { workspaceUpdateRouter } from './update'
 
 export const workspaceRouter = router({
   list: workspaceListRouter,
@@ -11,4 +12,5 @@ export const workspaceRouter = router({
   overview: workspaceOverviewRouter,
   detail: workspaceDetailRouter,
   leave: workspaceLeaveRouter,
+  update: workspaceUpdateRouter,
 })

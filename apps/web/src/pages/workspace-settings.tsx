@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { useNavigate, useParams } from 'react-router-dom'
 import { match } from 'ts-pattern'
@@ -7,18 +8,33 @@ import { QueryError } from '~/components/query-error'
 import { Button } from '~/components/ui/button'
 import { Card } from '~/components/ui/card'
 import { useToast } from '~/components/ui/use-toast'
+import { UpdateWorkspaceSheet } from '~/components/update-workspace-sheet'
+import { useAuthedStore } from '~/stores/auth'
 import { trpc } from '~/utils/trpc'
 
 export function WorkspaceSettingsPage() {
   const navigate = useNavigate()
   const { toast } = useToast()
+  const auth = useAuthedStore()
   const params = useParams() as { workspaceId: string }
+
   const workspaceDetailQuery = trpc.workspace.detail.useQuery({
     workspaceId: params.workspaceId,
   })
 
+  const [openUpdateWorkspaceSheet, setOpenUpdateWorkspaceSheet] = useState(false)
+
+  const isAdmin = !!workspaceDetailQuery.data?.workspace.members.find(
+    (member) => member.userId === auth.user.id && member.role === 'admin',
+  )
+
   return (
     <div>
+      <UpdateWorkspaceSheet
+        workspaceId={params.workspaceId}
+        open={openUpdateWorkspaceSheet}
+        onOpenChange={setOpenUpdateWorkspaceSheet}
+      />
       <h1 className="font-title text-xl font-medium p-4">Settings</h1>
 
       <div className="p-4 space-y-16">
@@ -56,8 +72,11 @@ export function WorkspaceSettingsPage() {
                     <div className="font-medium  sm:w-64 sm:flex-none sm:pr-6">Name</div>
                     <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
                       <div>{query.data.workspace.name}</div>
-                      {/* TODO */}
-                      <Button variant="ghost">Update</Button>
+                      {isAdmin && (
+                        <Button type="button" variant="ghost" onClick={() => setOpenUpdateWorkspaceSheet(true)}>
+                          Update
+                        </Button>
+                      )}
                     </dd>
                   </div>
                 </div>
