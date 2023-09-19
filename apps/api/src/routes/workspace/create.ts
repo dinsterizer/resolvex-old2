@@ -112,8 +112,8 @@ export const workspaceCreateRouter = authedProcedure
               name,
               email,
               assignedUserId: fakeUsers[Math.floor(Math.random() * fakeUsers.length)].id,
-              createdAt: date.getTime() / 1000,
-              updatedAt: date.getTime() / 1000,
+              createdAt: Math.floor(date.getTime() / 1000),
+              updatedAt: Math.floor(date.getTime() / 1000),
             })
             .returning({
               id: Customers.id,
@@ -143,7 +143,7 @@ export const workspaceCreateRouter = authedProcedure
                   message: faker.lorem.sentences({ min: 1, max: 3 }) + '?',
                 },
                 creatorId: customer.id,
-                createdAt: date.getTime() / 1000 - 60 * 60,
+                createdAt: Math.floor(date.getTime() / 1000) - 60 * 60,
               })
               .get(),
             ctx.db
@@ -155,7 +155,7 @@ export const workspaceCreateRouter = authedProcedure
                   message: faker.lorem.sentences({ min: 1, max: 4 }),
                 },
                 creatorId: customer.assignedUserId,
-                createdAt: date.getTime() / 1000 - 60 * 30,
+                createdAt: Math.floor(date.getTime() / 1000) - 60 * 30,
               })
               .get(),
             Math.random() > 0.5 &&
@@ -168,7 +168,7 @@ export const workspaceCreateRouter = authedProcedure
                     message: faker.lorem.sentences({ min: 1, max: 3 }) + '?',
                   },
                   creatorId: customer.id,
-                  createdAt: date.getTime() / 1000 - 60 * 5,
+                  createdAt: Math.floor(date.getTime() / 1000) - 60 * 5,
                 })
                 .get(),
             Math.random() > 0.5 &&
@@ -181,7 +181,7 @@ export const workspaceCreateRouter = authedProcedure
                     message: faker.lorem.sentences({ min: 1, max: 4 }),
                   },
                   creatorId: customer.assignedUserId,
-                  createdAt: date.getTime(),
+                  createdAt: Math.floor(date.getTime() / 1000),
                 })
                 .get(),
           ])
