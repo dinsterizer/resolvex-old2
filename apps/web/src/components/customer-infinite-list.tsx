@@ -1,5 +1,6 @@
 import { CustomerStatusBaseColumn } from '@resolvex/api/src/schema.customer'
 import { ComponentPropsWithoutRef } from 'react'
+import { match } from 'ts-pattern'
 import { trpc } from '~/utils/trpc'
 import { CustomerCard, CustomerCardSkeleton } from './customer-card'
 import { Empty } from './empty'
@@ -14,35 +15,50 @@ type Props = ComponentPropsWithoutRef<'div'> & {
 }
 
 export function CustomerInfiniteList({ status, workspaceId, limit, ...props }: Props) {
-  const { data, hasNextPage, isError, isSuccess, fetchNextPage, isFetching, isLoading } =
-    trpc.customer.list.useInfiniteQuery(
-      {
-        status,
-        workspaceId,
-        limit,
-      },
-      {
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-      },
-    )
+  const customerListQuery = trpc.customer.list.useInfiniteQuery(
+    {
+      status,
+      workspaceId,
+      limit,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    },
+  )
 
-  const customerCount = data?.pages.reduce((acc, page) => acc + page.items.length, 0) ?? 0
   return (
     <div {...props}>
-      {data?.pages.map((page) => page.items.map((customer) => <CustomerCard key={customer.id} customer={customer} />))}
-      {isLoading && (
-        <>
-          <CustomerCardSkeleton />
-          <CustomerCardSkeleton />
-          <CustomerCardSkeleton />
-          <CustomerCardSkeleton />
-        </>
-      )}
-      {isFetching && hasNextPage && <CustomerCardSkeleton />}
-      {!isFetching && hasNextPage && <ViewportBlock onEnterViewport={() => fetchNextPage()} />}
-      {isSuccess && customerCount === 0 && <Empty />}
-      {isSuccess && !hasNextPage && customerCount > 0 && <End />}
-      {isError && <QueryError />}
+      {match(customerListQuery)
+        .with({ status: 'loading' }, () => (
+          <>
+            <CustomerCardSkeleton />
+            <CustomerCardSkeleton />
+            <CustomerCardSkeleton />
+            <CustomerCardSkeleton />
+          </>
+        ))
+        .with({ status: 'error' }, () => <QueryError />)
+        .with({ status: 'success' }, (query) => {
+          const workspaceCount = query.data.pages.reduce((acc, page) => acc + page.items.length, 0)
+
+          if (workspaceCount === 0) return <Empty />
+
+          if (!query.hasNextPage && workspaceCount === 0) return <Empty />
+
+          return (
+            <>
+              {query.data.pages.map((page) =>
+                page.items.map((customer) => <CustomerCard key={customer.id} customer={customer} />),
+              )}
+              {query.isFetching && query.hasNextPage && <CustomerCardSkeleton />}
+              {!query.isFetching && query.hasNextPage && (
+                <ViewportBlock onEnterViewport={() => query.fetchNextPage()} />
+              )}
+              {!query.hasNextPage && workspaceCount > 0 && <End />}
+            </>
+          )
+        })
+        .exhaustive()}
     </div>
   )
 }

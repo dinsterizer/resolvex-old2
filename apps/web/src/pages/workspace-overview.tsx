@@ -1,5 +1,6 @@
 import { Card, Text, Metric, Title, LineChart } from '@tremor/react'
 import { useParams } from 'react-router-dom'
+import { match } from 'ts-pattern'
 import { CustomerInfiniteList } from '~/components/customer-infinite-list'
 import { QueryError } from '~/components/query-error'
 import { Skeleton } from '~/components/ui/skeleton'
@@ -7,46 +8,48 @@ import { trpc } from '~/utils/trpc'
 
 export function WorkspaceOverviewPage() {
   const { workspaceId } = useParams() as { workspaceId: string }
-  const { data, isLoading, isError, isSuccess } = trpc.workspace.overview.useQuery({ workspaceId })
+  const workspaceOverviewQuery = trpc.workspace.overview.useQuery({ workspaceId })
 
   return (
     <div>
       <h1 className="font-title text-xl font-medium p-4">Overview</h1>
 
       <div className="p-4 flex gap-8 flex-wrap">
-        {isError && <QueryError />}
-        {isLoading && (
-          <>
-            <Card className="md:max-w-xs">
-              <Text>
-                <Skeleton className="h-5 w-24" />
-              </Text>
-              <Metric>
-                <Skeleton className="h-8 w-44 mt-1" />
-              </Metric>
-            </Card>
-            <Card className="md:max-w-xs">
-              <Text>
-                <Skeleton className="h-5 w-24" />
-              </Text>
-              <Metric>
-                <Skeleton className="h-8 w-44 mt-1" />
-              </Metric>
-            </Card>
-          </>
-        )}
-        {isSuccess && (
-          <>
-            <Card className="md:max-w-xs">
-              <Text>Total customers</Text>
-              <Metric>{new Intl.NumberFormat('en-US', {}).format(data.totalCustomersCount)}</Metric>
-            </Card>
-            <Card className="md:max-w-xs">
-              <Text>Active customers</Text>
-              <Metric>{new Intl.NumberFormat('en-US', {}).format(data.activeCustomersCount)}</Metric>
-            </Card>
-          </>
-        )}
+        {match(workspaceOverviewQuery)
+          .with({ status: 'error' }, () => <QueryError />)
+          .with({ status: 'loading' }, () => (
+            <>
+              <Card className="md:max-w-xs">
+                <Text>
+                  <Skeleton className="h-5 w-24" />
+                </Text>
+                <Metric>
+                  <Skeleton className="h-8 w-44 mt-1" />
+                </Metric>
+              </Card>
+              <Card className="md:max-w-xs">
+                <Text>
+                  <Skeleton className="h-5 w-24" />
+                </Text>
+                <Metric>
+                  <Skeleton className="h-8 w-44 mt-1" />
+                </Metric>
+              </Card>
+            </>
+          ))
+          .with({ status: 'success' }, (query) => (
+            <>
+              <Card className="md:max-w-xs">
+                <Text>Total customers</Text>
+                <Metric>{new Intl.NumberFormat('en-US', {}).format(query.data.totalCustomersCount)}</Metric>
+              </Card>
+              <Card className="md:max-w-xs">
+                <Text>Active customers</Text>
+                <Metric>{new Intl.NumberFormat('en-US', {}).format(query.data.activeCustomersCount)}</Metric>
+              </Card>
+            </>
+          ))
+          .exhaustive()}
       </div>
 
       <div className="p-4">
@@ -55,7 +58,7 @@ export function WorkspaceOverviewPage() {
           <LineChart
             className="mt-6"
             data={
-              data?.newCustomersPerDayInLast7Days.map((data) => ({
+              workspaceOverviewQuery.data?.newCustomersPerDayInLast7Days.map((data) => ({
                 day: data.day,
                 'Count of new customers': data.count,
               })) ?? []

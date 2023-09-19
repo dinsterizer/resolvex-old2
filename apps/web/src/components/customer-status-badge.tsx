@@ -1,8 +1,7 @@
 import { SelectCustomer } from '@resolvex/api/src/schema'
 import { cva } from 'class-variance-authority'
 import { CheckCircle2, Circle, MinusCircle, XCircle } from 'lucide-react'
-import React from 'react'
-import { expectNever } from 'ts-expect'
+import { match } from 'ts-pattern'
 
 type Props = {
   status: SelectCustomer['status']
@@ -20,22 +19,14 @@ const variants = cva('px-2 py-1 border rounded-md flex items-center gap-1', {
 })
 
 export function CustomerStatusBadge({ status }: Props) {
-  let icon: React.ReactNode | null = null
-
-  if (status === 'waiting') {
-    icon = <Circle size={14} />
-  } else if (status === 'helping') {
-    icon = <MinusCircle size={14} />
-  } else if (status === 'helped') {
-    icon = <CheckCircle2 size={14} />
-  } else if (status === 'spam') {
-    icon = <XCircle size={14} />
-  } else {
-    expectNever(status)
-  }
   return (
     <div className={variants({ status })}>
-      {icon}
+      {match(status)
+        .with('waiting', () => <Circle size={14} />)
+        .with('helping', () => <MinusCircle size={14} />)
+        .with('helped', () => <CheckCircle2 size={14} />)
+        .with('spam', () => <XCircle size={14} />)
+        .exhaustive()}
       <span className="text-xs">{status}</span>
     </div>
   )
