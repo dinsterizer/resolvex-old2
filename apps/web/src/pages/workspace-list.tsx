@@ -1,4 +1,5 @@
 import { ChevronLeft, LogOut, Plus } from 'lucide-react'
+import { match } from 'ts-pattern'
 import { CreateWorkspaceSheet } from '~/components/create-workspace-sheet'
 import { Empty } from '~/components/empty'
 import { End } from '~/components/end'
@@ -14,16 +15,14 @@ import { trpc } from '~/utils/trpc'
 
 export function WorkspaceListPage() {
   const authed = useAuthedStore()
-  const { data, hasNextPage, isError, isSuccess, fetchNextPage, isFetching, isLoading } =
-    trpc.workspace.list.useInfiniteQuery(
-      {
-        limit: 8,
-      },
-      {
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-      },
-    )
-  const workspaceCount = data?.pages.reduce((acc, page) => acc + page.items.length, 0) ?? 0
+  const workspaceListQuery = trpc.workspace.list.useInfiniteQuery(
+    {
+      limit: 8,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    },
+  )
 
   return (
     <>
@@ -68,22 +67,37 @@ export function WorkspaceListPage() {
           </div>
 
           <div className="mt-10 space-y-4">
-            {data?.pages.map((page) =>
-              page.items.map((workspace) => <WorkspaceCard key={workspace.id} workspace={workspace} />),
-            )}
-            {isLoading && (
-              <>
-                <WorkspaceCardSkeleton />
-                <WorkspaceCardSkeleton />
-                <WorkspaceCardSkeleton />
-                <WorkspaceCardSkeleton />
-              </>
-            )}
-            {isFetching && hasNextPage && <WorkspaceCardSkeleton />}
-            {!isFetching && hasNextPage && <ViewportBlock onEnterViewport={() => fetchNextPage()} />}
-            {isSuccess && workspaceCount === 0 && <Empty />}
-            {isSuccess && !hasNextPage && workspaceCount > 0 && <End />}
-            {isError && <QueryError />}
+            {match(workspaceListQuery)
+              .with({ status: 'loading' }, () => (
+                <>
+                  <WorkspaceCardSkeleton />
+                  <WorkspaceCardSkeleton />
+                  <WorkspaceCardSkeleton />
+                  <WorkspaceCardSkeleton />
+                </>
+              ))
+              .with({ status: 'error' }, () => <QueryError />)
+              .with({ status: 'success' }, (query) => {
+                const workspaceCount = query.data.pages.reduce((acc, page) => acc + page.items.length, 0)
+
+                if (workspaceCount === 0) return <Empty />
+
+                if (!query.hasNextPage && workspaceCount === 0) return <Empty />
+
+                return (
+                  <>
+                    {query.data.pages.map((page) =>
+                      page.items.map((workspace) => <WorkspaceCard key={workspace.id} workspace={workspace} />),
+                    )}
+                    {query.isFetching && query.hasNextPage && <WorkspaceCardSkeleton />}
+                    {!query.isFetching && query.hasNextPage && (
+                      <ViewportBlock onEnterViewport={() => query.fetchNextPage()} />
+                    )}
+                    {!query.hasNextPage && workspaceCount > 0 && <End />}
+                  </>
+                )
+              })
+              .exhaustive()}
           </div>
         </main>
       </Container>
