@@ -12,6 +12,7 @@
     "deploy:production": "vite build --mode=production && wrangler pages deploy --project-name=resolvex-web-production --branch=main ./dist"
   },
   "dependencies": {
+    "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-avatar": "^1.0.3",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.4",
@@ -30,6 +31,7 @@
     "lucide-react": "^0.276.0",
     "million": "2.6.0-beta.16",
     "react": "^18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-in-viewport": "1.0.0-alpha.30",
     "react-otp-input": "^3.0.4",
@@ -43,6 +45,7 @@
     "@resolvex/tsconfig": "workspace:^",
     "@tailwindcss/container-queries": "^0.1.1",
     "@types/react": "^18.2.21",
+    "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react-swc": "^3.3.2",
     "autoprefixer": "^10.4.15",

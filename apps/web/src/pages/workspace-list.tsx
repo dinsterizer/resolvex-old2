@@ -1,19 +1,22 @@
 import { ChevronLeft, LogOut, Plus } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { match } from 'ts-pattern'
-import { CreateWorkspaceSheet } from '~/components/create-workspace-sheet'
 import { Empty } from '~/components/empty'
 import { End } from '~/components/end'
 import { Logo } from '~/components/logo'
 import { QueryError } from '~/components/query-error'
 import { Button } from '~/components/ui/button'
 import { Container } from '~/components/ui/container'
+import { SheetTrigger } from '~/components/ui/sheet'
 import { ViewportBlock } from '~/components/viewport-block'
 import { WorkspaceCard, WorkspaceCardSkeleton } from '~/components/workspace-cart'
+import { CreateWorkspaceSheet } from '~/components/workspace-create-sheet'
 import { env } from '~/env'
 import { useAuthedStore } from '~/stores/auth'
 import { trpc } from '~/utils/trpc'
 
 export function WorkspaceListPage() {
+  const navigate = useNavigate()
   const authed = useAuthedStore()
   const workspaceListQuery = trpc.workspace.list.useInfiniteQuery(
     {
@@ -58,10 +61,12 @@ export function WorkspaceListPage() {
               </p>
             </div>
             <div className="min-w-max mt-6 md:mt-0">
-              <CreateWorkspaceSheet>
-                <Button variant="secondary" className="md:w-auto w-full">
-                  <Plus size={16} className="mr-2" /> Create workspace
-                </Button>
+              <CreateWorkspaceSheet onSuccess={({ workspaceId }) => navigate(`/${workspaceId}`)}>
+                <SheetTrigger>
+                  <Button variant="secondary" className="md:w-auto w-full">
+                    <Plus size={16} className="mr-2" /> Create workspace
+                  </Button>
+                </SheetTrigger>
               </CreateWorkspaceSheet>
             </div>
           </div>
