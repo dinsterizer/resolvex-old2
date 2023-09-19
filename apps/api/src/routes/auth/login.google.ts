@@ -69,7 +69,7 @@ export const loginGoogleRouter = router({
     const jwt = await new SignJWT({ userId: user.id })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
-      .setExpirationTime(Date.now() / 1000 + 60 * 60 * 24 * 7)
+      .setExpirationTime(Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7)
       .sign(Buffer.from(ctx.env.AUTH_SECRET))
 
     return {

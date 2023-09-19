@@ -41,7 +41,7 @@ export const useAuthStore = create(
           try {
             const claims = decodeJwt(state.jwt)
 
-            if (claims.exp! - 2 * 60 * 60 < Date.now() / 1000) state.logout()
+            if (claims.exp! - 2 * 60 * 60 < Math.floor(Date.now() / 1000)) state.logout()
           } catch (e) {
             state.logout()
           }

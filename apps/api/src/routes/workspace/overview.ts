@@ -33,7 +33,12 @@ export const workspaceOverviewRouter = authedProcedure
         count: sql<number>`COUNT(*)`,
       })
       .from(Customers)
-      .where(and(eq(Customers.workspaceId, input.workspaceId), gte(Customers.createdAt, sub7Days.getTime() / 1000)))
+      .where(
+        and(
+          eq(Customers.workspaceId, input.workspaceId),
+          gte(Customers.createdAt, Math.floor(sub7Days.getTime() / 1000)),
+        ),
+      )
       .groupBy(sql<string>`strftime('%d', ${Customers.createdAt}, 'unixepoch')`)
       .all()
 
@@ -49,7 +54,7 @@ export const workspaceOverviewRouter = authedProcedure
       .where(
         and(
           eq(Customers.workspaceId, input.workspaceId),
-          gte(Customers.updatedAt, firstDayOfThisMonth.getTime() / 1000),
+          gte(Customers.updatedAt, Math.floor(firstDayOfThisMonth.getTime() / 1000)),
         ),
       )
       .get()
