@@ -181,7 +181,7 @@ export const workspaceCreateRouter = authedProcedure
                     message: faker.lorem.sentences({ min: 1, max: 4 }),
                   },
                   creatorId: customer.assignedUserId,
-                  createdAt: date.getTime(),
+                  createdAt: Math.floor(date.getTime() / 1000),
                 })
                 .get(),
           ])
