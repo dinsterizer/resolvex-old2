@@ -1,4 +1,3 @@
-import JsFileDownloader from 'js-file-downloader'
 import { Code, Download, FileImage, FileSearch, Github, Home, Twitter } from 'lucide-react'
 import { clientDownload } from '~/lib/download'
 import {
