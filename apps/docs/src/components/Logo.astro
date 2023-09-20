@@ -1,22 +1,12 @@
 ---
-import { Image } from 'astro:assets';
-import fullLogo from '~/assets/img/full-logo.svg';
-import iconLogo from '~/assets/img/icon-logo.svg';
-
+import FullLogo from './FullLogo.astro'
+import IconLogo from './IconLogo.astro'
 interface Props {
-    variant?: 'full' | 'icon';
-    size?: number;
+  variant?: 'full' | 'icon'
+  size?: number
 }
 
-const { variant = 'full', size = 20 } = Astro.props;
-
-const style = {
-    width: 'auto',
-    height: `${size}px`,
-};
-
-const src = variant === 'full' ? fullLogo : iconLogo;
-const alt = variant === 'full' ? 'ResolveX Full logo' : 'ResolveX Icon logo';
+const { variant = 'full', size = 40 } = Astro.props
 ---
-<!-- TODO: drop menu on click logo -->
-<Image src={src} alt={alt} style={style} />
+
+{variant === 'full' ? <FullLogo size={size} /> : <IconLogo size={size} />}

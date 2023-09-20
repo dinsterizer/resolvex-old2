@@ -3,7 +3,6 @@ dist/
 !.vscode/
 !.github/
 
-
 **.js
 **.d.ts
 pnpm-lock.yaml

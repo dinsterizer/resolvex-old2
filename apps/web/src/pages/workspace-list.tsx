@@ -54,6 +54,7 @@ export function WorkspaceListPage() {
         <main>
           <div className="block md:flex justify-between gap-4">
             <div>
+              {/* TODO: make dropdown menu */}
               <Logo size={24} />
               <h1 className="font-title text-xl font-bold mt-4">Chose your workspace</h1>
               <p className="mt-2 text-muted-foreground">

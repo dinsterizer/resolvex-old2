@@ -48,6 +48,7 @@ export function Login() {
 
       <Container className="mt-40 max-w-md mx-auto" asChild>
         <main>
+          {/* TODO: make dropdown menu */}
           <Logo size={24} />
           {step === 'send-otp' && <h1 className="font-title font-bold text-xl mt-3">One Step Login</h1>}
           {step === 'verify-otp' && <h1 className="font-title font-bold text-xl mt-3">Enter the 6-char OTP</h1>}

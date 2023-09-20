@@ -169,7 +169,9 @@ export function VerticalSidebar(props: Props) {
   return (
     <div className="space-y-8">
       <Link to="/">
-        <Logo size={24} />
+        <button type="button" className="px-3 py-2">
+          <Logo size={20} />
+        </button>
       </Link>
 
       <Nav {...props} />
@@ -182,7 +184,10 @@ export function HorizontalSidebar(props: Props) {
   return (
     <div className="flex items-center justify-between gap-2">
       <Link to="/">
-        <Logo size={24} />
+        {/* TODO: make dropdown menu */}
+        <button type="button" className="pr-3 py-2">
+          <Logo size={20} />
+        </button>
       </Link>
 
       <Sheet open={open} onOpenChange={setOpen}>
@@ -193,9 +198,10 @@ export function HorizontalSidebar(props: Props) {
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
-            <div>
-              <Logo size={24} />
-            </div>
+            {/* TODO: make dropdown menu */}
+            <button type="button" className="px-3 py-2">
+              <Logo size={20} />
+            </button>
           </SheetHeader>
 
           <div className="space-y-8 mt-8">
