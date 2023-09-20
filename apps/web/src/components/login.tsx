@@ -12,6 +12,7 @@ import { env } from '~/env'
 import { Google } from '~/icons/google'
 import { useAuthStore } from '~/stores/auth'
 import { trpc } from '~/utils/trpc'
+import { MenuSuperDropdown } from './menu-super-dropdown'
 
 export function Login() {
   const auth = useAuthStore()
@@ -48,7 +49,12 @@ export function Login() {
 
       <Container className="mt-40 max-w-md mx-auto" asChild>
         <main>
-          <Logo size={24} />
+          <MenuSuperDropdown>
+            <Button variant="ghost" type="button" className="justify-start max-w-max pl-0" size="sm">
+              <Logo size={24} />
+            </Button>
+          </MenuSuperDropdown>
+
           {step === 'send-otp' && <h1 className="font-title font-bold text-xl mt-3">One Step Login</h1>}
           {step === 'verify-otp' && <h1 className="font-title font-bold text-xl mt-3">Enter the 6-char OTP</h1>}
 

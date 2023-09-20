@@ -4,6 +4,7 @@ import { match } from 'ts-pattern'
 import { Empty } from '~/components/empty'
 import { End } from '~/components/end'
 import { Logo } from '~/components/logo'
+import { MenuSuperDropdown } from '~/components/menu-super-dropdown'
 import { QueryError } from '~/components/query-error'
 import { Button } from '~/components/ui/button'
 import { Container } from '~/components/ui/container'
@@ -54,8 +55,12 @@ export function WorkspaceListPage() {
         <main>
           <div className="block md:flex justify-between gap-4">
             <div>
-              <Logo size={24} />
-              <h1 className="font-title text-xl font-bold mt-4">Chose your workspace</h1>
+              <MenuSuperDropdown>
+                <Button variant="ghost" type="button" className="justify-start pl-0" size="sm">
+                  <Logo size={24} />
+                </Button>
+              </MenuSuperDropdown>
+              <h1 className="font-title text-xl font-bold mt-2">Chose your workspace</h1>
               <p className="mt-2 text-muted-foreground">
                 Each workspace should represent a product environment. The number of workspaces per account is unlimited
               </p>

@@ -1,12 +1,12 @@
 ---
-import { ChevronRight } from 'lucide-astro';
-import { cn } from '~/lib/utils';
+import { ChevronRight } from 'lucide-astro'
+import { cn } from '~/lib/utils'
 ---
 
 <a
-    href={import.meta.env.PUBLIC_WEB_URL}
-    class:list={cn(['pr-2.5 pl-[18px] py-2.5 rounded-full bg-gray-900 text-white flex items-center gap-1'])}
+  href={import.meta.env.PUBLIC_WEB_URL}
+  class:list={cn(['pr-2.5 pl-[18px] py-2.5 rounded-full bg-gray-900 text-white flex items-center gap-1'])}
 >
-    Get Started
-    <ChevronRight size={20} />
+  Get Started
+  <ChevronRight size={20} />
 </a>

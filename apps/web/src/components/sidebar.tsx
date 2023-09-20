@@ -13,6 +13,7 @@ import { useState } from 'react'
 import { Link, useMatch, useSearchParams } from 'react-router-dom'
 import { env } from '~/env'
 import { Logo } from './logo'
+import { MenuSuperDropdown } from './menu-super-dropdown'
 import { Button } from './ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from './ui/sheet'
 
@@ -168,9 +169,11 @@ function Nav(props: Props & { onNavigate?: () => void }) {
 export function VerticalSidebar(props: Props) {
   return (
     <div className="space-y-8">
-      <Link to="/">
-        <Logo size={24} />
-      </Link>
+      <MenuSuperDropdown>
+        <Button variant="ghost" type="button" className="justify-start" size="sm">
+          <Logo size={20} />
+        </Button>
+      </MenuSuperDropdown>
 
       <Nav {...props} />
     </div>
@@ -181,9 +184,11 @@ export function HorizontalSidebar(props: Props) {
   const [open, setOpen] = useState(false)
   return (
     <div className="flex items-center justify-between gap-2">
-      <Link to="/">
-        <Logo size={24} />
-      </Link>
+      <MenuSuperDropdown>
+        <Button variant="ghost" type="button" className="justify-start" size="sm">
+          <Logo size={20} />
+        </Button>
+      </MenuSuperDropdown>
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
@@ -193,9 +198,11 @@ export function HorizontalSidebar(props: Props) {
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
-            <div>
-              <Logo size={24} />
-            </div>
+            <MenuSuperDropdown>
+              <Button variant="ghost" type="button" className="justify-start max-w-max" size="sm">
+                <Logo size={20} />
+              </Button>
+            </MenuSuperDropdown>
           </SheetHeader>
 
           <div className="space-y-8 mt-8">

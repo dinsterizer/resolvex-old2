@@ -1,28 +1,38 @@
 ---
+import { SEO } from 'astro-seo'
 import './Layout.css'
-interface Props {
-    title?: string;
-}
-
-const { title } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="description" content="Astro description" />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="generator" content={Astro.generator} />
-        <title>{title ?? 'ResolveX | The Open-source Product'}</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
-            rel="stylesheet"
-        />
-    </head>
-    <body>
-        <slot />
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <slot name="head">
+      <SEO
+        title="ResolveX | Forge Vital Customer Connections"
+        description="Easily connect with your customers via chat, email, and more. Our assistant powered by ChatGPT and trained based on your unique data, can reduce your workload by 50%."
+        openGraph={{
+          basic: {
+            title: 'ResolveX | Forge Vital Customer Connections',
+            type: 'website',
+            image: '/og.jpg',
+          },
+        }}
+        twitter={{
+          card: 'summary_large_image',
+        }}
+      />
+    </slot>
+  </head>
+  <body>
+    <slot />
+  </body>
 </html>

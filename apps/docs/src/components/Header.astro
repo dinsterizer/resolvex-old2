@@ -1,11 +1,14 @@
 ---
-import GetStartedButton from './GetStartedButton.astro';
-import Logo from './Logo.astro';
+import GetStartedButton from './GetStartedButton.astro'
+import Logo from './Logo.astro'
+import { MenuSuperDropdown } from './menu-super-dropdown'
 ---
 
 <header class="flex justify-between items-center gap-4">
-    <a href="/">
-        <Logo size={24} />
-    </a>
-    <GetStartedButton />
+  <MenuSuperDropdown client:load>
+    <span class="pr-3 py-2">
+      <Logo size={20} />
+    </span>
+  </MenuSuperDropdown>
+  <GetStartedButton />
 </header>
