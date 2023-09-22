@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server'
 import { and, eq } from 'drizzle-orm'
 import { z } from 'zod'
+import { generateWorkspaceInvitationEmail } from '../../emails/workspace-invitation'
 import { WorkspaceMembers } from '../../schema'
 import { workspaceMemberRoleColumnBaseSchema } from '../../schema.workspace-member'
 import { authedProcedure, router } from '../../trpc'
@@ -45,7 +46,54 @@ export const workspaceMemberRouter = router({
         })
         .get()
 
-      // TODO: email notification
+      ctx.ec.waitUntil(
+        (async () => {
+          const inviter = await ctx.db.query.Users.findFirst({
+            columns: {
+              name: true,
+            },
+            where(t, { eq }) {
+              return eq(t.id, ctx.auth.userId)
+            },
+          })
+
+          const workspace = await ctx.db.query.Workspaces.findFirst({
+            columns: {
+              name: true,
+            },
+            where(t, { eq }) {
+              return eq(t.id, input.workspaceId)
+            },
+          })
+
+          if (!inviter || !workspace) {
+            return
+          }
+
+          const { htmlContent, textContent, subject } = generateWorkspaceInvitationEmail({
+            inviterName: inviter.name,
+            workspaceName: workspace.name,
+          })
+
+          await fetch('https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+              'api-key': ctx.env.BREVO_API_KEY,
+              accept: 'application/json',
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              sender: {
+                id: ctx.env.BREVO_SENDER_ID,
+              },
+              to: [{ email: input.memberEmail }],
+              htmlContent,
+              textContent,
+              subject,
+            }),
+          })
+        })(),
+      )
 
       return {
         workspaceId: input.workspaceId,
@@ -87,8 +135,6 @@ export const workspaceMemberRouter = router({
         })
         .where(and(eq(WorkspaceMembers.userId, input.userId), eq(WorkspaceMembers.workspaceId, input.workspaceId)))
         .get()
-
-      // TODO: email notification
 
       return {
         workspaceId: input.workspaceId,
