@@ -6,7 +6,6 @@ import { UserOtpBaseColumn } from './schema.user'
 import { workspaceMemberRoleColumnAllowValues } from './schema.workspace-member'
 import { generateCustomerId, generateTimelineId, generateUserId, generateWorkspaceId } from './utils'
 
-// TODO: floor Math.floor(Date.now() / 1000)
 export const Users = sqliteTable('users', {
   id: text('id')
     .notNull()
