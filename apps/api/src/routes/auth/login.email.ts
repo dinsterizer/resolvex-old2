@@ -21,23 +21,7 @@ export const loginEmailRouter = router({
       })
 
       const { email } = input
-      let user = await db.query.Users.findFirst({
-        where(t, { eq }) {
-          return eq(t.email, email)
-        },
-        columns: {
-          email: true,
-          otp: true,
-        },
-      })
-
-      if (!user) {
-        user = await db
-          .insert(Users)
-          .values({ email, name: email.split('@')[0] })
-          .returning({ email: Users.email, otp: Users.otp })
-          .get()
-      }
+      const user = await ctx.firstOrCreateUser({ email })
 
       let otp = user.otp
       if (!otp || otp.expiresAt < Math.floor(Date.now() / 1000) + 30) {
@@ -88,24 +72,7 @@ export const loginEmailRouter = router({
         limit: 10,
       })
 
-      const user = await db.query.Users.findFirst({
-        where(t, { eq }) {
-          return eq(t.email, email)
-        },
-        columns: {
-          id: true,
-          name: true,
-          email: true,
-          otp: true,
-        },
-      })
-
-      if (!user) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'User not found',
-        })
-      }
+      const user = await ctx.firstOrCreateUser({ email })
 
       if (!user.otp || user.otp.expiresAt < Math.floor(Date.now() / 1000) || user.otp.code !== input.otp) {
         throw new TRPCError({ code: 'BAD_REQUEST', message: 'Your OTP is invalid or expired' })
