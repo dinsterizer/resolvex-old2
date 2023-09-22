@@ -1,5 +1,5 @@
 import { Loader2 } from 'lucide-react'
-import React, { useId } from 'react'
+import React, { useId, useRef } from 'react'
 import { trpc } from '~/utils/trpc'
 import { Button } from './ui/button'
 import { Checkbox } from './ui/checkbox'
@@ -11,13 +11,15 @@ type Props = React.ComponentPropsWithoutRef<typeof Sheet> & {
   onSuccess?: ({ workspaceId }: { workspaceId: string }) => void
 }
 
-export function CreateWorkspaceSheet({ children, onSuccess, ...props }: Props) {
+export function WorkspaceCreateSheet({ children, onSuccess, ...props }: Props) {
   const nameId = useId()
   const demoDataId = useId()
+  const closeElement = useRef<HTMLButtonElement>(null)
 
   const { mutate, isLoading } = trpc.workspace.create.useMutation({
     onSuccess(data) {
       onSuccess?.({ workspaceId: data.workspaceId })
+      closeElement.current?.click()
     },
   })
 
@@ -57,7 +59,7 @@ export function CreateWorkspaceSheet({ children, onSuccess, ...props }: Props) {
 
           <div className="flex justify-end gap-4">
             <SheetClose asChild>
-              <Button type="button" variant="secondary">
+              <Button ref={closeElement} type="button" variant="secondary">
                 Close
               </Button>
             </SheetClose>

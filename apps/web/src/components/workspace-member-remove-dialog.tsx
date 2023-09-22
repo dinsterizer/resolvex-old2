@@ -15,12 +15,13 @@ import { Button } from './ui/button'
 
 type Props = ComponentPropsWithRef<typeof AlertDialog> & {
   workspaceId: string
+  userId: string
   onSuccess?: () => void
 }
 
-export function WorkspaceLeaveDialog({ children, workspaceId, onSuccess, ...props }: Props) {
+export function WorkspaceMemberRemoveDialog({ children, workspaceId, userId, onSuccess, ...props }: Props) {
   const cancelRef = useRef<HTMLButtonElement>(null)
-  const mutation = trpc.workspace.leave.useMutation({
+  const mutation = trpc.workspace.member.remove.useMutation({
     onSuccess() {
       onSuccess?.()
       cancelRef.current?.click()
@@ -34,13 +35,12 @@ export function WorkspaceLeaveDialog({ children, workspaceId, onSuccess, ...prop
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. Leaving the workspace will result in permanent data loss. If no other members
-            are in the workspace, it will be deleted.
+            This action cannot be undone. When a member is removed, they will lose access to the workspace.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel ref={cancelRef}>Cancel</AlertDialogCancel>
-          <Button variant="destructive" type="button" onClick={() => mutation.mutate({ workspaceId })}>
+          <Button variant="destructive" type="button" onClick={() => mutation.mutate({ workspaceId, userId })}>
             Continue
             {mutation.isLoading && <Loader2 size={16} className="animate-spin ml-1" />}
           </Button>

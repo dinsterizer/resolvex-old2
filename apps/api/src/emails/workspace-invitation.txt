@@ -1,0 +1,5 @@
+{{INVITER}} INVITED YOU TO JOIN "{{WORKSPACE_NAME}}" ON RESOLVEX.AI
+
+Accept invite [https://app.resolvex.ai]
+
+ResolveX.ai [https://resolvex.ai], forge vital customer connections

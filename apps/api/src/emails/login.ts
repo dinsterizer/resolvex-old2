@@ -1,5 +1,5 @@
-import templateHtml from './login-template.html'
-import templateText from './login-template.txt'
+import templateHtml from './login.html'
+import templateText from './login.txt'
 
 export function generateLoginEmail({ otp }: { otp: string }) {
   const htmlContent = templateHtml.replaceAll('{{OTP}}', otp)

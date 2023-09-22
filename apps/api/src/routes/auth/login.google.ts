@@ -47,22 +47,7 @@ export const loginGoogleRouter = router({
       throw new TRPCError({ code: 'BAD_REQUEST', message: 'Your Google account is not verified' })
     }
 
-    let user = await ctx.db.query.Users.findFirst({
-      where(t, { eq }) {
-        return eq(t.email, email)
-      },
-      columns: {
-        id: true,
-      },
-    })
-
-    if (!user) {
-      user = await ctx.db
-        .insert(Users)
-        .values({ email, name: email.split('@')[0] })
-        .returning({ id: Users.id })
-        .get()
-    }
+    const user = await ctx.firstOrCreateUser({ email, name })
 
     await ctx.db.update(Users).set({ name }).where(eq(Users.id, user.id)).get()
 
