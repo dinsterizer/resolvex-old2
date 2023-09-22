@@ -3,6 +3,7 @@ import { workspaceCreateRouter } from './create'
 import { workspaceDetailRouter } from './detail'
 import { workspaceLeaveRouter } from './leave'
 import { workspaceListRouter } from './list'
+import { workspaceMemberRouter } from './member'
 import { workspaceOverviewRouter } from './overview'
 import { workspaceUpdateRouter } from './update'
 
@@ -13,4 +14,5 @@ export const workspaceRouter = router({
   detail: workspaceDetailRouter,
   leave: workspaceLeaveRouter,
   update: workspaceUpdateRouter,
+  member: workspaceMemberRouter,
 })

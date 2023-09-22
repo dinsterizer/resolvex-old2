@@ -6,8 +6,10 @@ import { GeneralSkeleton } from '~/components/general-skeleton'
 import { QueryError } from '~/components/query-error'
 import { Button } from '~/components/ui/button'
 import { Card } from '~/components/ui/card'
+import { SheetTrigger } from '~/components/ui/sheet'
 import { useToast } from '~/components/ui/use-toast'
 import { LeaveWorkspaceDialog } from '~/components/workspace-leave-dialog'
+import { WorkspaceMemberInviteSheet } from '~/components/workspace-member-invite-sheet'
 import { UpdateWorkspaceSheet } from '~/components/workspace-update-sheet'
 import { useAuthedStore } from '~/stores/auth'
 import { trpc } from '~/utils/trpc'
@@ -116,9 +118,13 @@ export function WorkspaceSettingsPage() {
                   })}
                 </div>
                 <div className="flex border-t border-gray-100 pt-6 mt-6">
-                  <Button variant="ghost" className="text-primary hover:text-primary pl-0" type="button">
-                    + Invite a member
-                  </Button>
+                  <WorkspaceMemberInviteSheet workspaceId={params.workspaceId}>
+                    <SheetTrigger asChild>
+                      <Button variant="ghost" className="text-primary hover:text-primary pl-0" type="button">
+                        + Invite people
+                      </Button>
+                    </SheetTrigger>
+                  </WorkspaceMemberInviteSheet>
                 </div>
               </div>
 

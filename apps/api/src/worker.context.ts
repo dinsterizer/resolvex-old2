@@ -8,9 +8,10 @@ export function createContext({ env, ec }: { env: Env; ec: ExecutionContext }) {
   const rateLimiter = createRateLimiter({ don: env.RATE_LIMITER_DON })
 
   const firstOrCreateUser = async ({ email, name }: { email: string; name?: string }) => {
+    const lowerEmail = email.toLowerCase()
     const user = await db.query.Users.findFirst({
       where(t, { eq }) {
-        return eq(t.email, email)
+        return eq(t.email, lowerEmail)
       },
       columns: {
         id: true,
@@ -25,7 +26,7 @@ export function createContext({ env, ec }: { env: Env; ec: ExecutionContext }) {
 
     return await db
       .insert(schema.Users)
-      .values({ email, name: name || email.split('@')[0] })
+      .values({ email: lowerEmail, name: name || lowerEmail.split('@')[0] })
       .returning({
         id: schema.Users.id,
         name: schema.Users.name,

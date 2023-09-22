@@ -1,5 +1,5 @@
 import { Loader2 } from 'lucide-react'
-import { ComponentPropsWithoutRef, useId, useState } from 'react'
+import { ComponentPropsWithoutRef, useId, useRef, useState } from 'react'
 import { match } from 'ts-pattern'
 import { trpc } from '~/utils/trpc'
 import { GeneralSkeleton } from './general-skeleton'
@@ -16,10 +16,11 @@ type Props = ComponentPropsWithoutRef<typeof Sheet> & {
 export function UpdateWorkspaceSheet({ workspaceId, children, ...props }: Props) {
   const idId = useId()
   const nameId = useId()
+  const closeElement = useRef<HTMLButtonElement>(null)
   const query = trpc.workspace.detail.useQuery({ workspaceId })
   const mutation = trpc.workspace.update.useMutation({
     onSuccess() {
-      props.onOpenChange?.(false)
+      closeElement.current?.click()
     },
   })
   const [name, setName] = useState<string | undefined>()
@@ -69,7 +70,7 @@ export function UpdateWorkspaceSheet({ workspaceId, children, ...props }: Props)
 
                 <div className="flex justify-end gap-4">
                   <SheetClose asChild>
-                    <Button type="button" variant="secondary">
+                    <Button ref={closeElement} type="button" variant="secondary">
                       Close
                     </Button>
                   </SheetClose>
