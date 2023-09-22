@@ -9,7 +9,7 @@ export function WorkspaceDetailPage() {
         <HorizontalSidebar workspaceId={params.workspaceId} />
       </div>
 
-      <div className="p-4 hidden lg:block w-44">
+      <div className="p-4 hidden lg:block w-64">
         <VerticalSidebar workspaceId={params.workspaceId} />
       </div>
 

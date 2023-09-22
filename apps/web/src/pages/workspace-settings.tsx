@@ -62,7 +62,7 @@ export function WorkspaceSettingsPage() {
                           })
                         }}
                       >
-                        <Button type="button" variant="ghost">
+                        <Button type="button" variant="ghost" className="text-primary hover:text-primary">
                           Copy
                         </Button>
                       </CopyToClipboard>
@@ -73,7 +73,12 @@ export function WorkspaceSettingsPage() {
                     <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
                       <div>{query.data.workspace.name}</div>
                       {isAdmin && (
-                        <Button type="button" variant="ghost" onClick={() => setOpenUpdateWorkspaceSheet(true)}>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="text-primary hover:text-primary"
+                          onClick={() => setOpenUpdateWorkspaceSheet(true)}
+                        >
                           Update
                         </Button>
                       )}
@@ -82,27 +87,64 @@ export function WorkspaceSettingsPage() {
                 </div>
               </div>
 
-              <Card className="p-4 border-destructive">
-                <h2 className="font-medium text-destructive">Danger zone</h2>
+              <div>
+                <h2 className="font-medium">Members</h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Please be careful with these settings. They can&apos;t be undone.
+                  Invite people to collaborate with you in this workspace.
                 </p>
 
-                <div className="mt-6 space-y-6 divide-y divide-border/60 border-t border-border text-sm leading-6">
-                  <div className="pt-6 sm:flex">
-                    <div className="sm:w-64 sm:flex-none sm:pr-6">
-                      Leave <span className="font-bold">{query.data.workspace.name}</span> workspace
-                    </div>
-                    <dd className="mt-1 flex justify-end gap-x-6 sm:mt-0 sm:flex-auto">
-                      <LeaveWorkspaceDialog workspaceId={params.workspaceId} onSuccess={() => navigate('/')}>
-                        <Button type="button" variant="destructive">
-                          Leave
-                        </Button>
-                      </LeaveWorkspaceDialog>
-                    </dd>
-                  </div>
+                <div className="mt-6 space-y-6 divide-y divide-border/60 border-t text-sm leading-6">
+                  {query.data.workspace.members.map((member) => {
+                    return (
+                      <div key={`members:${member.userId}`} className="pt-6 sm:flex">
+                        <div className="font-medium  sm:w-64 sm:flex-none sm:pr-6">{member.user.name}</div>
+                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                          <div>{member.user.email}</div>
+                          {isAdmin && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              className="text-primary hover:text-primary"
+                              onClick={() => setOpenUpdateWorkspaceSheet(true)}
+                            >
+                              Update
+                            </Button>
+                          )}
+                        </dd>
+                      </div>
+                    )
+                  })}
                 </div>
-              </Card>
+                <div className="flex border-t border-gray-100 pt-6 mt-6">
+                  <Button variant="ghost" className="text-primary hover:text-primary pl-0" type="button">
+                    + Invite a member
+                  </Button>
+                </div>
+              </div>
+
+              <div className="pt-10">
+                <Card className="p-4 border-destructive">
+                  <h2 className="font-medium text-destructive">Danger zone</h2>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    Please be careful with these settings. They can&apos;t be undone.
+                  </p>
+
+                  <div className="mt-6 space-y-6 divide-y divide-border/60 border-t border-border text-sm leading-6">
+                    <div className="pt-6 sm:flex">
+                      <div className="sm:w-64 sm:flex-none sm:pr-6">
+                        Leave <span className="font-bold">{query.data.workspace.name}</span> workspace
+                      </div>
+                      <dd className="mt-1 flex justify-end gap-x-6 sm:mt-0 sm:flex-auto">
+                        <LeaveWorkspaceDialog workspaceId={params.workspaceId} onSuccess={() => navigate('/')}>
+                          <Button type="button" variant="destructive">
+                            Leave
+                          </Button>
+                        </LeaveWorkspaceDialog>
+                      </dd>
+                    </div>
+                  </div>
+                </Card>
+              </div>
             </>
           ))
           .exhaustive()}

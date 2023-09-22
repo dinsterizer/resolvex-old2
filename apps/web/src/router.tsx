@@ -4,7 +4,6 @@ import { CustomerDetailPage } from './pages/customer-detail'
 import { CustomerListPage } from './pages/customer-list'
 import { WorkspaceDetailPage } from './pages/workspace-detail'
 import { WorkspaceListPage } from './pages/workspace-list'
-import { WorkspaceMembersPage } from './pages/workspace-members'
 import { WorkspaceOverviewPage } from './pages/workspace-overview'
 import { WorkspaceSettingsPage } from './pages/workspace-settings'
 
@@ -28,10 +27,6 @@ export const router = createBrowserRouter([
           {
             path: 'settings',
             element: <WorkspaceSettingsPage />,
-          },
-          {
-            path: 'members',
-            element: <WorkspaceMembersPage />,
           },
           {
             path: 'customers',
