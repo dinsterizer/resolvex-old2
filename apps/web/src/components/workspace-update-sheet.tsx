@@ -13,7 +13,7 @@ type Props = ComponentPropsWithoutRef<typeof Sheet> & {
   workspaceId: string
 }
 
-export function UpdateWorkspaceSheet({ workspaceId, children, ...props }: Props) {
+export function WorkspaceUpdateSheet({ workspaceId, children, ...props }: Props) {
   const idId = useId()
   const nameId = useId()
   const closeElement = useRef<HTMLButtonElement>(null)

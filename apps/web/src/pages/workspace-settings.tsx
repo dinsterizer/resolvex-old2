@@ -8,9 +8,10 @@ import { Button } from '~/components/ui/button'
 import { Card } from '~/components/ui/card'
 import { SheetTrigger } from '~/components/ui/sheet'
 import { useToast } from '~/components/ui/use-toast'
-import { LeaveWorkspaceDialog } from '~/components/workspace-leave-dialog'
+import { WorkspaceLeaveDialog } from '~/components/workspace-leave-dialog'
 import { WorkspaceMemberInviteSheet } from '~/components/workspace-member-invite-sheet'
-import { UpdateWorkspaceSheet } from '~/components/workspace-update-sheet'
+import { WorkspaceMemberUpdateSheet } from '~/components/workspace-member-update-sheet'
+import { WorkspaceUpdateSheet } from '~/components/workspace-update-sheet'
 import { useAuthedStore } from '~/stores/auth'
 import { trpc } from '~/utils/trpc'
 
@@ -32,7 +33,7 @@ export function WorkspaceSettingsPage() {
 
   return (
     <div>
-      <UpdateWorkspaceSheet
+      <WorkspaceUpdateSheet
         workspaceId={params.workspaceId}
         open={openUpdateWorkspaceSheet}
         onOpenChange={setOpenUpdateWorkspaceSheet}
@@ -103,14 +104,13 @@ export function WorkspaceSettingsPage() {
                         <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
                           <div>{member.user.email}</div>
                           {isAdmin && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              className="text-primary hover:text-primary"
-                              onClick={() => setOpenUpdateWorkspaceSheet(true)}
-                            >
-                              Update
-                            </Button>
+                            <WorkspaceMemberUpdateSheet workspaceId={params.workspaceId} userId={member.userId}>
+                              <SheetTrigger asChild>
+                                <Button type="button" variant="ghost" className="text-primary hover:text-primary">
+                                  Update
+                                </Button>
+                              </SheetTrigger>
+                            </WorkspaceMemberUpdateSheet>
                           )}
                         </dd>
                       </div>
@@ -141,11 +141,11 @@ export function WorkspaceSettingsPage() {
                         Leave <span className="font-bold">{query.data.workspace.name}</span> workspace
                       </div>
                       <dd className="mt-1 flex justify-end gap-x-6 sm:mt-0 sm:flex-auto">
-                        <LeaveWorkspaceDialog workspaceId={params.workspaceId} onSuccess={() => navigate('/')}>
+                        <WorkspaceLeaveDialog workspaceId={params.workspaceId} onSuccess={() => navigate('/')}>
                           <Button type="button" variant="destructive">
                             Leave
                           </Button>
-                        </LeaveWorkspaceDialog>
+                        </WorkspaceLeaveDialog>
                       </dd>
                     </div>
                   </div>

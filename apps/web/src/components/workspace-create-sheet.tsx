@@ -11,7 +11,7 @@ type Props = React.ComponentPropsWithoutRef<typeof Sheet> & {
   onSuccess?: ({ workspaceId }: { workspaceId: string }) => void
 }
 
-export function CreateWorkspaceSheet({ children, onSuccess, ...props }: Props) {
+export function WorkspaceCreateSheet({ children, onSuccess, ...props }: Props) {
   const nameId = useId()
   const demoDataId = useId()
   const closeElement = useRef<HTMLButtonElement>(null)

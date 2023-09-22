@@ -11,7 +11,7 @@ import { Container } from '~/components/ui/container'
 import { SheetTrigger } from '~/components/ui/sheet'
 import { ViewportBlock } from '~/components/viewport-block'
 import { WorkspaceCard, WorkspaceCardSkeleton } from '~/components/workspace-cart'
-import { CreateWorkspaceSheet } from '~/components/workspace-create-sheet'
+import { WorkspaceCreateSheet } from '~/components/workspace-create-sheet'
 import { env } from '~/env'
 import { useAuthedStore } from '~/stores/auth'
 import { trpc } from '~/utils/trpc'
@@ -66,13 +66,13 @@ export function WorkspaceListPage() {
               </p>
             </div>
             <div className="min-w-max mt-6 md:mt-0">
-              <CreateWorkspaceSheet onSuccess={({ workspaceId }) => navigate(`/${workspaceId}`)}>
+              <WorkspaceCreateSheet onSuccess={({ workspaceId }) => navigate(`/${workspaceId}`)}>
                 <SheetTrigger>
                   <Button variant="secondary" className="md:w-auto w-full">
                     <Plus size={16} className="mr-2" /> Create workspace
                   </Button>
                 </SheetTrigger>
-              </CreateWorkspaceSheet>
+              </WorkspaceCreateSheet>
             </div>
           </div>
 
