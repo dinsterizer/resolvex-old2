@@ -10,6 +10,7 @@ import { SheetTrigger } from '~/components/ui/sheet'
 import { useToast } from '~/components/ui/use-toast'
 import { WorkspaceLeaveDialog } from '~/components/workspace-leave-dialog'
 import { WorkspaceMemberInviteSheet } from '~/components/workspace-member-invite-sheet'
+import { WorkspaceMemberRemoveDialog } from '~/components/workspace-member-remove-dialog'
 import { WorkspaceMemberUpdateSheet } from '~/components/workspace-member-update-sheet'
 import { WorkspaceUpdateSheet } from '~/components/workspace-update-sheet'
 import { useAuthedStore } from '~/stores/auth'
@@ -101,17 +102,30 @@ export function WorkspaceSettingsPage() {
                     return (
                       <div key={`members:${member.userId}`} className="pt-6 sm:flex">
                         <div className="font-medium  sm:w-64 sm:flex-none sm:pr-6">{member.user.name}</div>
-                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                        <dd className="mt-1 flex justify-between gap-x-6 gap-y-4 sm:mt-0 sm:flex-auto flex-wrap">
                           <div>{member.user.email}</div>
-                          {isAdmin && (
-                            <WorkspaceMemberUpdateSheet workspaceId={params.workspaceId} userId={member.userId}>
-                              <SheetTrigger asChild>
-                                <Button type="button" variant="ghost" className="text-primary hover:text-primary">
-                                  Update
-                                </Button>
-                              </SheetTrigger>
-                            </WorkspaceMemberUpdateSheet>
-                          )}
+                          <div className="flex items-center gap-2">
+                            {isAdmin && auth.user.id !== member.userId && (
+                              <>
+                                <WorkspaceMemberRemoveDialog workspaceId={params.workspaceId} userId={member.userId}>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    className="text-destructive hover:text-destructive"
+                                  >
+                                    Remove
+                                  </Button>
+                                </WorkspaceMemberRemoveDialog>
+                                <WorkspaceMemberUpdateSheet workspaceId={params.workspaceId} userId={member.userId}>
+                                  <SheetTrigger asChild>
+                                    <Button type="button" variant="ghost" className="text-primary hover:text-primary">
+                                      Update
+                                    </Button>
+                                  </SheetTrigger>
+                                </WorkspaceMemberUpdateSheet>
+                              </>
+                            )}
+                          </div>
                         </dd>
                       </div>
                     )

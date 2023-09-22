@@ -46,7 +46,7 @@ export const workspaceLeaveRouter = authedProcedure
       if (otherAdmins.length === 0) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Please make someone else an admin before leaving or kick other members out before leaving',
+          message: 'Please make someone else an admin before leaving or remove other members out before leaving',
         })
       }
     }

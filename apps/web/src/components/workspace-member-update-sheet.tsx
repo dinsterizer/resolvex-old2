@@ -59,7 +59,7 @@ export function WorkspaceMemberUpdateSheet({ children, workspaceId, userId, ...p
               <>
                 <SheetHeader>
                   <SheetTitle>Update member</SheetTitle>
-                  <SheetDescription>Update member role or remove member from workspace.</SheetDescription>
+                  <SheetDescription>Update member role and permissions.</SheetDescription>
                 </SheetHeader>
                 <form className="space-y-4 mt-6" onSubmit={onSubmit}>
                   <div className="space-y-1">
