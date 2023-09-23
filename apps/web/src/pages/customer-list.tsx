@@ -29,8 +29,10 @@ export function CustomerListPage() {
           <CustomerInfiniteList className="space-y-4" status={status} limit={12} workspaceId={workspaceId} />
         </div>
 
-        <div className="lg:col-span-7">
-          <Outlet />
+        <div className="flex flex-col overflow-auto lg:col-span-7">
+          <div className="flex-1 overflow-auto">
+            <Outlet />
+          </div>
         </div>
       </div>
     </div>

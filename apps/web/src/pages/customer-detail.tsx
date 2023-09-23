@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { match } from 'ts-pattern'
 import { CustomerAvatar } from '~/components/customer-avatar'
 import { QueryError } from '~/components/query-error'
+import { TimelineInfiniteList } from '~/components/timeline-infinite-list'
 import { Button } from '~/components/ui/button'
 import { Skeleton } from '~/components/ui/skeleton'
 import { UserAvatar } from '~/components/user-avatar'
@@ -14,11 +15,20 @@ export function CustomerDetailPage() {
 
   return (
     <div className="py-4 pr-4 pl-2 h-screen lg:h-full">
-      {match(query)
-        .with({ status: 'loading' }, () => <CustomerDetailPageSkeleton />)
-        .with({ status: 'error' }, () => <QueryError />)
-        .with({ status: 'success' }, (query) => (
-          <div className="border rounded-md h-full flex flex-col">
+      <div className="border rounded-md h-full flex flex-col">
+        {match(query)
+          .with({ status: 'loading' }, () => (
+            <div className="px-4 py-2.5 flex justify-between items-center border-b">
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-8 w-8 rounded-full" />
+                <Skeleton className="h-[17px] w-[92px]" />
+              </div>
+
+              <Skeleton className="w-[18px] h-[18px]" />
+            </div>
+          ))
+          .with({ status: 'error' }, () => <QueryError />)
+          .with({ status: 'success' }, (query) => (
             <div className="px-4 py-2.5 flex justify-between items-center border-b">
               <div className="flex items-center gap-2">
                 <CustomerAvatar size={32} customerName={query.data.customer.name} />
@@ -30,20 +40,38 @@ export function CustomerDetailPage() {
                 <Columns size={18} />
               </button>
             </div>
+          ))
+          .exhaustive()}
 
-            <div className="flex-1 overflow-auto">
-              <div className="max-w-lg mx-auto space-y-[18px] py-6">
-                <Skeleton className="w-[180px] h-4" />
-                <Skeleton className="w-full h-[135px]" />
-                <div className="py-2">
-                  <Skeleton className="w-[160px] h-5" />
+        <div className="flex-1 overflow-auto">
+          <div className="max-w-lg mx-auto py-6 ">
+            <TimelineInfiniteList
+              className="min-w-[300px] flex flex-col-reverse gap-5"
+              customerId={params.customerId}
+            />
+          </div>
+        </div>
+
+        {match(query)
+          .with({ status: 'loading' }, () => (
+            <div>
+              <div className="py-3 px-4">
+                <Skeleton className="w-full h-7" />
+              </div>
+              <div className="px-4 py-2.5 flex justify-between items-center border-t">
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-8 w-8 rounded-full" />
+                  <Skeleton className="h-[17px] w-[92px]" />
                 </div>
-                <Skeleton className="w-full h-[179px]" />
-                <Skeleton className="w-[160px] h-4" />
-                <Skeleton className="w-[170px] h-4" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="w-[44px] h-6" />
+                  <Skeleton className="w-[104px] h-6" />
+                </div>
               </div>
             </div>
-
+          ))
+          .with({ status: 'error' }, () => <QueryError />)
+          .with({ status: 'success' }, (query) => (
             <div>
               <div className="py-3 px-4">
                 {/* TODO */}
@@ -92,52 +120,8 @@ export function CustomerDetailPage() {
                 </div>
               </div>
             </div>
-          </div>
-        ))
-        .exhaustive()}
-    </div>
-  )
-}
-
-function CustomerDetailPageSkeleton() {
-  return (
-    <div className="border rounded-md h-full flex flex-col">
-      <div className="px-4 py-2.5 flex justify-between items-center border-b">
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-8 w-8 rounded-full" />
-          <Skeleton className="h-[17px] w-[92px]" />
-        </div>
-
-        <Skeleton className="w-[18px] h-[18px]" />
-      </div>
-
-      <div className="flex-1 overflow-auto">
-        <div className="max-w-lg mx-auto space-y-[18px] py-6">
-          <Skeleton className="w-[180px] h-4" />
-          <Skeleton className="w-full h-[135px]" />
-          <div className="py-2">
-            <Skeleton className="w-[160px] h-5" />
-          </div>
-          <Skeleton className="w-full h-[179px]" />
-          <Skeleton className="w-[160px] h-4" />
-          <Skeleton className="w-[170px] h-4" />
-        </div>
-      </div>
-
-      <div>
-        <div className="py-3 px-4">
-          <Skeleton className="w-full h-7" />
-        </div>
-        <div className="px-4 py-2.5 flex justify-between items-center border-t">
-          <div className="flex items-center gap-2">
-            <Skeleton className="h-8 w-8 rounded-full" />
-            <Skeleton className="h-[17px] w-[92px]" />
-          </div>
-          <div className="flex items-center gap-2">
-            <Skeleton className="w-[44px] h-6" />
-            <Skeleton className="w-[104px] h-6" />
-          </div>
-        </div>
+          ))
+          .exhaustive()}
       </div>
     </div>
   )
