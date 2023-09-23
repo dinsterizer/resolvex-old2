@@ -2,11 +2,10 @@ import type { SelectCustomer, SelectTimeline, SelectUser } from '@resolvex/api/s
 import { formatDistanceToNow } from 'date-fns'
 import { Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { Md5 } from 'ts-md5'
 import { CustomerStatusBadge } from './customer-status-badge'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Card } from './ui/card'
 import { Skeleton } from './ui/skeleton'
+import { UserAvatar } from './user-avatar'
 
 type Props = {
   customer: Pick<SelectCustomer, 'id' | 'name' | 'email' | 'updatedAt' | 'status' | 'workspaceId'> & {
@@ -37,15 +36,7 @@ export function CustomerCard({ customer }: Props) {
         </div>
 
         <div className="flex gap-3">
-          {customer.assignedUser && (
-            <Avatar className="h-5 w-5">
-              <AvatarImage
-                src={`https://www.gravatar.com/avatar/${Md5.hashStr(customer.assignedUser.email)}?s=20&default=404`}
-                alt={`Member ${customer.assignedUser.name}`}
-              />
-              <AvatarFallback className="text-[10px]">{customer.assignedUser.name[0]}</AvatarFallback>
-            </Avatar>
-          )}
+          {customer.assignedUser && <UserAvatar user={customer.assignedUser} />}
 
           {/* TODO */}
           {/* <button type="button">
