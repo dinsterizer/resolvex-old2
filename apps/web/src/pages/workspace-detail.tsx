@@ -1,18 +1,21 @@
-import { useParams, Outlet } from 'react-router-dom'
+import { useParams, Outlet, useMatch } from 'react-router-dom'
 import { HorizontalSidebar, VerticalSidebar } from '~/components/sidebar'
 
 export function WorkspaceDetailPage() {
   const params = useParams() as { workspaceId: string }
+  const matchCustomerDetail = useMatch(`/${params.workspaceId}/customers/:customerId`)
+
   return (
     <div className="lg:flex flex-row h-screen">
       <div className="p-4 lg:hidden">
         <HorizontalSidebar workspaceId={params.workspaceId} />
       </div>
 
-      <div className="p-4 hidden lg:block w-64">
-        <VerticalSidebar workspaceId={params.workspaceId} />
+      <div className="p-4 hidden lg:block max-w-xs">
+        <VerticalSidebar collapse={matchCustomerDetail !== null} workspaceId={params.workspaceId} />
       </div>
 
+      {/* TODO: care about on mobile it enough heigh or not? */}
       <div className="flex-1 lg:overflow-auto">
         <Outlet />
       </div>
