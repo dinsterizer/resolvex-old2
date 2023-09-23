@@ -6,7 +6,7 @@ export function WorkspaceDetailPage() {
   const matchCustomerDetail = useMatch(`/${params.workspaceId}/customers/:customerId`)
 
   return (
-    <div className="lg:flex flex-row h-screen">
+    <div className="lg:flex flex-row lg:h-screen">
       <div className="p-4 lg:hidden">
         <HorizontalSidebar workspaceId={params.workspaceId} />
       </div>

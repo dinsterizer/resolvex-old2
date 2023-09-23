@@ -14,15 +14,14 @@ export function CustomerListPage() {
       <h1 className="font-title text-xl font-medium p-4">Customers</h1>
 
       <div
-        className={cn('p-4', {
-          'pb-0': outlet !== null,
-          'grid lg:grid-cols-11 gap-2': outlet !== null,
-          'flex-1 overflow-auto': outlet !== null,
+        className={cn({
+          'lg:grid lg:grid-cols-11': outlet !== null,
+          'flex-1 lg:overflow-auto': outlet !== null,
         })}
       >
         <div
-          className={cn({
-            'col-span-4 pb-4': outlet !== null,
+          className={cn('p-4', {
+            'lg:col-span-4': outlet !== null,
             'h-full overflow-auto pr-1': outlet !== null,
             'hidden lg:block': outlet !== null,
           })}
@@ -30,7 +29,7 @@ export function CustomerListPage() {
           <CustomerInfiniteList className="space-y-4" status={status} limit={12} workspaceId={workspaceId} />
         </div>
 
-        <div className="col-span-7">
+        <div className="lg:col-span-7">
           <Outlet />
         </div>
       </div>
